@@ -1,0 +1,24 @@
+<html>
+<meta charset="UTF-8">
+<script src="vue.js"></script>
+<link href="index.css" rel="stylesheet">
+<style>
+	.pagenum {font-size:100%;}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<body>
+	<div id="app">
+		
+		<button class="btnnav" @click="prevpage">Previous</button>
+		<input class="pagenum" @input="pagenumchange" v-model="pagenum"/>
+		<button class="btnnav" @click="nextpage">Next</button>
+
+		<br/>
+		<maintext :rawtext="rawtext"></maintext>
+		<button class="btnnav" @click="morepage">more</button>
+		<logger :log="logmessages" :clear="clearlog"></logger>
+		
+	</div>
+</body>
+<script src="bundle.js"></script>
+</html>
