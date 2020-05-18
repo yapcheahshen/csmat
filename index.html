@@ -9,9 +9,9 @@
 <body>
 	<div id="app">
 		
-		<button class="btnnav" @click="prevpage">Previous</button>
-		<input class="pagenum" @input="pagenumchange" v-model="pagenum"/>
-		<button class="btnnav" @click="nextpage">Next</button>
+		<button class="btnnav" @click="prevpara">Previous</button>
+		<input class="bookpara" @input="bookparachange" v-model="bookpara"/>
+		<button class="btnnav" @click="nextpara">Next</button>
 
 		<br/>
 		<maintext :rawtext="rawtext"></maintext>

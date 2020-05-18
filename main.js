@@ -25,21 +25,21 @@ const URLParams=()=>{
 	p.forEach( (v,k)=>out[k]=v);
 	return out;
 }
-
+const {parseId}=require("./fetch");
 new Vue({
 	el:"#app",
 	methods:{
-		nextpage(){
+		nextpara(){
 			const pc=this.rawpagecount;
 			this.rawpagecount=1;
-			this.fetch(this.pagenum,pc,1);
+			this.fetch(this.bookpara,pc,1);
 		},
-		prevpage(){
+		prevpara(){
 			this.rawpagecount=1;
-			this.fetch(this.pagenum,-1);
+			this.fetch(this.bookpara,-1);
 		},
 		morepage(){
-			this.fetch(this.pagenum,0,this.rawpagecount+1);
+			this.fetch(this.bookpara,0,this.rawpagecount+1);
 		},
 		openxref(db,vpl){
 			Dengine.readpage(db,{prefix:vpl,plusminus:-1,pagecount:2},(res,db)=>{
@@ -54,31 +54,30 @@ new Vue({
 		clearlog(){
 			this.logmessages=[];
 		},
-		pagenumchange(){
+		bookparachange(){
 			clearTimeout(this.timer);
 			this.timer=setTimeout(()=>{
-				this.fetch()
+				this.fetch(this.bookpara)
 			},1000);
 		},
-		fetch(pn,plusminus,pagecount){
-			let prefix=pn;
-			if (typeof prefix!=="string") prefix=this.pagenum;
-			const t=(new Date()).getMilliseconds()
-			Dengine.readpage(dbname,{prefix,plusminus,pagecount},(res,db)=>{
+		fetch(rawid,plusminus){
+			const t=(new Date()).getMilliseconds();
+			Dengine.readpage(dbname,{parseId,rawid,plusminus},(res,db)=>{
 				const elapse=(new Date()).getMilliseconds()-t;
-				setHash({q:prefix});
-				const pagenum=res[0][0];
-				const pagenums=res.map(item=>item[0]);
+				setHash({q:rawid});
+				//const pagenum=res[0][0];
+				//const pagenums=res.map(item=>item[0]);
 				if (!this.gettoc) this.gettoc=db.gettoc;
 				this.rawtext=res;
 				this.rawpagecount=pagecount||1;
-
+				/*
 				setTimeout((function(){
 					this.vpl=pagenum;
 					const at=pagenum.lastIndexOf(".");
 					this.pagenum=pagenum.substr(0,at);
 					this.logmessages.unshift("fetch "+prefix+" elapse"+elapse)
 				}).bind(this),200);
+				*/
 			})
 		},
 		selectsid(sid){
@@ -92,7 +91,7 @@ new Vue({
 	mounted(){
 		Dengine.openSearchable(dbname,function(db){
 			const {q,i}=URLParams();
-			this.pagenum=q?q:"1:1";
+			this.bookpara=q?q:"1,10";
 			this.db=db;
 			this.log(dbname+" opened, built on "+db.getDate());
 		}.bind(this));
@@ -109,7 +108,7 @@ new Vue({
 			rawtext:helpmessage,
 			rawpagecount:1,
 			gettoc:null,
-			pagenum:'',
+			bookpara:'',
 			ptspagenum:'',
 			logmessages:[],
 			vpl:'',
