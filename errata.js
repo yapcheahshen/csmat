@@ -3,6 +3,9 @@ module.exports={
 	[`<note>imā tiracchānakathāyo dī. 1.17; ma. ni. 2.223; saṃ. ni. <pb ed="T" n="5.1080" />; a. ni. 10.69</note>`
 	 ,`<pb ed="T" n="5.1080" /><note>imā tiracchānakathāyo dī. 1.17; ma. ni. 2.223; saṃ. ni. Thai 5.1080 ; a. ni. 10.69</note>`]
 	] ,
+	"s0201m.xml":[
+		['<p rend="nikaya">Majjhimanikāyo</p>','<p rend="nikaya">Majjhimanikāye</p>']
+	],
 	"s0203m.xml":[
 	['(ma. ni. 2.166 naḷakapāne</note>','(ma. ni. 2.166) naḷakapāne</note>']
 	],
@@ -17,6 +20,10 @@ module.exports={
 	],
 	"s0514m.xml":[
 		[/<p rend="gathalast"><\/p>\n\n/g,""],
+	],
+	"s0518m.xml":[
+		['<p rend="nikaya">Mātikā</p>','<p rend="centre">Mātikā</p>'],
+		['<p rend="nikaya">Nigamanaṃ</p>','<p rend="centre">Nigamanaṃ</p>']
 	],
 	"abh03m5.xml":[
 	['<p rend="bodytext" n="4"><hi rend="paranum">4</hi> (Ṅa) paccanīkaokāso</p>','<p rend="subhead">(Ṅa) paccanīkaokāso</p>'],

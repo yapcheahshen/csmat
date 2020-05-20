@@ -1,8 +1,8 @@
 .breadcrumbtoc {font-size:100%;border:none;background: #DFDFDF}
 .pagenum {width:5em;}
-.maintext{font-size: 100%}
+
 .btnnav {font-size:100%;border:none;}
-.maintext {font-size:100%;font-family: courier}
+.maintext {font-size:100%;font-family: Tahoma}
 @media (orientation: portrait) {
 	tr{display:block;}
 

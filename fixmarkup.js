@@ -23,6 +23,11 @@ const finalfixes=[
 	[/<p rend="bodytext">/g,"<p>"]
 	,[/<p PN="(\d+)"><\/p>\n<p>/g,'<p pn="$1">'] //empty p with hangnum, 
 	,[/;;<gbrk\/>/g,";<gbrk/>"]
+	,[/<p rend="title"><note c="(.+?)"\/><\/p>/g,
+	'<p rend="title">($1)</p>'
+	],
+	[/<p rend="subhead"><note c="(.+?)"\/><\/p>/g,
+	'<p rend="subhead">($1)</p>']
 ]
 const startingfixes=[
 	[/\n\n<p /g,"\n<p "],

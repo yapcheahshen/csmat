@@ -1,4 +1,4 @@
-//require("./breadcrumbtoc");
+require("dui");
 require("./maintext");
 //require("./bigpopup");
 //require("./xref");
@@ -25,22 +25,24 @@ const URLParams=()=>{
 	p.forEach( (v,k)=>out[k]=v);
 	return out;
 }
-const {parseId}=require("./fetch");
+const {parseId,vpl2paranum}=require("./fetch");
 new Vue({
 	el:"#app",
 	methods:{
 		nextpara(){
 			const pc=this.rawpagecount;
 			this.rawpagecount=1;
-			this.fetch(this.bookpara,pc,1);
+			this.paranum=parseInt(this.paranum)+1;
+			this.fetchPara(this.bookname,this.paranum);
 		},
 		prevpara(){
 			this.rawpagecount=1;
-			this.fetch(this.bookpara,-1);
+			let prev=parseInt(this.paranum)-1;
+			if (prev<0) prev=0;
+			this.paranum=prev;
+			this.fetchPara(this.bookname,this.paranum);
 		},
-		morepage(){
-			this.fetch(this.bookpara,0,this.rawpagecount+1);
-		},
+		
 		openxref(db,vpl){
 			Dengine.readpage(db,{prefix:vpl,plusminus:-1,pagecount:2},(res,db)=>{
 				this.showpopup=true;
@@ -54,34 +56,48 @@ new Vue({
 		clearlog(){
 			this.logmessages=[];
 		},
-		bookparachange(){
+		bookchange(){
 			clearTimeout(this.timer);
 			this.timer=setTimeout(()=>{
-				this.fetch(this.bookpara)
-			},1000);
+				this.fetchPara(this.bookname,this.paranum)
+			},500);
 		},
-		fetch(rawid,plusminus){
+		paranumchange(){
+			clearTimeout(this.timer);
+			this.timer=setTimeout(()=>{
+				this.fetchPara(this.bookname,this.paranum)
+			},500);
+		},
+		fetchPara(bookname,paranum,plusminus){
+			const rawid=bookname+","+paranum;
+			setHash({b:bookname,p:paranum});
+			const fetchobj={parseId,rawid,plusminus};
+			this.fetch(fetchobj);
+		},
+		fetch(obj){
 			const t=(new Date()).getMilliseconds();
-			Dengine.readpage(dbname,{parseId,rawid,plusminus},(res,db)=>{
+			Dengine.readpage(dbname,obj,(res,db)=>{
 				const elapse=(new Date()).getMilliseconds()-t;
-				setHash({q:rawid});
-				//const pagenum=res[0][0];
-				//const pagenums=res.map(item=>item[0]);
 				if (!this.gettoc) this.gettoc=db.gettoc;
 				this.rawtext=res;
-				this.rawpagecount=pagecount||1;
-				/*
+				//this.rawpagecount=pagecount||1;
+				
 				setTimeout((function(){
-					this.vpl=pagenum;
-					const at=pagenum.lastIndexOf(".");
-					this.pagenum=pagenum.substr(0,at);
-					this.logmessages.unshift("fetch "+prefix+" elapse"+elapse)
+					const sid=res[0][0];
+					let at=sid.lastIndexOf(":");
+					this.bookname=sid.substr(0,at);
+					const page=parseInt(sid.substr(at+1));
+
+					const vpl=this.bookname+":"+(page)+".1";
+					this.paranum=vpl2paranum(db,vpl);
+
+					this.vpl=sid;
+					this.logmessages.unshift("fetch "+this.vpl+" elapse"+elapse)
 				}).bind(this),200);
-				*/
 			})
 		},
 		selectsid(sid){
-			this.fetch(sid);
+			this.fetch({prefix:sid});
 		},
 		log(msg){
 			this.logmessages.unshift((new Date()).toISOString()+":"+msg);
@@ -90,8 +106,9 @@ new Vue({
 
 	mounted(){
 		Dengine.openSearchable(dbname,function(db){
-			const {q,i}=URLParams();
-			this.bookpara=q?q:"1,10";
+			const {b,p}=URLParams();
+			this.bookname=b?b:"1";
+			this.paranum=p?p:"1";
 			this.db=db;
 			this.log(dbname+" opened, built on "+db.getDate());
 		}.bind(this));
@@ -108,7 +125,8 @@ new Vue({
 			rawtext:helpmessage,
 			rawpagecount:1,
 			gettoc:null,
-			bookpara:'',
+			bookname:'1',
+			paranum:'1',
 			ptspagenum:'',
 			logmessages:[],
 			vpl:'',

@@ -10,12 +10,14 @@
 	<div id="app">
 		
 		<button class="btnnav" @click="prevpara">Previous</button>
-		<input class="bookpara" @input="bookparachange" v-model="bookpara"/>
+		<input class="bookpara" @input="bookchange" v-model="bookname"/>
+		<input class="bookpara" @input="paranumchange" v-model="paranum"/>
 		<button class="btnnav" @click="nextpara">Next</button>
-
 		<br/>
+		<breadcrumbtoc :vpl="vpl" :selectsid="selectsid" :gettoc="gettoc"></breadcrumbtoc>
+
+		
 		<maintext :rawtext="rawtext"></maintext>
-		<button class="btnnav" @click="morepage">more</button>
 		<logger :log="logmessages" :clear="clearlog"></logger>
 		
 	</div>

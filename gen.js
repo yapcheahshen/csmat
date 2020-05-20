@@ -8,12 +8,12 @@ const {isSyllable,syllabify,isPaliword,palialpha}=require("./paliutil");
 let bookseq=0;
 const output=[];
 const rawtags=[];
-const tocoutput=[];
+const tocoutput=['1:1,0Tipitaka'];
 const matpara=[];
 const MAXDOC=1<<16; //<p> is a doc
 const MAXSYL =1<<12;
 let filename='',sourcelinenumber=0;
-const TocEle={nikaya:1,book:2,chapter:3,title:4,subhead:5,subsubhead:6}
+const TocEle={nikaya:1,book:2,chapter:3,title:4,subhead:5}//,subsubhead:6}
 const isToc=rend=>{
 	return TocEle[rend];
 }
@@ -46,8 +46,9 @@ const parseInlineTag=(tagstr)=>{
 }
 const {expandrange}=require("./paliutil")
 const repeatnum={};
+let nikaya='',lastdepth=0;
 const parseP=(attrs,docseq,linetext)=>{
-	let extra='';
+	let extra='',paranum=''; //
 	const a=mataddr(bookseq,docseq);
 	attrs.forEach(attr=>{
 		if (attr[attr.length-1]=='"') {
@@ -56,8 +57,20 @@ const parseP=(attrs,docseq,linetext)=>{
 		const m=attr.match(/(\S+?)="(.+)/);
 		if (m[1]=="rend") {
 			if (isToc(m[2])) {
+				let depth=isToc(m[2]);
+				if (depth>lastdepth+1) {
+					//patch missing level
+					tocoutput.push([bookseq+":"+docseq+","+(depth-1)+"|"+"-"]);
+				}
+
+				lastdepth=depth;
 				const purelinetext=linetext.replace(/<[^<]+?>/,"");
-				tocoutput.push([a.toString(16),m[2]+"|"+purelinetext])
+				
+				if (!(depth==1 && nikaya==purelinetext)) {
+					tocoutput.push([bookseq+":"+docseq+","+depth+"|"+purelinetext])					
+				}
+								
+				if (depth==1) nikaya=purelinetext;
 			}
 			extra=m[2];
 		} else if (m[1]=='pn' || m[1]=='PN') {
@@ -65,6 +78,7 @@ const parseP=(attrs,docseq,linetext)=>{
 			if (!matpara[bookseq])matpara[bookseq]=[0];
 			const arr=matpara[bookseq];
 			const range=m[2].split("-");
+			paranum=m[2];
 			if (range.length==1) {
 				let at=parseInt(range[0]);
 				if (arr[at]) {
@@ -79,25 +93,15 @@ const parseP=(attrs,docseq,linetext)=>{
 				if (to<from) {
 					console.log("para range error",range,filename,sourcelinenumber+1);
 				}
-
 				arr[from]=docseq;
 				// search backward if item is null
 				arr[to]=docseq;
-				/*
-				for (let ii=from;ii<=to;ii++) {
-					if (arr[ii]) {
-						if (!repeatnum[filename])repeatnum[filename]=[];
-						repeatnum[filename].push(sourcelinenumber);
-					}
-					arr[ii]=docseq;
-				}
-				*/
 			}
 		} else {
 			console.log("unknown p attributes ",m[1],filename,sourcelinenumber);
 		}
 	})
-	return extra;
+	return paranum+extra;
 }
 const parseLine=(line,docseq)=>{
 	let units=line.split(/(<.+?>)/);
@@ -129,22 +133,24 @@ const gen=(content,fn)=>{
 	for (let i=0;i<lines.length;i++) {
 		let L=lines[i];
 		sourcelinenumber=i;
-		let extra='';
 		if (L.substr(L.length-4,4)!=="</p>") continue;
 		L=L.substr(0,L.length-4);
 		let rend='';
 		docseq++;
+		let extra='';
 		if (L[2]==">") {
 			L=L.substr(3); //<p>
 		} else {
 			L=L.replace(/<p ([^<]+?)>/,(m,attr,idx)=>{
 				let attrs=attr.split(/\" +/);
-				extra=parseP(attrs,docseq, L.substr(idx+m.length));
+				extra=parseP(attrs,docseq, L.substr(idx+m.length));				
 				return "";
 			});
+
 		}
 		const sid=bookseq+":"+docseq;
 		let outl=parseLine(L,docseq);
+
 		outl= extra? extra+"|"+outl:outl;
 		output.push(sid+","+outl);
 	}
