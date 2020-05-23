@@ -1,14 +1,31 @@
 const fs=require("fs");
-const {dofiles,files}=require("./dofile");
-const f=files.nrf;//.filter(fn=>fn.substr(0,3)=="s01");
+
+let multag=fs.readFileSync("mul-rawtag.txt","utf8").split(/\r?\n/);
+let atttag=fs.readFileSync("att-rawtag.txt","utf8").split(/\r?\n/);
+let tiktag=fs.readFileSync("tik-rawtag.txt","utf8").split(/\r?\n/);
+
+mulnote=multag.filter(item=>item.indexOf("note ")>-1).join("\n");
+attnote=atttag.filter(item=>item.indexOf("note ")>-1).join("\n");
+tiknote=tiktag.filter(item=>item.indexOf("note ")>-1).join("\n");
+const patterns=[
+	/[āūḷṭīa-z\.]+ [āūḷṭīa-z\.]+ ṭī\. [\-\d\.]+/gi,
+	/[āūḷṭīa-z\.]+ [āūḷṭīa-z\.]+ aṭṭha\. [\-\d\.]+/gi,
+	/[āūḷṭīa-z\.]+ [a-z][āa]\. [\-\d\.]+/gi,
+	/[āūḷṃīa-z\.]+ ?ni\. aṭṭha\. [\-\d\.]+/gi,
+	/[āūḷṃīa-z\.]+ ?ni\. [\-\d\.]+/gi,
+	/[āūḷṃṭīa-z\.]+ [\-\d\.]+/gi,
+]
 const links=[];
-dofiles(f,(content,fn)=>{
-	content.replace(/\((.+?)\)/g,(m,m1)=>{
-		if (m1.indexOf(" ")==-1) return;
-		if (!m1.match(/\d/))return;
-		if (m1.match(/</))return;
-		m1.split(";").forEach(i=>links.push(i));
+const listpat=content=>{
+	patterns.forEach(pat=>{
+		content.replace(pat,m=>{
+			links.push(m);
+			return "";
+		});
 	});
-});
-links.sort();
-fs.writeFileSync("nrf-links.txt",links.join("\n"),"utf8")
+};
+listpat(mulnote);
+listpat(attnote);
+listpat(tiknote);
+
+fs.writeFileSync("all-links.txt",links.join("\n"),"utf8")

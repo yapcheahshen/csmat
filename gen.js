@@ -4,6 +4,7 @@ const set=process.argv[2] || "mul"
 const maxfile=parseInt(process.argv[3],0);
 const files=getfiles("./raw/");
 const {isSyllable,syllabify,isPaliword,palialpha}=require("./paliutil");
+const {LANGSEP}=require("dengine")
 
 let bookseq=0;
 const output=[];
@@ -36,6 +37,7 @@ const parseInlineTag=(tagstr)=>{
 		
 	} else if (tagstr.substr(0,6)=="<note ") {
 		//todo parse note links
+		savetag=false;
 	} else if (tagstr.substr(0,6)=="<gbrk/") {
 		savetag=false;
 	} else {
@@ -65,7 +67,7 @@ const parseP=(attrs,docseq,linetext)=>{
 
 				lastdepth=depth;
 				const purelinetext=linetext.replace(/<[^<]+?>/,"");
-				
+
 				if (!(depth==1 && nikaya==purelinetext)) {
 					tocoutput.push([bookseq+":"+docseq+","+depth+"|"+purelinetext])					
 				}
@@ -107,6 +109,7 @@ const parseLine=(line,docseq)=>{
 	let units=line.split(/(<.+?>)/);
 	let l='';
 	let nsyl=0; //syllable pointer
+	let nnote=0,notestr=''; // inline note counter
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
 		if (unit[0]=="<") {
@@ -114,6 +117,12 @@ const parseLine=(line,docseq)=>{
 			const savetag=parseInlineTag(unit);
 			const tagline=unit.substr(1,unit.length-3);
 			if (savetag) rawtags.push([a.toString(16),tagline]);
+			if (unit.substr(0,6)=="<note ") {
+				nnote++;
+				l+="^"+nnote;
+				if (notestr) notestr+=" ";
+				notestr+=nnote+"^"+unit.match(/<note [a-z]+="(.+?)"/)[1];
+			}
 		} else {
 			const syllables=syllabify(unit);
 			syllables.forEach(syl=>{
@@ -122,7 +131,9 @@ const parseLine=(line,docseq)=>{
 			l+=unit;
 		}
 	};
-	
+	if (notestr) {
+		l+=LANGSEP+notestr;
+	}
 	return l;
 }
 const bookname=[];
@@ -173,7 +184,7 @@ const write=()=>{
 	output.length=0;
 	fs.writeFileSync(set+"-rawtag.txt",rawtags.join("\n"),"utf8");
 	rawtags.length=0;
-	fs.writeFileSync(set+"-toc.txt",tocoutput.join("\n"),"utf8");
+	fs.writeFileSync(set+"-rawtoc.txt",tocoutput.join("\n"),"utf8");
 	tocoutput.length=0;
 	fs.writeFileSync(set+"-paranum.txt",matpara.join("\n"),"utf8");
 	matpara.length=0;

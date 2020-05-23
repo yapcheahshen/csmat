@@ -2,7 +2,7 @@
 .pagenum {width:5em;}
 
 .btnnav {font-size:100%;border:none;}
-.maintext {font-size:100%;font-family: Tahoma}
+.maintext {font-size:90%;font-family: Tahoma}
 @media (orientation: portrait) {
 	tr{display:block;}
 

@@ -25,6 +25,7 @@ const URLParams=()=>{
 	p.forEach( (v,k)=>out[k]=v);
 	return out;
 }
+//const {conjugate,conjugateWord,analyzeword,G_outwords,G_shortdefpost,outputAnalysis}=require("./fromdpr")
 const {parseId,vpl2paranum}=require("./fetch");
 new Vue({
 	el:"#app",
@@ -62,6 +63,13 @@ new Vue({
 				this.fetchPara(this.bookname,this.paranum)
 			},500);
 		},
+		keywordchange(){
+			//aniccucchādanaparimaddanabhedana  , 8 seconds
+			//const t=new Date();
+			//const g=outputAnalysis(this.keyword);
+			//this.grammarout=g[0][0]+ ",time:"+(new Date()-t);
+			//this.grammarout=conjugateWord(this.keyword);
+		},
 		paranumchange(){
 			clearTimeout(this.timer);
 			this.timer=setTimeout(()=>{
@@ -87,12 +95,12 @@ new Vue({
 					let at=sid.lastIndexOf(":");
 					this.bookname=sid.substr(0,at);
 					const page=parseInt(sid.substr(at+1));
+//jakata 17~22 有問題
+					const vpl=this.bookname+":"+(page+3)+".1";
+					this.paranum=vpl2paranum(db,sid);
 
-					const vpl=this.bookname+":"+(page)+".1";
-					this.paranum=vpl2paranum(db,vpl);
-
-					this.vpl=sid;
-					this.logmessages.unshift("fetch "+this.vpl+" elapse"+elapse)
+					this.vpl=vpl;
+					this.logmessages.unshift(sid+"fetch "+this.vpl+" elapse"+elapse)
 				}).bind(this),200);
 			})
 		},
@@ -128,6 +136,8 @@ new Vue({
 			bookname:'1',
 			paranum:'1',
 			ptspagenum:'',
+			keyword:'',
+			grammarout:'grammar',
 			logmessages:[],
 			vpl:'',
 			timer:0

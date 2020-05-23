@@ -21,6 +21,8 @@ Vue.component('maintext', {
 			return item[1];
 		}).join("<br>");
 
+		text=text.replace(/.\ ([A-Z])/g,".<br> $1");
+
 		const children=[];
 		let p=0;
 		text.replace(/<(.+?)>/g,(m,m1,p1)=>{

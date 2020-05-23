@@ -19,5 +19,9 @@ const bookname=fs.readFileSync(set+"-bookname.txt","utf8");
 const aux={paranum,bookname}; // if eval(paranum), empty item will fill with null
 
 build({name:set,outdir:set+"/", textonly:true, 
-	continuouspage:true,aux, 
+	withtoc:true,continuouspage:true,aux, 
 	fields:["txt"] },raw);
+
+
+const toc=fs.readFileSync(set+"-toc.txt","utf8");
+writeExtra(set+"/"+set+".toc.js",{"name":set,"type":"toc","field":["txt","notes"]},toc);
