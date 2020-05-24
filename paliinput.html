@@ -1,0 +1,71 @@
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+	#typein {font-size:150%;}
+	#output {font-size:150%;background: silver}
+	.hidesanskrit {display: none}
+</style>
+<body onload=loaded()>
+	<b>Pali</b> aa=ā AA=Ā|zn .n=ṇ .m=ṃ .t=ṭ .d=ḍ .l=ḷ|qn ;n=ṅ ;m=ṁ|wn ,n=ñ
+	<label><input type="checkbox" id="cbsanskrit" onchange=togglesanskrit()>Sanskrit</input></label>
+	<span class="hidesanskrit" id="lblsanskrit">,l=ḹ|,r=ṝ|,s=ś|.r=ṛ|.s=ṣ|.h=ḥ</span>
+	<br/>
+
+	<textarea rows=10 cols=50 id=typein oninput=translit() ></textarea>
+	<br/>
+	
+</body>
+<script>
+function loaded(){
+	typein.focus();
+}
+function togglesanskrit(){
+	lblsanskrit.classList.toggle("hidesanskrit")
+}
+function translit(){
+	const s=toUni(typein.value);
+	if (s!==typein.value) {
+		const sel=typein.selectionStart;
+		typein.value=s;
+		typein.setSelectionRange(sel,sel);
+	}
+}
+function selectoutput(){
+	output.setSelectionRange(0,output.value.length)
+}
+const chmap=[
+	[/aa/g,'ā'], [/ii/g, 'ī'], 	[/uu/g, 'ū'],
+	[/[z\.]t/g, 'ṭ'],	[/[z\.]d/g, 'ḍ'],
+	[/[z\.]n/g, 'ṇ'],	[/[q;]n/g, 'ṅ'],	[/[w,]n/g, 'ñ'],
+	[/[z\.]m/g, "ṃ"],	[/[q;]m/g, "ṁ"],
+	[/[z\.]l/g,'ḷ'],   
+
+	[/A[Aa]/g,'Ā'], [/I[Ii]/g, 'Ī'], 	[/U[Uu]/g, 'Ū'],
+	[/[Z\.]T/g, 'Ṭ'],	[/[Z\.]D/g, 'Ḍ'],
+	[/[Z\.]N/g, 'Ṇ'],	[/[Q;]N/g, 'Ṅ'],	[/[W,]N/g, 'Ñ'],
+	[/[Z\.]M/g, "Ṃ"],	[/[Q;]M/g, "Ṁ"],
+	[/[Z\.]L/g,'Ḷ'],    
+]
+const chmapsanksrit=[
+ 	[/[w,]l/g, 'ḹ'],   
+	[/[z\.]r/g,'ṛ'],    [/[w,]r/g, 'ṝ'],
+	[/[z\.]s/g,'ṣ'],    [/[w,]s/g, 'ś'],
+	[/[z\.]h/g,'ḥ'],
+	[/[W,]L/g, 'Ḹ'],   
+	[/[Z\.]R/g,'Ṛ'],    [/[W,]R/g, 'Ṝ'],
+	[/[Z\.]S/g,'Ṣ'],    [/[W,]S/g, 'Ś'],
+	[/[Z\.]H/g,'Ḥ'],
+]
+
+function toUni(input) {
+	if(!input || input == '') return input;
+	chmap.forEach( m=> input=input.replace(m[0],m[1]));	
+	if (cbsanskrit.checked) {
+		chmapsanksrit.forEach( m=> input=input.replace(m[0],m[1]));	
+	}
+	return input;
+}
+</script>
+</html>

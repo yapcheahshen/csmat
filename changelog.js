@@ -1,5 +1,6 @@
 ﻿/* remind me to backup*/
 `
+2020.5.24 found 32364 links, recognized 99.28%, parsed 38.17% 
 2020.5.21 study DPR conjugation and compound word breakup
 2020.5.20 breadcrumb TOC
 2020.5.17 smaller file for easier mat mapping, 
@@ -9,6 +10,13 @@
 2020.5.15   too many syllable in e301n  , mul, att, tik passed
 2020.5.13 start project
 	
+
+link format
+s0305m3p200
+s0305m3p200y33 33th syllable
+s0305m3p200y33z 33th syllable until end of word
+s0305m3p200y33z3 33th syllable and 3 syllable forward
+
 
 
 TODO

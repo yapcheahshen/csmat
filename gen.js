@@ -11,24 +11,11 @@ const output=[];
 const rawtags=[];
 const tocoutput=['1:1,0Tipitaka'];
 const matpara=[];
-const MAXDOC=1<<16; //<p> is a doc
-const MAXSYL =1<<12;
+
 let filename='',sourcelinenumber=0;
 const TocEle={nikaya:1,book:2,chapter:3,title:4,subhead:5}//,subsubhead:6}
 const isToc=rend=>{
 	return TocEle[rend];
-}
-const mataddr=(nbook=0,ndoc=1,nsyl=0)=>{ 
-	if (ndoc>=MAXDOC)throw ndoc+" doc exceed limit " +filename+" "+sourcelinenumber;
-	if (nsyl>=MAXSYL)throw nsyl+" syllabus exceed limit " +filename+" "+sourcelinenumber;
-	return nsyl+ndoc*(1<<12)+nbook*(1<<28);
-}
-const unpackmataddr=addr=>{
-	const syl=addr % (MAXSYL-1);
-	addr=addr>>12;
-	const doc = addr % (MAXDOC-1);
-	const book= addr>>16;
-	return [book,doc,syl];
 }
 
 const parseInlineTag=(tagstr)=>{
@@ -37,7 +24,6 @@ const parseInlineTag=(tagstr)=>{
 		
 	} else if (tagstr.substr(0,6)=="<note ") {
 		//todo parse note links
-		savetag=false;
 	} else if (tagstr.substr(0,6)=="<gbrk/") {
 		savetag=false;
 	} else {
@@ -46,12 +32,13 @@ const parseInlineTag=(tagstr)=>{
 	}
 	return savetag;
 }
+const {makemataddr}=require("./mataddr");
 const {expandrange}=require("./paliutil")
 const repeatnum={};
 let nikaya='',lastdepth=0;
 const parseP=(attrs,docseq,linetext)=>{
 	let extra='',paranum=''; //
-	const a=mataddr(bookseq,docseq);
+	const a=makemataddr(bookseq,docseq);
 	attrs.forEach(attr=>{
 		if (attr[attr.length-1]=='"') {
 			attr=attr.slice(0,attr.length-1);
@@ -113,7 +100,7 @@ const parseLine=(line,docseq)=>{
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
 		if (unit[0]=="<") {
-			const a=mataddr(bookseq,docseq,nsyl);
+			const a=makemataddr(bookseq,docseq,nsyl);
 			const savetag=parseInlineTag(unit);
 			const tagline=unit.substr(1,unit.length-3);
 			if (savetag) rawtags.push([a.toString(16),tagline]);

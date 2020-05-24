@@ -8,7 +8,7 @@ const helpmessage=[["","巴利聖典逐詞定址系統"]
                   ,["","版本：2020.5.11"]
                   ,["","https://github.com/ksanaforge/csmat/"]]
 
-const dbname="mul"
+const dbname=["mul","att","tik"];
 const setHash=(newobj)=>{
 	let hash=document.location.hash.substr(1);
 	const p=new URLSearchParams(hash);
@@ -84,7 +84,7 @@ new Vue({
 		},
 		fetch(obj){
 			const t=(new Date()).getMilliseconds();
-			Dengine.readpage(dbname,obj,(res,db)=>{
+			Dengine.readpage(dbname[0],obj,(res,db)=>{
 				const elapse=(new Date()).getMilliseconds()-t;
 				if (!this.gettoc) this.gettoc=db.gettoc;
 				this.rawtext=res;
@@ -113,18 +113,23 @@ new Vue({
 	},
 
 	mounted(){
-		Dengine.openSearchable(dbname,function(db){
+		Dengine.openSearchable(dbname[0],function(db){
+			this.log(dbname[0]+" opened, built on "+db.getDate());
+			Dengine.openSearchable(dbname[1],db2=>{
+				this.log(dbname[1]+" opened, built on "+db2.getDate());
+				Dengine.openSearchable(dbname[2],db3=>{
+					this.log(dbname[2]+" opened, built on "+db3.getDate());
+				});
+			})
 			const {b,p}=URLParams();
 			this.bookname=b?b:"1";
 			this.paranum=p?p:"1";
 			this.db=db;
-			this.log(dbname+" opened, built on "+db.getDate());
 		}.bind(this));
 
 		setInterval(()=>{
 			this.logmessages.pop();
 		},10000);
-
 	},
 	data(){
 		return {
