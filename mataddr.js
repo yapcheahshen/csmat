@@ -1,10 +1,10 @@
 const MAXDOC=1<<16; //<p> is a doc
 const MAXSYL =1<<12;
-const {getbookname}=require("./bookname");
+const {bookseq2bookname}=require("./bookseq");
 const humanlink=(set,mataddr)=>{
 	const o=unpackmataddr(mataddr);
 	if (!o)return null;
-	const bk=getbookname(set,o[0]);
+	const bk=bookseq2bookname(set,o[0]);
 
 	if (!bk)return null;
 	let s=bk+"d"+o[1];//need db to translate to p
@@ -22,7 +22,6 @@ const unpackmataddr=addr=>{
 	addr=Math.floor(addr / 4096);
 	const doc = addr & 0xffff;
 	const book= addr>>16;
-	console.log(book)
 	return [book,doc,syl];
 }
 

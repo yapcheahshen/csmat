@@ -46,7 +46,9 @@ const {humanlink}=require("./mataddr");
 const pattern=require("./linkpattern");
 let recognized=0;
 const unregconized=[];
-
+const patstat=[];
+const parsefail=[];
+const parsedlinks=[];
 const recognize=(link,set,mataddr)=>{
 	let res='',ok=false,lastpat;
 	for (var i=0;i<pattern.length;i++){
@@ -56,9 +58,12 @@ const recognize=(link,set,mataddr)=>{
 			const o=pat[1]( m[1]);
 			if (typeof o=="string"){
 				ok=true;
+				if (!patstat[i]) patstat[i]=0;
+				patstat[i]++;
 				res=o;
+				parsedlinks.push(o+"<="+set+"@"+mataddr.toString(16));
 			} else {
-				if (o) console.log("cannot parse ",link,'to',humanlink(set,mataddr),'code',o);	
+				if (o) parsefail.push([link[0],humanlink(set,mataddr)]);	
 			}
 			break; //try the first match pattern , /ma. ni./ fail and do not try /a. ni./
 		}
@@ -80,4 +85,10 @@ console.log("number of links",links.length)
 fs.writeFileSync("all-links.txt",links.join("\n"),"utf8")
 fs.writeFileSync("tra-links.txt",translatelink.join("\n"),"utf8")
 fs.writeFileSync("unregconized.txt",unregconized.join("\n"),"utf8")
-console.log("recognized",recognized, (recognized*100/links.length).toFixed(2)+"%");
+console.log("recognized",recognized, (recognized*100/links.length).toFixed(2)+"%fail",parsefail.length);
+
+fs.writeFileSync("link-parsefail.txt",parsefail.join("\n"),"utf8")
+fs.writeFileSync("link-parsed.txt",parsedlinks.join("\n"),"utf8");
+const stat=patstat.map((count,idx)=>[count,pattern[idx][0]]);
+stat.sort((a,b)=>b[0]-a[0]);
+fs.writeFileSync("link-freqpat.txt",stat.join("\n"),"utf8")
