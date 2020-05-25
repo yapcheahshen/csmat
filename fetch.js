@@ -1,15 +1,19 @@
 const getaux=db=>{
 	const aux=db.getaux();
 	if (typeof aux.paranum=="string") aux.paranum=eval(aux.paranum);
-	if (typeof aux.bookname=="string") aux.bookname=aux.bookname.split("\n");
-	return {bookname:aux.bookname,paranum:aux.paranum};
+	return {paranum:aux.paranum};
 }
 const vpl2paranum=(db,vpl)=>{
 	let at=vpl.indexOf(":");
-	const book=parseInt(vpl.substr(0,at));
+	const bookname=vpl.substr(0,at);
 	const page=parseInt( vpl.substr(at+1));
-	const {bookname,paranum}=getaux(db);
-
+	const {paranum}=getaux(db);
+	let book;
+	if (parseInt(bookname).toString()==bookname) {
+		book=parseInt(bookname)
+	} else {
+		book=db.bookname2seq(bookname);
+	}
 	const arr=paranum[book];
 	let prev=0,l=0;
 	for (var i=0;i<arr.length;i++) {
@@ -23,12 +27,19 @@ const vpl2paranum=(db,vpl)=>{
 	return 0;
 }
 const parseId=(db,opts)=>{
-	const m=opts.rawid.match(/(\d+),(\d+)/);
+	const m=opts.rawid.match(/(.+),(\d+)/);
 	if (!m)return opts;
 
-	const {bookname,paranum}=getaux(db);
-	const book=parseInt(m[1]);
+	const {paranum}=getaux(db);
+	let bookname=m[1],book;
 	const para=parseInt(m[2]);
+	
+	if (parseInt(bookname).toString()==bookname) {
+		book=parseInt(bookname);
+		bookname=db.bookseq2name(book);
+	} else {
+		book=db.bookname2seq(bookname);
+	}
 
 	let at=para;
 	let start=paranum[book][at];
@@ -44,7 +55,7 @@ const parseId=(db,opts)=>{
 		end=paranum[book][at];
 	}
 
-	const prefix=book+":"+start;
+	const prefix=bookname+":"+start;
 	const pagecount=end-start;
 	return Object.assign(opts,{prefix,pagecount});
 }

@@ -14,14 +14,14 @@ paras.forEach((item,idx)=>{
 });
 paranum+=']';
 
-const bookname=fs.readFileSync(set+"-bookname.txt","utf8");
+//const bookname=fs.readFileSync(set+"-bookname.txt","utf8");
 
-const aux={paranum,bookname}; // if eval(paranum), empty item will fill with null
+const aux={paranum}; // if eval(paranum), empty item will fill with null
 
 build({name:set,outdir:set+"/", textonly:true, 
 	withtoc:true,continuouspage:true,aux, 
-	fields:["txt"] },raw);
+	fields:["txt","notes"] },raw);
 
 
 const toc=fs.readFileSync(set+"-toc.txt","utf8");
-writeExtra(set+"/"+set+".toc-ori.js",{"name":set,"type":"toc","field":["txt","notes"]},toc);
+writeExtra(set+"/"+set+".toc-ori.js",{"name":set,"type":"toc","field":["txt"]},toc);

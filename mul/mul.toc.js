@@ -1534,7 +1534,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 8:367,5|Aññathāsatthuguṇadassanaṃ
 8:369,5|Anuyogadānappakāro
 8:374,5|Acchariyaabbhutaṃ
-8:379,3|6. Pāsādikasuttaṃ|29清淨經
+8:379,3|6. Pāsādikasuttaṃ|29淨信經
 8:381,4|-
 8:381,5|Nigaṇṭhanāṭaputtakālaṅkiriyā
 8:386,5|Asammāsambuddhappaveditadhammavinayo
@@ -4224,7 +4224,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 20:222,5|1. Cakkasuttaṃ
 20:225,5|2. Saṅgahasuttaṃ
 20:230,5|3. Sīhasuttaṃ
-20:237,5|4. Aggappasādasuttaṃ|最上清淨品
+20:237,5|4. Aggappasādasuttaṃ|最上淨信經
 20:246,5|5. Vassakārasuttaṃ
 20:254,5|6. Doṇasuttaṃ
 20:261,5|7. Aparihāniyasuttaṃ

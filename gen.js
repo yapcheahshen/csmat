@@ -123,11 +123,12 @@ const parseLine=(line,docseq)=>{
 	}
 	return l;
 }
-const bookname=[];
+//const booknames=[];
 const gen=(content,fn)=>{
 	const lines=content.split(/\r?\n/);
+	const bk=fn.substr(3).replace(/\.xml/,'');
 	let docseq=0;
-	bookname.push(fn.substr(3).replace(/\.xml/,''));
+	//booknames.push(bk);
 	for (let i=0;i<lines.length;i++) {
 		let L=lines[i];
 		sourcelinenumber=i;
@@ -146,7 +147,11 @@ const gen=(content,fn)=>{
 			});
 
 		}
-		const sid=bookseq+":"+docseq;
+		let sid=":"+docseq;
+		if (docseq==1) {
+			sid=bk+sid;
+			console.log(bk)
+		}
 		let outl=parseLine(L,docseq);
 
 		outl= extra? extra+"|"+outl:outl;
@@ -176,8 +181,8 @@ const write=()=>{
 	fs.writeFileSync(set+"-paranum.txt",matpara.join("\n"),"utf8");
 	matpara.length=0;
 
-	fs.writeFileSync(set+"-bookname.txt",bookname.join("\n"),"utf8");
-	bookname.length=0;
+	//fs.writeFileSync(set+"-bookname.txt",bookname.join("\n"),"utf8");
+	//bookname.length=0;
 
 	fs.writeFileSync(set+"-repeatnum.txt",JSON.stringify(repeatnum,'',' '),'utf8');
 }

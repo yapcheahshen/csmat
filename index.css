@@ -1,3 +1,25 @@
+.tip {
+	border-bottom: 1px dashed;
+	text-decoration:none;
+}
+.tip:hover{
+	cursor: pointer;position: relative;
+}
+.tip span {display:none;}
+.tip:hover span {
+	border:#c0c0c0 1px;
+	padding:5px 20px 5px 5px;
+	background: gray;
+	display:block;text-decoration: none;
+	left:0px;margin:10px;width:250px;top:10px;position: absolute;
+}
+
+option[data-title]:hover:after{
+	content:attr(data-title);
+	position:absolute;
+	background: gray;
+}
+
 .breadcrumbtoc {font-size:100%;border:none;background: #DFDFDF}
 .pagenum {width:5em;}
 

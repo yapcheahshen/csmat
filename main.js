@@ -94,18 +94,29 @@ new Vue({
 					const sid=res[0][0];
 					let at=sid.lastIndexOf(":");
 					this.bookname=sid.substr(0,at);
-					const page=parseInt(sid.substr(at+1));
-//jakata 17~22 有問題
-					const vpl=this.bookname+":"+(page+3)+".1";
-					this.paranum=vpl2paranum(db,sid);
+					const docseq=parseInt(sid.substr(at+1));
 
-					this.vpl=vpl;
+//jakata 17~22 有問題
+					let book='';
+					if (parseInt(book).toString()==book) {
+						book=parseInt(this.bookname);
+					} else {
+						book=db.bookname2seq(this.bookname);
+					}
+					const vpl=book+":"+(docseq+3)+".1";
+					this.paranum=vpl2paranum(db,sid);
+					this.vpl=vpl; //tree toc still using bookseq:docseq
 					this.logmessages.unshift(sid+"fetch "+this.vpl+" elapse"+elapse)
 				}).bind(this),200);
 			})
 		},
 		selectsid(sid){
-			this.fetch({prefix:sid});
+			const arr=sid.split(":");
+			let bk=arr[0],docseq=arr[1];
+			if (parseInt(bk).toString()==bk) {
+				bk=this.db.bookseq2name(bk);
+			}
+			this.fetch({prefix:bk+":"+docseq});
 		},
 		log(msg){
 			this.logmessages.unshift((new Date()).toISOString()+":"+msg);
@@ -113,16 +124,16 @@ new Vue({
 	},
 
 	mounted(){
-		Dengine.openSearchable(dbname[0],function(db){
+		Dengine.open(dbname[0],function(db){
 			this.log(dbname[0]+" opened, built on "+db.getDate());
-			Dengine.openSearchable(dbname[1],db2=>{
+			Dengine.open(dbname[1],db2=>{
 				this.log(dbname[1]+" opened, built on "+db2.getDate());
-				Dengine.openSearchable(dbname[2],db3=>{
+				Dengine.open(dbname[2],db3=>{
 					this.log(dbname[2]+" opened, built on "+db3.getDate());
 				});
 			})
 			const {b,p}=URLParams();
-			this.bookname=b?b:"1";
+			this.bookname=b?b:"s0101m";
 			this.paranum=p?p:"1";
 			this.db=db;
 		}.bind(this));
