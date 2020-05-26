@@ -15,8 +15,8 @@ paras.forEach((item,idx)=>{
 paranum+=']';
 
 //const bookname=fs.readFileSync(set+"-bookname.txt","utf8");
-
-const aux={paranum}; // if eval(paranum), empty item will fill with null
+const matlinks=JSON.parse(fs.readFileSync(set+"-matlinks.txt","utf8"));
+const aux={paranum,matlinks}; // if eval(paranum), empty item will fill with null
 
 build({name:set,outdir:set+"/", textonly:true, 
 	withtoc:true,continuouspage:true,aux, 

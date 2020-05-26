@@ -4,9 +4,9 @@ require("./maintext");
 //require("./xref");
 require("./logger");
 //const ptscite=require("./ptscite");
-const helpmessage=[["","巴利聖典逐詞定址系統"]
-                  ,["","版本：2020.5.11"]
-                  ,["","https://github.com/ksanaforge/csmat/"]]
+const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
+               //   ,["","版本：2020.5.11"]
+                //  ,["","https://github.com/ksanaforge/csmat/"]]
 
 const dbname=["mul","att","tik"];
 const setHash=(newobj)=>{
@@ -26,7 +26,7 @@ const URLParams=()=>{
 	return out;
 }
 //const {conjugate,conjugateWord,analyzeword,G_outwords,G_shortdefpost,outputAnalysis}=require("./fromdpr")
-const {parseId,vpl2paranum}=require("./fetch");
+const {vpl2paranum,id_regex}=require("./fetch");
 new Vue({
 	el:"#app",
 	methods:{
@@ -61,7 +61,7 @@ new Vue({
 			clearTimeout(this.timer);
 			this.timer=setTimeout(()=>{
 				this.fetchPara(this.bookname,this.paranum)
-			},500);
+			},800);
 		},
 		keywordchange(){
 			//aniccucchādanaparimaddanabhedana  , 8 seconds
@@ -74,22 +74,20 @@ new Vue({
 			clearTimeout(this.timer);
 			this.timer=setTimeout(()=>{
 				this.fetchPara(this.bookname,this.paranum)
-			},500);
+			},800);
 		},
 		fetchPara(bookname,paranum,plusminus){
-			const rawid=bookname+","+paranum;
-			setHash({b:bookname,p:paranum});
-			const fetchobj={parseId,rawid,plusminus};
-			this.fetch(fetchobj);
+			const rawid=(paranum[0]==":")?bookname+paranum
+			:bookname+"p"+paranum;
+			setHash({a:rawid});
+			this.rawid=rawid;
+			//const fetchobj={parseId,rawid,plusminus};
+			//this.fetch(fetchobj);
 		},
-		fetch(obj){
+		fetched(res){
 			const t=(new Date()).getMilliseconds();
-			Dengine.readpage(dbname[0],obj,(res,db)=>{
+			Dengine.open(dbname[0],db=>{
 				const elapse=(new Date()).getMilliseconds()-t;
-				if (!this.gettoc) this.gettoc=db.gettoc;
-				this.rawtext=res;
-				//this.rawpagecount=pagecount||1;
-				
 				setTimeout((function(){
 					const sid=res[0][0];
 					let at=sid.lastIndexOf(":");
@@ -116,7 +114,7 @@ new Vue({
 			if (parseInt(bk).toString()==bk) {
 				bk=this.db.bookseq2name(bk);
 			}
-			this.fetch({prefix:bk+":"+docseq});
+			this.rawid=bk+":"+docseq;
 		},
 		log(msg){
 			this.logmessages.unshift((new Date()).toISOString()+":"+msg);
@@ -132,10 +130,18 @@ new Vue({
 					this.log(dbname[2]+" opened, built on "+db3.getDate());
 				});
 			})
-			const {b,p}=URLParams();
+			const {a}=URLParams();
+			const m=(a||"").match(id_regex);
+			let b,p;
+			if (m) {
+				b=m[1];
+				p=m[2]
+			}
 			this.bookname=b?b:"s0101m";
 			this.paranum=p?p:"1";
 			this.db=db;
+			this.gettoc=db.gettoc;
+			this.paranumchange()
 		}.bind(this));
 
 		setInterval(()=>{
@@ -147,6 +153,7 @@ new Vue({
 			db:null,
 			showpopup:false,
 			rawtext:helpmessage,
+			rawid:'',
 			rawpagecount:1,
 			gettoc:null,
 			bookname:'1',

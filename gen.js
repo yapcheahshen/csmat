@@ -34,6 +34,7 @@ const parseInlineTag=(tagstr)=>{
 }
 const {makemataddr}=require("./mataddr");
 const {expandrange}=require("./paliutil")
+const {recognise,linkpatterns,filename2set,hyperlink_regex}=require("./linkparser");
 const repeatnum={};
 let nikaya='',lastdepth=0;
 const parseP=(attrs,docseq,linetext)=>{
@@ -92,6 +93,7 @@ const parseP=(attrs,docseq,linetext)=>{
 	})
 	return paranum+extra;
 }
+const matlinks=[];
 const parseLine=(line,docseq)=>{
 	let units=line.split(/(<.+?>)/);
 	let l='';
@@ -100,15 +102,29 @@ const parseLine=(line,docseq)=>{
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
 		if (unit[0]=="<") {
-			const a=makemataddr(bookseq,docseq,nsyl);
+			const mataddr=makemataddr(bookseq,docseq,nsyl);
 			const savetag=parseInlineTag(unit);
 			const tagline=unit.substr(1,unit.length-3);
-			if (savetag) rawtags.push([a.toString(16),tagline]);
+			if (savetag) rawtags.push([mataddr.toString(16),tagline]);
 			if (unit.substr(0,6)=="<note ") {
 				nnote++;
 				l+="^"+nnote;
 				if (notestr) notestr+=" ";
-				notestr+=nnote+"^"+unit.match(/<note [a-z]+="(.+?)"/)[1];
+				let nc=unit.match(/<note [a-z]+="(.+?)"/)[1]
+		
+				linkpatterns.forEach(pat=>{
+					nc=nc.replace(pat,m=>{
+						let translated=recognise([m,mataddr]);
+						if (typeof translated=="string") {
+							const hyperlink= "@"+translated+";";
+							matlinks.push([mataddr.toString(16),hyperlink]);
+							return hyperlink;
+						} else {
+							return m;
+						}
+					})
+				})
+				notestr+=nnote+"^"+nc;
 			}
 		} else {
 			const syllables=syllabify(unit);
@@ -168,7 +184,27 @@ const dofile=()=>{
 		gen(content,fn);
 	});
 }
+/*
+{"targetdb":{
+	targetbkname:[
+		"srcmataddr_p_targetparanum"
+	]
+}}
+*/
+const groupmatlinksindb=()=>{
+	const groups={};
+	for (var i=0;i<matlinks.length;i++ ){
+		const srcmataddr=matlinks[i][0];
+		const hyperlink=matlinks[i][1];
+		const set=filename2set( matlinks[i][1] );
+		if (!groups[set]) groups[set]={};
 
+		const m=hyperlink.match(hyperlink_regex);
+		if (!groups[set][m[1]]) groups[set][m[1]]=[];
+		groups[set][m[1]].push(srcmataddr+"p"+m[2]);
+	}
+	return groups;
+}
 const write=()=>{
 	const outfn=set+"-raw.txt";
 	console.log("writing ",outfn);
@@ -185,6 +221,8 @@ const write=()=>{
 	//bookname.length=0;
 
 	fs.writeFileSync(set+"-repeatnum.txt",JSON.stringify(repeatnum,'',' '),'utf8');
+	const groups=groupmatlinksindb();
+	fs.writeFileSync(set+"-matlinks.txt",JSON.stringify(groups),'utf8');
 }
 
 

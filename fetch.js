@@ -3,6 +3,20 @@ const getaux=db=>{
 	if (typeof aux.paranum=="string") aux.paranum=eval(aux.paranum);
 	return {paranum:aux.paranum};
 }
+const getparallel=(set,rawid)=>{
+	if (set=="att") {
+		return rawid.replace(/(\d+)[mat]/,"$1a");
+	}
+	if (set=="tik") {
+		return rawid.replace(/(\d+)[mat]/,"$1t");
+	}
+
+	if (set=="mul") {
+		return rawid.replace(/(\d+)[mat]/,"$1m");
+	}
+	return rawid;
+}
+
 const vpl2paranum=(db,vpl)=>{
 	let at=vpl.indexOf(":");
 	const bookname=vpl.substr(0,at);
@@ -27,8 +41,14 @@ const vpl2paranum=(db,vpl)=>{
 	return 0;
 }
 const parseId=(db,opts)=>{
-	const m=opts.rawid.match(/(.+),(\d+)/);
-	if (!m)return opts;
+	const m=opts.rawid.match(/(.+?)p(\d+)/);
+	if (!m) {
+		const m2=opts.rawid.match(/(.+?):(.+)/);
+		if (m2) {
+			return Object.assign(opts,{prefix:opts.rawid});
+		}
+		return opts;
+	}
 
 	const {paranum}=getaux(db);
 	let bookname=m[1],book;
@@ -59,4 +79,39 @@ const parseId=(db,opts)=>{
 	const pagecount=end-start;
 	return Object.assign(opts,{prefix,pagecount});
 }
-module.exports={parseId,vpl2paranum};
+
+const An=(m1,m2)=>{
+	if (m1=="2") {
+		return parseInt(m2)+1
+	}
+	if (m1=="3"){
+		return parseInt(m2)+4
+	}
+	if (m1=="4"){
+		return parseInt(m2)+7
+	}
+	return 1;
+}
+const patterns=[
+  [/s010(\d)mp/,'dn. ni. $1.'],
+  [/s020(\d)mp/,'mn. ni. $1.'],
+  [/s030(\d)mp/,'sn. ni. $1.'],
+  [/s040(\d)m(\d?)p/,(m,m1,m2)=>'an. ni. '+An(m1,m2)+'.'],
+  [/s010(\d)a/,'dn. ni. attha $1.'],
+  [/s020(\d)a/,'mn. ni. attha $1.'],
+  [/s030(\d)a/,'sn. ni. attha $1.'],
+  [/s040(\d)a(\d?)p/,(m,m1,m2)=>'an. ni. attha '+An(m1,m2)+'.'],
+  [/s010(\d)m/,'dn. ni. tika $1.'],
+  [/s020(\d)t/,'mn. ni. tika $1.'],
+  [/s030(\d)t/,'sn. ni. tika $1.'],
+  [/s040(\d)t(\d?)p/,(m,m1,m2)=>'an. ni. tika '+An(m1,m2)+'.'],
+]
+const matlabel=hyperlink=>{
+	let o=hyperlink;
+	patterns.forEach(pat=>{
+		o=o.replace(pat[0],pat[1]);
+	})
+	return o;
+}
+const id_regex=/([vinseabh\d]+[mat]\d?)p(\d+)/
+module.exports={parseId,vpl2paranum,getparallel,id_regex,matlabel};

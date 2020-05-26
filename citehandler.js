@@ -86,7 +86,7 @@ const visuddhi=num=>{
 }
 const mv=n=>{return 0}
 const generic=n=>{return 0}
-const linkpattern=[
+const citehandler=[
 	[/[Dd]ī\. ?ni\. abhi\. ṭī\. ([\d\., \-]+)/, generic],
 	[/[Dd]ī\. ?ni. ?aṭṭha\.? ([\d\., \-]+)/, dn_a],
 	[/[Dd]ī\. ?ni. ?ṭī\.? ([\d\., \-]+)/, dn_t],
@@ -186,4 +186,4 @@ const linkpattern=[
 ]
 
 /* rare case */
-module.exports=linkpattern;
+module.exports=citehandler;
