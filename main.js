@@ -102,6 +102,7 @@ new Vue({
 						book=db.bookname2seq(this.bookname);
 					}
 					const vpl=book+":"+(docseq+3)+".1";
+
 					this.paranum=vpl2paranum(db,sid);
 					this.vpl=vpl; //tree toc still using bookseq:docseq
 					this.logmessages.unshift(sid+"fetch "+this.vpl+" elapse"+elapse)

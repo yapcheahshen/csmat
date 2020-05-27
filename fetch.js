@@ -93,18 +93,18 @@ const An=(m1,m2)=>{
 	return 1;
 }
 const patterns=[
-  [/s010(\d)mp/,'dn. ni. $1.'],
-  [/s020(\d)mp/,'mn. ni. $1.'],
-  [/s030(\d)mp/,'sn. ni. $1.'],
-  [/s040(\d)m(\d?)p/,(m,m1,m2)=>'an. ni. '+An(m1,m2)+'.'],
-  [/s010(\d)a/,'dn. ni. attha $1.'],
-  [/s020(\d)a/,'mn. ni. attha $1.'],
-  [/s030(\d)a/,'sn. ni. attha $1.'],
-  [/s040(\d)a(\d?)p/,(m,m1,m2)=>'an. ni. attha '+An(m1,m2)+'.'],
-  [/s010(\d)m/,'dn. ni. tika $1.'],
-  [/s020(\d)t/,'mn. ni. tika $1.'],
-  [/s030(\d)t/,'sn. ni. tika $1.'],
-  [/s040(\d)t(\d?)p/,(m,m1,m2)=>'an. ni. tika '+An(m1,m2)+'.'],
+  [/s010(\d)mp/,'dn$1.'],
+  [/s020(\d)mp/,'mn$1.'],
+  [/s030(\d)mp/,'sn$1.'],
+  [/s040(\d)m(\d?)p/,(m,m1,m2)=>'an'+An(m1,m2)+'.'],
+  [/s010(\d)ap/,'da$1.'],
+  [/s020(\d)ap/,'ma$1.'],
+  [/s030(\d)ap/,'sa$1.'],
+  [/s040(\d)a(\d?)p/,(m,m1,m2)=>'aa'+An(m1,m2)+'.'],
+  [/s010(\d)tp/,'dt$1.'],
+  [/s020(\d)tp/,'mt$1.'],
+  [/s030(\d)tp/,'st$1.'],
+  [/s040(\d)t(\d?)p/,(m,m1,m2)=>'at'+An(m1,m2)+'.'],
 ]
 const matlabel=hyperlink=>{
 	let o=hyperlink;

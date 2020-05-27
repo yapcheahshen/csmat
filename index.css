@@ -1,3 +1,11 @@
+.translatebtn{border-radius: 50%;cursor:pointer;color:white;
+	background:green;border:solid 1px black;}
+.hi {color:#ffafaf;}
+.proper{color:blue;}
+.verb{color:red;}
+.lexicon {border-bottom: dotted 1px brown}
+rt {font-size:85%;font-family: "Microsoft YaHei"}
+.underline {border-bottom: dotted 1px blue}
 .topleveltextmenu {background: #ffffaf}
 .backlinkmenu {background: #ffffaf}
 .tip {

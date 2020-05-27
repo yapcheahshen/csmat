@@ -4,8 +4,10 @@
 */
 const {SEGSEP,getdbbookname}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
-const {filename2set,hyperlink_regex_g}=require("./linkparser");
+const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
+const {decorateText}=require("./decorate");
+const {parsedef}=require("./lexicon");
 const dbname=["mul","att","tik"];
 
 Vue.component('notebutton',{
@@ -33,8 +35,7 @@ Vue.component('notebutton',{
 				const label=matlabel(rawid);
 				const setname=filename2set(rawid);
 				children.push( h('paralleltextbutton',
-					{props:{rawid,depth:this.depth,closeme:this.closeme,
-						setname,label}}));
+					{props:{rawid,depth:this.depth,setname,label}}));
 				prev=idx+m.length;
 			});
 			let t=notetext.substr(prev)
@@ -50,21 +51,57 @@ Vue.component('notebutton',{
 	}
 })
 
+const renderInlineNote=(h,text,notes,nline,depth)=>{
+	let p=0;
+	const children=[];
+
+	text.replace(/\^(\d+)/g,(m,m1,p1)=>{
+		const t=text.substring(p,p1);
+		if (t) children.push( h('span',t));
+
+		const note=notes[nline+"_"+m1];
+		if (note) {
+			const m=note.trim().match(hyperlink_regex);
+			if (m){
+				const rawid=m[1]+"p"+m[2];
+				const label=matlabel(rawid);
+				const setname=filename2set(rawid);
+				children.push( h('paralleltextbutton',
+					{props:{rawid,depth,setname,label}}));
+			} else {
+				children.push(h('notebutton',{props:{id:m1,note,depth}}));
+			}
+		} else {
+			children.push(h('xrefbutton',{props:{xref:m1,openxref:this.openxref}})) 
+		}
+		p=p1+m.length;
+	})
+	if (children.length==0) {
+		return text;
+	}
+	children.push( h('span',{},text.substr(p)))
+	return children;
+}
+
 Vue.component('paralleltextbutton',{
-	props:['setname','closeme','depth','rawid','label'],
+	props:['setname','depth','rawid','label'],
 	methods:{
-		toggle(){
-			this.show=!this.show;
+		execcommand(cmd){
+			if (cmd=="close") this.show=false;
+			return true;
+		},
+		showme(){
+			this.show=true;
 		}
 	},
 	render(h){
 		if (!this.show){
-			return h('button',{on:{click:this.toggle}},
+			return h("button",{on:{click:this.showme}},
 				this.label?this.label:this.setname);
 		} else {
 			const rawid=getparallel(this.setname,this.rawid);
-			return h('card',{props:{depth:this.depth+1,
-				closeme:this.toggle,rawid }});
+			return h("card",{props:{depth:this.depth+1,
+				command:this.execcommand,rawid }});
 		}
 	},
 	data(){
@@ -87,28 +124,45 @@ Vue.component('xrefbutton',{
 })
 
 Vue.component('topleveltextmenu',{
-	props:['depth','closeme','rawid'],
+	props:['depth','rawid','command'],
 	render(h){
-		const sets=["att","tik"];
+		const dbname=filename2set(this.rawid);
+		const sets=["mul","att","tik"].filter(s=>s!==dbname);		
 		const children=sets.map(setname=>h("paralleltextbutton",
 			{props:{setname,rawid:this.rawid,
-				closeme:this.closeme,depth:this.depth+1}}))
+				depth:this.depth+1}}))
+		children.push(h("autotran",{props:{command:this.command}}));
 		return h("div",{class:"topleveltextmenu"},children);
 	}
 })
-Vue.component('textmenu',{
-	props:['depth','closeme','rawid'],
+Vue.component('autotran',{
+	props:['command'],
 	methods:{
-		onclose(){
-			this.closeme()
+		toggletranslate(){
+			this.command("toggletranslate")
 		}
 	},
 	render(h){
-		const attr={on:{click:this.onclose},props:{rawid:this.rawid,depth:this.depth}};
+		return h("span",{class:"translatebtn",on:{click:this.toggletranslate}},"译")
+	}
+})
+Vue.component('textmenu',{
+	props:['depth','command','rawid'],
+	methods:{
+		onclose(){
+			this.command("close");
+		}
+	},
+	render(h){
+		const attr={on:{click:this.onclose},
+		props:{rawid:this.rawid,depth:this.depth,command:this.command}};
 		if (this.depth==0) {
 			return h("topleveltextmenu",attr);
 		}
-		return h("button",attr,"close");
+		return h("div",{},
+			 [h("button",attr,"close"),
+			 h("autotran",{props:{command:this.command}})]
+		);
 	}
 });
 Vue.component('backlinkmenu',{
@@ -129,7 +183,7 @@ Vue.component('backlinkmenu',{
 			const depth=this.depth+1;
 			const label=matlabel(rawid);
 			return h("paralleltextbutton",
-				{props:{closeme:this.closeme,rawid,label,setname,depth}})
+				{props:{command:this.command,rawid,label,setname,depth}})
 		}):[];
 		return h('div',{},children)
 	}
@@ -137,7 +191,7 @@ Vue.component('backlinkmenu',{
 })
 
 Vue.component('card', { 
-	props:['rawid','depth','fetched','closeme'],
+	props:['rawid','depth','fetched','command'],
 	methods:{
 		onnote(note){
 			alert(note)
@@ -155,9 +209,18 @@ Vue.component('card', {
 			});	
 			this.prevrawid=this.rawid;	
 		},
+		execcommand(cmd){
+			let r=null;
+			if (this.command) r=this.command(cmd);
+			//if (r)return;
+
+			if (cmd=='toggletranslate') {
+				this.autotranslate=!this.autotranslate;
+			}
+		}
 	},
 	data(){
-		return {rawtext:null,prevrawid:'',backlinks:[]}
+		return {rawtext:null,prevrawid:'',backlinks:[],autotranslate:false}
 	},
 
 	render(h){
@@ -171,6 +234,7 @@ Vue.component('card', {
 		const depth=this.depth||0;
 		const notes={};
 
+
 		this.rawtext.map((item,idx)=>{
 			if (item[2]) { //has note
 				const ns=item[2].split(/(\d+)\^/).filter(item=>item);
@@ -180,36 +244,48 @@ Vue.component('card', {
 			} 
 		})
 
-		let text=this.rawtext.map((item,idx)=>{
-			let t=item[1];
-			t=t.replace(/\^\d+/g,(m,m1)=>"<"+idx+"_"+m.substr(1)+">" );
-			return t;
-		}).join("<br>");
-		//text=text.replace(/.\ ([A-Z])/g,".<br> $1");
-		//render xref at the line
-		
-
 		const children=[];
-		let p=0;
-		text.replace(/<(.+?)>/g,(m,m1,p1)=>{
-			const t=text.substring(p,p1);
-			if (t) children.push( h('span',t));
-			if (m1=="br") {
-				children.push(h('br'));
-			} else {
-				const note=notes[m1];
-				if (note) {
-					children.push(h('notebutton',{props:{id:m1,note,depth:depth+1}}));
-				} else {
-					children.push(h('xrefbutton',{props:{xref:m1,openxref:this.openxref}}))
-				}
-			}
-			p=p1+m.length;
-		})
+		if (this.autotranslate){
+			for (var j=0;j<this.rawtext.length;j++){
+				const text=this.rawtext[j][1];
+				
+				const snippet=decorateText(text);	
+				
+				let n=0,t='',prevclass='';
+				for (var i=0;i<text.length;i++){
+					if (n<snippet.length&&snippet[n][0]==i) {
+						if (prevclass[0]=="@") {
+							const rb=h('rb',{},t);
+							const {cls,def}=parsedef(prevclass.substr(1));
+							const rt=h('rt',{class:cls},def);
+							children.push(h('ruby',{},[rb,rt]));
 
-		children.push(h('span',text.substr(p)));
-		children.unshift(h('textmenu',{props:{depth,rawid:this.rawid,closeme:this.closeme}}));
-		children.push(h('backlinkmenu',{class:"backlinkmenu",props:{links:this.backlinks,depth}}));
+						} else {
+							const textwithotebtn=renderInlineNote(h,t,notes,j,depth+1);
+							children.push(h('span',{class:prevclass},textwithotebtn));
+						}
+						t='';
+						prevclass=snippet[n][1];
+						n++;
+					}
+					t+=text[i];
+				}
+				children.push(h('span',{class:prevclass},t));
+				children.push(h('br'));
+			}
+		} else {
+			for (var j=0;j<this.rawtext.length;j++){
+				const text=this.rawtext[j][1];
+				const textwithotebtn=renderInlineNote(h,text,notes,j,depth+1);
+				children.push(h('span',{},textwithotebtn));
+				children.push(h('br'));
+			}
+		}
+
+		children.unshift(h('textmenu',
+			{props:{depth,rawid:this.rawid,command:this.execcommand}}));
+		children.push(h('backlinkmenu',
+			{class:"backlinkmenu",props:{links:this.backlinks,depth}}));
 
 		let cls='card0';
 		if (this.depth) cls="card";
