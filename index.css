@@ -1,4 +1,5 @@
-
+.topleveltextmenu {background: #ffffaf}
+.backlinkmenu {background: #ffffaf}
 .tip {
 	border-bottom: 1px dashed;
 	text-decoration:none;
@@ -6,8 +7,8 @@
 .tip:hover{
 	cursor: pointer;position: relative;
 }
-.maintext0 { font-family: Tahoma; }
-.maintext {display:block;margin-left:1em;
+.card0 { font-family: Tahoma; }
+.card {display:block;margin-left:1em;
 	margin-top:0.5em;margin-bottom:0.5em;margin-right:3px;
 	border:1px dotted #1C6EA4;font-family: Tahoma}
 

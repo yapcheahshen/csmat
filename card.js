@@ -2,9 +2,10 @@
 	nestable text
 
 */
-const {SEGSEP}=require("dengine");
+const {SEGSEP,getdbbookname}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g}=require("./linkparser");
+const {unpackmataddr}=require("./mataddr");
 const dbname=["mul","att","tik"];
 
 Vue.component('notebutton',{
@@ -18,7 +19,7 @@ Vue.component('notebutton',{
 		}
 	},
 	data(){
-		return {show:false} 
+		return {show:false,showtimer:0} 
 	},
 	render(h) {
 		if (this.show) {
@@ -43,7 +44,8 @@ Vue.component('notebutton',{
 			return h('span',{class:'inlinenote'},children);
 
 		} else{
-			return h('span',{class:'notebutton',on:{click:this.toggle}},"※");
+			return h('span',{class:'notebutton',
+				on:{click:this.toggle}},"※");
 		}
 	}
 })
@@ -61,7 +63,7 @@ Vue.component('paralleltextbutton',{
 				this.label?this.label:this.setname);
 		} else {
 			const rawid=getparallel(this.setname,this.rawid);
-			return h('maintext',{props:{depth:this.depth+1,
+			return h('card',{props:{depth:this.depth+1,
 				closeme:this.toggle,rawid }});
 		}
 	},
@@ -91,7 +93,7 @@ Vue.component('topleveltextmenu',{
 		const children=sets.map(setname=>h("paralleltextbutton",
 			{props:{setname,rawid:this.rawid,
 				closeme:this.closeme,depth:this.depth+1}}))
-		return h("div",{},children);
+		return h("div",{class:"topleveltextmenu"},children);
 	}
 })
 Vue.component('textmenu',{
@@ -109,10 +111,33 @@ Vue.component('textmenu',{
 		return h("button",attr,"close");
 	}
 });
+Vue.component('backlinkmenu',{
+	props:['links','depth'],
+	//props:['setname','closeme','depth','rawid','label'],
+	methods:{
+		decodelink(link){
+			const tdb=link[0];
+			const vpl=unpackmataddr(link[1]);
+			const fn=getdbbookname(tdb,vpl[0]);
+			return fn+":"+vpl[1];
+		}
+	},
+	render(h){
+		const children=this.links?this.links.map( link=>{
+			const rawid=this.decodelink(link);
+			const setname=link[0];
+			const depth=this.depth+1;
+			const label=matlabel(rawid);
+			return h("paralleltextbutton",
+				{props:{closeme:this.closeme,rawid,label,setname,depth}})
+		}):[];
+		return h('div',{},children)
+	}
 
+})
 
-Vue.component('maintext', { 
-	props:['rawid','depth','closeme','fetched'],
+Vue.component('card', { 
+	props:['rawid','depth','fetched','closeme'],
 	methods:{
 		onnote(note){
 			alert(note)
@@ -121,15 +146,18 @@ Vue.component('maintext', {
 			const dbname=filename2set(this.rawid);
 			const obj={parseId,rawid:this.rawid};
 			Dengine.readpage(dbname,obj,(res,db)=>{
+				this.db=db;
 				if (!this.gettoc) this.gettoc=db.gettoc;
 				this.rawtext=res;
 				if (this.fetched) this.fetched(res);
+
+				this.backlinks=db.getbacklinks(this.rawid);
 			});	
 			this.prevrawid=this.rawid;	
 		},
 	},
 	data(){
-		return {rawtext:null,prevrawid:''}
+		return {rawtext:null,prevrawid:'',backlinks:[]}
 	},
 
 	render(h){
@@ -180,10 +208,11 @@ Vue.component('maintext', {
 		})
 
 		children.push(h('span',text.substr(p)));
-		children.unshift(h('textmenu',{props:{depth,closeme:this.closeme,rawid:this.rawid}}));
+		children.unshift(h('textmenu',{props:{depth,rawid:this.rawid,closeme:this.closeme}}));
+		children.push(h('backlinkmenu',{class:"backlinkmenu",props:{links:this.backlinks,depth}}));
 
-		let cls='maintext0';
-		if (this.depth) cls="maintext";
+		let cls='card0';
+		if (this.depth) cls="card";
 		return h("div",{class:cls},children);
 	}
 })

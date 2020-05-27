@@ -1,5 +1,5 @@
 require("dui");
-require("./maintext");
+require("./card");
 //require("./bigpopup");
 //require("./xref");
 require("./logger");
