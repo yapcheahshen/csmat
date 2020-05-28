@@ -1,19 +1,46 @@
 const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
 const {getdef}=require("./lexicon");
+const {suggestedBreak}=require("paliword");
+const trimdef=d=>{
+	let o='';
+	if (!d)return '';
+	const at=d.indexOf("=");
+	d=d.substr(at+1);
+	const m=d.match(/(.+?)[。，！]/)
+	if (m){
+		o=m[1].replace(/【.+?】/g,'');
+	}
+	return o;
+}
 const decorateText=(str)=>{
 	const tokens=str.split(PALI);
 
 	const decorations=[];
 	let offset=0;
 	for (var i=0;i<tokens.length;i++) {
-		const tk=tokens[i];
-		const def=getdef(tk.toLowerCase());
-		if (def) {
-			decorations.push([offset, tk.length,"@"+def]);
+		const tk=tokens[i].toLowerCase();
+		if (parseInt(tk)){
+			offset+=tk.length;
+			continue;
+		}
+		const breakup=suggestedBreak(tk);
+
+		for (var j=0;j<breakup.length;j++) {
+			const b=breakup[j];
+			if (Array.isArray(b)){
+				if (b[1]!==-1){
+					if (Array.isArray(b[1])){
+						decorations.push(
+						[offset+b[1][1],
+						b[1][2] ,"@"+getdef(b[1][0])]);												
+					} else {//solo
+						decorations.push([offset,b[0].length,"@!"+b[1]]);
+					}
+				}
+			}
 		}
 		offset+=tk.length;
 	}
-
 	return snip(str,decorations);
 }
 

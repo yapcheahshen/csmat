@@ -258,7 +258,7 @@ Vue.component('card', {
 							const rb=h('rb',{},t);
 							const {cls,def}=parsedef(prevclass.substr(1));
 							const rt=h('rt',{class:cls},def);
-							children.push(h('ruby',{},[rb,rt]));
+							children.push(h('ruby',{class:"known"},[rb,rt]));
 
 						} else {
 							const textwithotebtn=renderInlineNote(h,t,notes,j,depth+1);
@@ -289,6 +289,7 @@ Vue.component('card', {
 
 		let cls='card0';
 		if (this.depth) cls="card";
+		if (this.autotranslate) cls+=' unknown';
 		return h("div",{class:cls},children);
 	}
 })

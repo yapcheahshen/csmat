@@ -161,7 +161,6 @@ new Vue({
 			paranum:'1',
 			ptspagenum:'',
 			keyword:'',
-			grammarout:'grammar',
 			logmessages:[],
 			vpl:'',
 			timer:0

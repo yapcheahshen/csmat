@@ -14,7 +14,6 @@
 		<button class="btnnav" @click="nextpara">Next</button>
 
 		<input class="bookpara" @input="keywordchange" v-model="keyword"/>
-		<span>{{grammarout}}</span>
 		<br/>
 
 		<breadcrumbtoc :vpl="vpl" :selectsid="selectsid" :gettoc="gettoc"></breadcrumbtoc>
@@ -25,5 +24,6 @@
 		
 	</div>
 </body>
+<script src="lexicon-pli-zh.js"></script>
 <script src="bundle.js"></script>
 </html>

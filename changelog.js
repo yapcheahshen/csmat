@@ -13,6 +13,10 @@
 2020.5.13 start project
 	
 
+TODO
+āvusovādena 錯誤為avuso
+file:///D:/!mywork/csmat/index.html#a=s0201mp286
+
 link format
 s0305m3p200
 s0305m3p200y33 33th syllable
