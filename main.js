@@ -2,6 +2,7 @@ require("dui");
 require("./card");
 //require("./bigpopup");
 //require("./xref");
+require("./bookmark");
 require("./logger");
 //const ptscite=require("./ptscite");
 const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
@@ -108,6 +109,9 @@ new Vue({
 					this.logmessages.unshift(sid+"fetch "+this.vpl+" elapse"+elapse)
 				}).bind(this),200);
 			})
+		},
+		setrawid(rawid){
+			this.rawid=rawid;
 		},
 		selectsid(sid){
 			const arr=sid.split(":");

@@ -1,8 +1,9 @@
+.bookmarklist{font-size:100%;}
 .unknown{color:red;}
 .known {color:black;}
 .solo {color:orange;}
-.translatebtn{border-radius: 50%;cursor:pointer;color:white;
-	background:green;border:solid 1px black;}
+.translatebtn{border-radius: 5px;cursor:pointer;color:brown;
+	background:orange;}
 .hi {color:#ffafaf;}
 .proper{color:blue;}
 ruby:hover{color:red;cursor:pointer;}

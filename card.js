@@ -143,7 +143,8 @@ Vue.component('autotran',{
 		}
 	},
 	render(h){
-		return h("span",{class:"translatebtn",on:{click:this.toggletranslate}},"译")
+		return h("span",{class:"translatebtn",on:{click:this.toggletranslate}},
+			"䛊")
 	}
 })
 Vue.component('textmenu',{

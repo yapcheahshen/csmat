@@ -15,10 +15,9 @@
 
 		<input class="bookpara" @input="keywordchange" v-model="keyword"/>
 		<br/>
-
+		<bookmarklist :setrawid="setrawid"></bookmarklist>
 		<breadcrumbtoc :vpl="vpl" :selectsid="selectsid" :gettoc="gettoc"></breadcrumbtoc>
 
-		
 		<card :rawid="rawid" :fetched="fetched"></card>
 		<logger :log="logmessages" :clear="clearlog"></logger>
 		

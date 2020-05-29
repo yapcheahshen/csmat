@@ -13,6 +13,12 @@
 2020.5.13 start project
 	
 
+bookmark fast jump to selected page
+multiple card
+
+prev/next para move to per card
+bookname+docseq as address bar and store in hash
+ 
 TODO
 āvusovādena 錯誤為avuso
 file:///D:/!mywork/csmat/index.html#a=s0201mp286
