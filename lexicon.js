@@ -2,7 +2,7 @@ const lexjs=palilexicon;
 
 const {bsearch}=require("dengine");
 
-const getdef=w=>{
+const getdef=(w)=>{
 	if (typeof w=="number"){
 		const at=lexjs[w].indexOf("=");
 		return lexjs[w].substr(at+1);
@@ -20,7 +20,7 @@ const getdef=w=>{
 	return '';
 }
 const parsedef=def=>{
-	let cls="";
+	let cls="",extra='';
 	if (def[0]=="+") {
 		cls="verb";
 		def=def.substr(1);
@@ -30,7 +30,11 @@ const parsedef=def=>{
 	} else if (def[0]=="!") {
 		cls="solo";
 		def=def.substr(1);
+	} else if (def[0]==":") { //
+		extra=def.substr(1);
+		cls="nissaya"
+		def="...";
 	}
-	return {cls,def};
+	return {cls,def,extra};
 }
 module.exports={getdef,parsedef};

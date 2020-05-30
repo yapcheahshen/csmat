@@ -30,9 +30,13 @@ const decorateText=(str)=>{
 			if (Array.isArray(b)){
 				if (b[1]!==-1){
 					if (Array.isArray(b[1])){
+						let d=getdef(b[1][0]);
+						if (d.length>5){
+							d=':'+b[0]+"="+d;
+						}
 						decorations.push(
 						[offset+b[1][1],
-						b[1][2] ,"@"+getdef(b[1][0])]);												
+						b[1][2] ,"@"+d]);												
 					} else {//solo
 						decorations.push([offset,b[0].length,"@!"+b[1]]);
 					}

@@ -122,7 +122,15 @@ Vue.component('xrefbutton',{
 
 	}
 })
-
+const CardNav=Vue.extend({
+	render(h){
+		return h("span",{},[
+			h("button","〈"),
+			h("button","〉"),
+			h("span","ancestors")]
+		);
+	}
+})
 Vue.component('topleveltextmenu',{
 	props:['depth','rawid','command'],
 	render(h){
@@ -132,7 +140,11 @@ Vue.component('topleveltextmenu',{
 			{props:{setname,rawid:this.rawid,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
+		children.push(h("cardnav"));
 		return h("div",{class:"topleveltextmenu"},children);
+	},
+	components:{
+		'cardnav':CardNav
 	}
 })
 Vue.component('autotran',{
@@ -162,8 +174,12 @@ Vue.component('textmenu',{
 		}
 		return h("div",{},
 			 [h("button",attr,"close"),
+			 h("cardnav",{}),
 			 h("autotran",{props:{command:this.command}})]
 		);
+	},
+	components:{
+		'cardnav':CardNav
 	}
 });
 Vue.component('backlinkmenu',{
@@ -257,8 +273,16 @@ Vue.component('card', {
 					if (n<snippet.length&&snippet[n][0]==i) {
 						if (prevclass[0]=="@") {
 							const rb=h('rb',{},t);
-							const {cls,def}=parsedef(prevclass.substr(1));
-							const rt=h('rt',{class:cls},def);
+							const {cls,def,extra}=parsedef(prevclass.substr(1));
+							let rtspan=def;
+							if (extra) {
+								rtspan=[
+								h('span',{class:"tip"},
+									[h('span',{},extra)]
+								)
+								]
+							}
+							const rt=h('rt',{class:cls},rtspan);
 							children.push(h('ruby',{class:"known"},[rb,rt]));
 
 						} else {

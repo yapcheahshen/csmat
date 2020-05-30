@@ -6,39 +6,30 @@
 	background:orange;}
 .hi {color:#ffafaf;}
 .proper{color:blue;}
-ruby:hover{color:red;cursor:pointer;}
-.verb{color:red;}
-.lexicon {border-bottom: dotted 1px brown}
-rt {font-size:85%;font-family: "Microsoft YaHei"}
+
 .underline {border-bottom: dotted 1px blue}
 .topleveltextmenu {background: #ffffaf}
 .backlinkmenu {background: #ffffaf}
-.tip {
-	border-bottom: 1px dashed;
-	text-decoration:none;
-}
-.tip:hover{
-	cursor: pointer;position: relative;
-}
+
 .card0 { font-family: Tahoma; }
 .card {display:block;margin-left:1em;
 	margin-top:0.5em;margin-bottom:0.5em;margin-right:3px;
 	border:1px dotted #1C6EA4;font-family: Tahoma}
 
-.tip span {display:none;}
-.tip:hover span {
-	border:#c0c0c0 1px;
-	padding:5px 20px 5px 5px;
-	background: gray;
-	display:block;text-decoration: none;
-	left:0px;margin:10px;width:250px;top:10px;position: absolute;
+ruby:hover{color:brown;cursor:pointer;}
+.verb{color:red;}
+.lexicon {border-bottom: dotted 1px brown}
+
+
+rt {font-size:100%;font-family:Tahoma}
+.nissaya span {display:none;}
+.tip span {position:absolute}
+ruby:hover .nissaya span{
+	border:dotted 1px silver;
+	background: lightyellow;
+	display: block;
 }
 
-option[data-title]:hover:after{
-	content:attr(data-title);
-	position:absolute;
-	background: gray;
-}
 
 .breadcrumbtoc {font-size:100%;border:none;background: #DFDFDF}
 .pagenum {width:5em;}
