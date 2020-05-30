@@ -123,16 +123,23 @@ Vue.component('xrefbutton',{
 	}
 })
 const CardNav=Vue.extend({
+	props:['db','rawid'],
 	render(h){
+		const tid=parseId(this.db,{rawid:this.rawid});
+		const m=tid.prefix.match(/(.+?):(\d+)/);
+		const bookseq=this.db.bookname2seq(m[1]);
+		const ancestor=this.db.gettocancestor(bookseq+":"+m[2]).
+			map(item=>item[0]).filter(item=>item!="-").join("/");
 		return h("span",{},[
+			h("span",this.rawid),
 			h("button","〈"),
 			h("button","〉"),
-			h("span","ancestors")]
+			h("span",ancestor)]
 		);
 	}
 })
 Vue.component('topleveltextmenu',{
-	props:['depth','rawid','command'],
+	props:['depth','rawid','command','db'],
 	render(h){
 		const dbname=filename2set(this.rawid);
 		const sets=["mul","att","tik"].filter(s=>s!==dbname);		
@@ -140,7 +147,7 @@ Vue.component('topleveltextmenu',{
 			{props:{setname,rawid:this.rawid,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
-		children.push(h("cardnav"));
+		children.push(h("cardnav",{props:{rawid:this.rawid,db:this.db}}));
 		return h("div",{class:"topleveltextmenu"},children);
 	},
 	components:{
@@ -160,7 +167,7 @@ Vue.component('autotran',{
 	}
 })
 Vue.component('textmenu',{
-	props:['depth','command','rawid'],
+	props:['depth','command','rawid','db'],
 	methods:{
 		onclose(){
 			this.command("close");
@@ -168,7 +175,7 @@ Vue.component('textmenu',{
 	},
 	render(h){
 		const attr={on:{click:this.onclose},
-		props:{rawid:this.rawid,depth:this.depth,command:this.command}};
+		props:{rawid:this.rawid,db:this.db,depth:this.depth,command:this.command}};
 		if (this.depth==0) {
 			return h("topleveltextmenu",attr);
 		}
@@ -273,12 +280,14 @@ Vue.component('card', {
 					if (n<snippet.length&&snippet[n][0]==i) {
 						if (prevclass[0]=="@") {
 							const rb=h('rb',{},t);
+
 							const {cls,def,extra}=parsedef(prevclass.substr(1));
 							let rtspan=def;
+
 							if (extra) {
-								rtspan=[
-								h('span',{class:"tip"},
-									[h('span',{},extra)]
+								rtspan=[def||"…",
+								h('span',{class:"tip"},extra
+									//[h('span',{},extra)]
 								)
 								]
 							}
@@ -308,7 +317,7 @@ Vue.component('card', {
 		}
 
 		children.unshift(h('textmenu',
-			{props:{depth,rawid:this.rawid,command:this.execcommand}}));
+			{props:{db:this.db,depth,rawid:this.rawid,command:this.execcommand}}));
 		children.push(h('backlinkmenu',
 			{class:"backlinkmenu",props:{links:this.backlinks,depth}}));
 

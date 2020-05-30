@@ -502,4 +502,4 @@ nacira=不久
 upasaṅkami=走向
 ajjhagama=到达
 khandha=蘊`
-window.palilexicon=lexicon_pli_zh.split(/\r?\n/).sort((a,b)=>(a==b)?0:((a>b)?1:-1));
+window.palilexicon=(lexicon_pli_zh+(lexicon_user||'')).split(/\r?\n/).sort((a,b)=>(a==b)?0:((a>b)?1:-1));

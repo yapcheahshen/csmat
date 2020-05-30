@@ -19,7 +19,7 @@ const getdef=(w)=>{
 	}
 	return '';
 }
-const parsedef=def=>{
+const parsedef=(def)=>{
 	let cls="",extra='';
 	if (def[0]=="+") {
 		cls="verb";
@@ -30,10 +30,14 @@ const parsedef=def=>{
 	} else if (def[0]=="!") {
 		cls="solo";
 		def=def.substr(1);
-	} else if (def[0]==":") { //
-		extra=def.substr(1);
+	} else if (def.indexOf("|")) { //ruby and detail explaination
+		const at=def.indexOf("|");
+		extra=def.substr(at+1);
 		cls="nissaya"
-		def="...";
+		def=def.substr(0,at);
+		if (extra[0]=="@"){
+			extra=getdef(extra.substr(1));
+		}
 	}
 	return {cls,def,extra};
 }

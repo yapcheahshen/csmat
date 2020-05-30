@@ -20,6 +20,8 @@ prev/next para move to per card
 bookname+docseq as address bar and store in hash
  
 TODO
+跳到轉法輪經時breadcrumb中間downdrop selected index不對。
+
 āvusovādena 錯誤為avuso
 file:///D:/!mywork/csmat/index.html#a=s0201mp286
 

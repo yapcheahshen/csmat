@@ -31,12 +31,10 @@ const decorateText=(str)=>{
 				if (b[1]!==-1){
 					if (Array.isArray(b[1])){
 						let d=getdef(b[1][0]);
-						if (d.length>5){
-							d=':'+b[0]+"="+d;
-						}
+
 						decorations.push(
 						[offset+b[1][1],
-						b[1][2] ,"@"+d]);												
+						b[1][2] ,"@"+d]);							
 					} else {//solo
 						decorations.push([offset,b[0].length,"@!"+b[1]]);
 					}
@@ -65,7 +63,9 @@ const snip=(str,decoration)=>{
 	let prev='';
 	for (var i=0;i<arr.length;i++){
 		if (prev!==arr[i]) {
-			if (typeof arr[i]!=="undefined") out.push([i,arr[i]]);
+			if (typeof arr[i]!=="undefined") {
+				out.push([i,arr[i]]);
+			}
 		}
 		prev=arr[i];
 	}

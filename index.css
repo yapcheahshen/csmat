@@ -16,18 +16,18 @@
 	margin-top:0.5em;margin-bottom:0.5em;margin-right:3px;
 	border:1px dotted #1C6EA4;font-family: Tahoma}
 
-ruby:hover{color:brown;cursor:pointer;}
+ruby:hover{border-bottom:double 2px brown;cursor:pointer;}
 .verb{color:red;}
 .lexicon {border-bottom: dotted 1px brown}
 
 
-rt {font-size:100%;font-family:Tahoma}
-.nissaya span {display:none;}
-.tip span {position:absolute}
-ruby:hover .nissaya span{
-	border:dotted 1px silver;
-	background: lightyellow;
-	display: block;
+rt {font-size:100%;font-family:"Microsoft YaHei"}
+.nissaya span {font-family:Tahoma}
+.tip {display:none;position:absolute}
+.nissaya:hover span{
+	background: #FFFF7F;
+	color:black;
+	display: inline;
 }
 
 
