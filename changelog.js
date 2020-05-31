@@ -1,5 +1,6 @@
 ﻿/* remind me to backup*/
 `
+2020.5.31 90% translated, UI rewrite for multiple cards
 2020.5.27 show translated word on ruby text
 2020.5.25 cluster links to 4nikaya, top 5 are mn26,12,22,44,129
 2020.5.24 found 32364 links, recognized 99.28%, parsed 38.17% 
@@ -21,6 +22,8 @@ bookname+docseq as address bar and store in hash
  
 TODO
 跳到轉法輪經時breadcrumb中間downdrop selected index不對。
+click on ancestor to show all sublings
+  (store first sublings)
 
 āvusovādena 錯誤為avuso
 file:///D:/!mywork/csmat/index.html#a=s0201mp286

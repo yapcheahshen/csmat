@@ -1,6 +1,6 @@
 Vue.component('bookmarklist',{
 	props:{
-		'setrawid':{type:Function,required:true}
+		'openbookmark':{type:Function,required:true}
 	},
 	methods:{
 		onselect(event){

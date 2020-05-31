@@ -30,13 +30,35 @@ const parsedef=(def)=>{
 	} else if (def[0]=="!") {
 		cls="solo";
 		def=def.substr(1);
-	} else if (def.indexOf("|")) { //ruby and detail explaination
-		const at=def.indexOf("|");
-		extra=def.substr(at+1);
-		cls="nissaya"
-		def=def.substr(0,at);
-		if (extra[0]=="@"){
-			extra=getdef(extra.substr(1));
+	} else { //ruby and detail explaination
+		if (def.length<5 && def[0]!=="@") {
+			return {cls,def,extra:""};
+		}
+		if (def.indexOf("|")>-1) { //指定短字串
+			const at=def.indexOf("|");
+			extra=def.substr(at+1);
+			cls="nissaya"
+			def=def.substr(0,at);
+			if (extra[0]=="@"){
+				extra=getdef(extra.substr(1));
+			}
+		} else { //取最前面幾個中文字
+			extra=def;
+			cls="nissaya"
+			const s=def.replace(/\(梵/,'(')
+			.replace(/【\S+?】/g,'').replace(/\(\S+?\)/g,'')
+			.replace(/（\S+?）/g,'').replace(/[a-zāīūñṅṇŋṁṃḍṭḷ\d\.,:!&;的]+/gi,'')
+			.replace(/[\(\) ,\.]+/g,'');
+			const m=s.match(/(.+?)[，。]/);
+			if (m&& m[1].length>1){
+				def=m[1].replace(/[\(\)]/g,'').substr(0,5);
+				
+			} else {
+				def='';
+				if (extra[0]=="@") {
+					extra=getdef(extra.substr(1))
+				}
+			}
 		}
 	}
 	return {cls,def,extra};

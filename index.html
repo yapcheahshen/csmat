@@ -8,19 +8,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <body>
 	<div id="app">
-		<button class="btnnav" @click="prevpara">Previous</button>
-		<input class="bookpara" size=3 @input="bookchange" v-model="bookname"/>
-		<input class="bookpara" size=3  @input="paranumchange" v-model="paranum"/>
-		<button class="btnnav" @click="nextpara">Next</button>
+		<bookmarklist :openbookmark="openbookmark"></bookmarklist>
+		<cards :seltext="seltext" :addrs="addrs" :setaddrs="setaddrs"></cards>
+		<!-- <logger :log="logmessages" :clear="clearlog"></logger>//
 
-		<input class="bookpara" @input="keywordchange" v-model="keyword"/>
-		<br/>
-		<bookmarklist :setrawid="setrawid"></bookmarklist>
-		<breadcrumbtoc :vpl="vpl" :selectsid="selectsid" :gettoc="gettoc"></breadcrumbtoc>
-
-		<card :rawid="rawid" :fetched="fetched"></card>
-		<!-- <logger :log="logmessages" :clear="clearlog"></logger>//-->
-		
+<card :rawid="rawid" :fetched="fetched"></card>
+		-->
 	</div>
 </body>
 <script src="lexicon-user.js"></script>

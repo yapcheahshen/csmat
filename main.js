@@ -1,5 +1,5 @@
-require("dui");
-require("./card");
+require("./popup");
+require("./cards");
 //require("./bigpopup");
 //require("./xref");
 require("./bookmark");
@@ -10,6 +10,13 @@ const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
                 //  ,["","https://github.com/ksanaforge/csmat/"]]
 
 const dbname=["mul","att","tik"];
+const URLParams=()=>{
+	let hash=document.location.hash.substr(1);
+	const p=new URLSearchParams(hash);
+	const out={};
+	p.forEach( (v,k)=>out[k]=v);
+	return out;
+}
 const setHash=(newobj)=>{
 	let hash=document.location.hash.substr(1);
 	const p=new URLSearchParams(hash);
@@ -19,18 +26,14 @@ const setHash=(newobj)=>{
 	}
 	document.location.hash="#"+p.toString();
 }
-const URLParams=()=>{
-	let hash=document.location.hash.substr(1);
-	const p=new URLSearchParams(hash);
-	const out={};
-	p.forEach( (v,k)=>out[k]=v);
-	return out;
-}
+
+
 //const {conjugate,conjugateWord,analyzeword,G_outwords,G_shortdefpost,outputAnalysis}=require("./fromdpr")
 const {vpl2paranum,id_regex}=require("./fetch");
 new Vue({
 	el:"#app",
 	methods:{
+		/*
 		nextpara(){
 			const pc=this.rawpagecount;
 			this.rawpagecount=1;
@@ -65,11 +68,6 @@ new Vue({
 			},800);
 		},
 		keywordchange(){
-			//aniccucchādanaparimaddanabhedana  , 8 seconds
-			//const t=new Date();
-			//const g=outputAnalysis(this.keyword);
-			//this.grammarout=g[0][0]+ ",time:"+(new Date()-t);
-			//this.grammarout=conjugateWord(this.keyword);
 		},
 		paranumchange(){
 			clearTimeout(this.timer);
@@ -85,6 +83,7 @@ new Vue({
 			//const fetchobj={parseId,rawid,plusminus};
 			//this.fetch(fetchobj);
 		},
+
 		fetched(res){
 			const t=(new Date()).getMilliseconds();
 			Dengine.open(dbname[0],db=>{
@@ -121,12 +120,32 @@ new Vue({
 			}
 			this.rawid=bk+":"+docseq;
 		},
+		*/
 		log(msg){
 			this.logmessages.unshift((new Date()).toISOString()+":"+msg);
-		}
-	},
+		},
+		openbookmark(){
 
+		},
+		setaddrs(){
+
+		}
+
+	},
 	mounted(){
+		let selectiontimer=0;
+		document.addEventListener('selectionchange', (event) => {
+		  clearTimeout(selectiontimer);
+		  selectiontimer=setTimeout(()=>{
+		  	const sel=document.getSelection();
+		  	if (!sel||!sel.baseNode)return;
+		  	const f=sel.baseNode.parentElement;
+		  	let tf=sel.toString().toLowerCase().trim();
+		  	if (!tf) return;
+		  	this.seltext=tf;
+		  },200);
+		});
+
 		Dengine.open(dbname[0],function(db){
 			this.log(dbname[0]+" opened, built on "+db.getDate());
 			Dengine.open(dbname[1],db2=>{
@@ -135,18 +154,21 @@ new Vue({
 					this.log(dbname[2]+" opened, built on "+db3.getDate());
 				});
 			})
-			const {a}=URLParams();
-			const m=(a||"").match(id_regex);
-			let b,p;
-			if (m) {
-				b=m[1];
-				p=m[2]
+			let {a}=URLParams();
+			a=a?a:"s0201mp273";
+			const cardsaddr=[];
+			const addrarr=a.split(";");
+			for (let addr of addrarr){
+				const m=addr.match(id_regex);
+				if (m){
+					cardsaddr.push(addr);
+				}
 			}
-			this.bookname=b?b:"s0101m";
-			this.paranum=p?p:"1";
-			this.db=db;
-			this.gettoc=db.gettoc;
-			this.paranumchange()
+			if (cardsaddr.length==0){
+				cardsaddr.push("s0201mp273");
+			}
+			this.addrs=cardsaddr;
+
 		}.bind(this));
 
 		setInterval(()=>{
@@ -155,19 +177,10 @@ new Vue({
 	},
 	data(){
 		return {
-			db:null,
-			showpopup:false,
+			addrs:[],
+			seltext:'',
 			rawtext:helpmessage,
-			rawid:'',
-			rawpagecount:1,
-			gettoc:null,
-			bookname:'1',
-			paranum:'1',
-			ptspagenum:'',
-			keyword:'',
 			logmessages:[],
-			vpl:'',
-			timer:0
 		}
 	}
 });

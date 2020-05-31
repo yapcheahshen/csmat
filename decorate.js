@@ -23,6 +23,7 @@ const decorateText=(str)=>{
 			offset+=tk.length;
 			continue;
 		}
+		if (tk=="ekacīvaro")debugger
 		const breakup=suggestedBreak(tk);
 
 		for (var j=0;j<breakup.length;j++) {

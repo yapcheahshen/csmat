@@ -113,5 +113,5 @@ const matlabel=hyperlink=>{
 	})
 	return o;
 }
-const id_regex=/([vinseabh\d]+[mat]\d?)p(\d+)/
+const id_regex=/([vinseabh\d]+[mat]\d?)[:p]([\.\d]+)/
 module.exports={parseId,vpl2paranum,getparallel,id_regex,matlabel};
