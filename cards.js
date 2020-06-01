@@ -21,7 +21,7 @@ Vue.component("cards",{
 		})
 		const out=[h("div",{class:"cards"},children)];
 		if (this.prevseltext!==this.seltext||this.dictshown){
-			if(this.seltext.length>2&&this.seltext.indexOf(" ")==-1){
+			if(this.seltext.length>1&&this.seltext.indexOf(" ")==-1){
 				this.prevseltext=this.seltext;
 				this.dictshown=true;
 				out.unshift(h("dictionarypopup",{

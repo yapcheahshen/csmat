@@ -23,5 +23,5 @@ build({name:set,outdir:set+"/", textonly:true,
 	fields:["txt","notes"] },raw);
 
 
-const toc=fs.readFileSync(set+"-toc.txt","utf8");
+const toc=fs.readFileSync(set+"-rawtoc.txt","utf8");
 writeExtra(set+"/"+set+".toc-ori.js",{"name":set,"type":"toc","field":["txt"]},toc);

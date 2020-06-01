@@ -142,8 +142,9 @@ new Vue({
 		  	const f=sel.baseNode.parentElement;
 		  	let tf=sel.toString().toLowerCase().trim();
 		  	if (!tf) return;
+		  	if (parseInt(tf))return;
 		  	this.seltext=tf;
-		  },200);
+		  },500);
 		});
 
 		Dengine.open(dbname[0],function(db){

@@ -10,7 +10,8 @@
 .fullscreenpopup .ancestor{background:silver;cursor:pointer;}
 .fullscreenpopup .ancestor_active {background: yellow;cursor:pointer;}
 .tocitem{cursor:pointer;}
-.selectedtocitem{background:yellow;}
+.tocitem.active{background:yellow;}
+.tocitem:hover td{border-bottom:solid 1px brown}
 
 .fullscreenpopup {
 	background:rgba(0,0,0,0);
@@ -50,11 +51,11 @@ rt {font-size:90%;font-family:"Microsoft YaHei"}
 	display: inline;
 }
 
-
+.address {font-size:85%;font-family: consolas}
 .breadcrumbtoc {font-size:100%;border:none;background: #DFDFDF}
 .pagenum {width:5em;}
-
-.btnnav {font-size:100%;border:none;}
+.btnnav {font-size:85%;}
+.btnbacklink {font-size:70%;}
 
 @media (orientation: portrait) {
 	tr{display:block;}

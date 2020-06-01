@@ -1,20 +1,27 @@
+const {open}=require("dengine");
 const getaux=db=>{
 	const aux=db.getaux();
 	if (typeof aux.paranum=="string") aux.paranum=eval(aux.paranum);
 	return {paranum:aux.paranum};
 }
-const getparallel=(set,rawid)=>{
+const getparallel=(set,bktoc)=>{
+	const m=bktoc.match(/(.+?)[mat]/);
+	if (!m) throw "invalid bktoc"
+	const db=open(set);
+	if (!db) return set+" not open yet";
+
+	const paranum=vpl2paranum(db,bktoc)-1;
 	if (set=="att") {
-		return rawid.replace(/(\d+)[mat]/,"$1a");
+		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1a$2p"+paranum);
 	}
 	if (set=="tik") {
-		return rawid.replace(/(\d+)[mat]/,"$1t");
+		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1t$2p"+paranum);
 	}
 
 	if (set=="mul") {
-		return rawid.replace(/(\d+)[mat]/,"$1m");
+		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1m$2p"+paranum);
 	}
-	return rawid;
+	return addr;
 }
 
 const vpl2paranum=(db,vpl)=>{
@@ -42,15 +49,24 @@ const vpl2paranum=(db,vpl)=>{
 }
 const parseId=(db,opts)=>{
 	const m=opts.rawid.match(/(.+?)p(\d+)/);
+	const {paranum}=getaux(db);
+
 	if (!m) {
 		const m2=opts.rawid.match(/(.+?):(.+)/);
 		if (m2) {
-			return Object.assign(opts,{prefix:opts.rawid});
+			let book=parseInt(m2[1]);
+			if (book.toString()!==m2[1]){
+				book=db.bookname2seq(m2[1]);
+			}
+			const at= vpl2paranum(db,opts.rawid)+1;
+			let end=paranum[book][at]+(opts.extrapara||0);
+			const pagecount=end-parseInt(m2[2])-1;
+			return Object.assign(opts,{prefix:opts.rawid,pagecount});
 		}
 		return opts;
 	}
 
-	const {paranum}=getaux(db);
+	
 	let bookname=m[1],book;
 	const para=parseInt(m[2]);
 	
@@ -69,7 +85,7 @@ const parseId=(db,opts)=>{
 	}
 
 	at=para+1;
-	let end=paranum[book][at];
+	let end=paranum[book][at]+(opts.extrapara||0);
 	while (!end && at>0) {
 		at--;
 		end=paranum[book][at];
