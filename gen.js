@@ -32,9 +32,9 @@ const parseInlineTag=(tagstr)=>{
 	}
 	return savetag;
 }
-const {makemataddr}=require("./mataddr");
+const {makemataddr}=require("./ui/mataddr");
 const {expandrange}=require("./paliutil")
-const {recognise,linkpatterns,filename2set,hyperlink_regex}=require("./linkparser");
+const {recognise,linkpatterns,filename2set,hyperlink_regex}=require("./ui/linkparser");
 const repeatnum={};
 let nikaya='',lastdepth=0;
 const parseP=(attrs,docseq,linetext)=>{
@@ -147,8 +147,13 @@ const gen=(content,fn)=>{
 	//booknames.push(bk);
 	for (let i=0;i<lines.length;i++) {
 		let L=lines[i];
+		if (i==lines.length-1){
+			L=L.replace(/\r?<\/cscd>/,''); //missing one \n at second line line
+		}
 		sourcelinenumber=i;
-		if (L.substr(L.length-4,4)!=="</p>") continue;
+		if (L.substr(L.length-4,4)!=="</p>") {
+			continue;
+		}
 		L=L.substr(0,L.length-4);
 		let rend='';
 		docseq++;

@@ -127,8 +127,8 @@ new Vue({
 		openbookmark(){
 
 		},
-		setaddrs(){
-
+		setaddrs(addrs){
+			setHash({a:addrs.join(";")})
 		}
 
 	},

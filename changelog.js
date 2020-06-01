@@ -21,6 +21,16 @@ prev/next para move to per card
 bookname+docseq as address bar and store in hash
  
 TODO
+
+CAPaddress
+
+
+
+s0101p102  第100段+1行
+s0101p100
+s0101mb100   第100行   
+
+
 跳到轉法輪經時breadcrumb中間downdrop selected index不對。
 click on ancestor to show all sublings
   (store first sublings)

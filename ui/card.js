@@ -85,7 +85,7 @@ const renderInlineNote=(h,text,notes,nline,depth)=>{
 }
 
 Vue.component('paralleltextbutton',{
-	props:['setname','depth','bkdoc','label'],
+	props:['db','setname','depth','bkdoc','label'],
 	methods:{
 		execcommand(cmd){
 			if (cmd=="close") this.show=false;
@@ -100,7 +100,8 @@ Vue.component('paralleltextbutton',{
 			return h("button",{class:"btnnav",on:{click:this.showme}},
 				this.label?this.label:this.setname);
 		} else {
-			const addr=getparallel(this.setname,this.bkdoc);
+			let addr=this.bkdoc;
+			addr=getparallel(this.db,this.setname,this.bkdoc);
 			return h("card",{props:{depth:this.depth+1,
 				command:this.execcommand,addr }});
 		}
@@ -222,7 +223,7 @@ Vue.component('topleveltextmenu',{
 		const dbname=filename2set(this.bkdoc);
 		const sets=["mul","att","tik"].filter(s=>s!==dbname);
 		const children=sets.map(setname=>h("paralleltextbutton",
-			{props:{setname,bkdoc:this.bkdoc,
+			{props:{db:this.db,setname,bkdoc:this.bkdoc,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
 		children.push(h("cardnav",{props:{command:this.command,bkdoc:this.bkdoc,db:this.db}}));
@@ -286,7 +287,7 @@ Vue.component('backlinkmenu',{
 			const depth=this.depth+1;
 			const label=bkdoc;//matlabel(bkdoc);
 			return h("paralleltextbutton",
-				{props:{command:this.command,bkdoc,label,setname,depth}})
+				{props:{db:this.db,command:this.command,bkdoc,label,setname,depth}})
 		}):[];
 		return h('div',{},children)
 	}
@@ -294,7 +295,7 @@ Vue.component('backlinkmenu',{
 })
 
 Vue.component('card', { 
-	props:['addr','depth','fetched','command'],
+	props:['cardid','addr','depth','fetched','command'],
 	data(){
 		return {rawtext:null,prevaddr:'',bkdoc:'',prevbkdoc:'',
 		backlinks:[],autotranslate:false}
@@ -304,6 +305,7 @@ Vue.component('card', {
 			alert(note)
 		},
 		setbkdoc(bkdoc){
+
 			this.bkdoc=bkdoc;
 		},
 		fetch(bkdoc){
@@ -317,7 +319,7 @@ Vue.component('card', {
 				this.db=db;
 				if (!this.gettoc) this.gettoc=db.gettoc;
 				this.rawtext=res;
-				if (this.fetched) this.fetched(res);
+				if (this.fetched) this.fetched(res,obj.prefix,this.cardid);
 
 				this.backlinks=db.getbacklinks(this.addr);
 			});	

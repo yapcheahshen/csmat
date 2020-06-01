@@ -1,14 +1,19 @@
 const {open}=require("dengine");
+const {filename2set}=require("./linkparser");
 const getaux=db=>{
 	const aux=db.getaux();
 	if (typeof aux.paranum=="string") aux.paranum=eval(aux.paranum);
 	return {paranum:aux.paranum};
 }
-const getparallel=(set,bktoc)=>{
-	const m=bktoc.match(/(.+?)[mat]/);
+const getparallel=(db,set,bktoc)=>{
+	const m=bktoc.match(/(.+?[mat]\d?)/);
 	if (!m) throw "invalid bktoc"
-	const db=open(set);
-	if (!db) return set+" not open yet";
+
+	const bktocset=filename2set(m[1])
+	if (bktocset!=db.getname()){
+		db=open(bktocset);
+		if (!db) return set+" not open yet";		
+	}
 
 	const paranum=vpl2paranum(db,bktoc)-1;
 	if (set=="att") {

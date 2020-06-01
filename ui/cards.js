@@ -13,11 +13,15 @@ Vue.component("cards",{
 	methods:{
 		hidedictionary(){
 			this.dictshown=false;
+		},
+		fetched(res,newid,cardid){
+			const arr=this.addrs.map((addr,idx)=>idx==cardid?newid:addr);
+			this.setaddrs(arr);
 		}
 	},
 	render(h){
-		const children=this.addrs.map(addr=>{
-			return h("card",{props:{addr}});
+		const children=this.addrs.map((addr,cardid)=>{
+			return h("card",{props:{cardid,addr,fetched:this.fetched}});
 		})
 		const out=[h("div",{class:"cards"},children)];
 		if (this.prevseltext!==this.seltext||this.dictshown){
