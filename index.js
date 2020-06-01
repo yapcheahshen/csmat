@@ -1,2 +1,2 @@
 window.dengine=require("dengine");
-window.startui=require("./main");
+window.startui=require("./ui/main");
