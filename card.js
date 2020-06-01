@@ -8,6 +8,7 @@ const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText}=require("./decorate");
 const {parsedef}=require("./lexicon");
+const {getancestor}=require("./tocpopup");
 const dbname=["mul","att","tik"];
 
 Vue.component('notebutton',{
@@ -144,90 +145,38 @@ const CardNav=Vue.extend({
 			this.selectingtocitem=false;
 		},
 		selecttocitem(event){
-			this.toclink=event.srcElement.attributes.toclink.value;
-			this.firstsibling=parseInt(event.srcElement.attributes.firstsibling.value);
-			this.thissibling=parseInt(event.srcElement.attributes.thissibling.value)
+			this.depth=parseInt(event.srcElement.attributes.depth.value);
 			this.selectingtocitem=true;
 		}
 	},
 	data(){
-		return {toclink:0,thissibling:0,firstsibling:0,selectingtocitem:false}
+		return {depth:0,selectingtocitem:false}
 	},
 	render(h){
-		let ancestor=''
 		const tid=parseId(this.db,{rawid:this.bkdoc||""});
-		if (tid&&tid.prefix){
-			const m=tid.prefix.match(/(.+?):(\d+)/);
-			const bookseq=this.db.bookname2seq(m[1]);
+		const ancestor=getancestor(this.db,tid&&tid.prefix);
 
-			ancestor=this.db.gettocancestor(bookseq+":"+m[2]).
-				filter(item=>item.t!="-").map(item=>{
-					let t=item.t;
-					const at=t.indexOf("|");
-					if (at>-1) t=t.substr(at+1);
-					return h("span",{class:"tocitem",
-						attrs:{toclink:item.l,thissibling:item.cur,firstsibling:item.first},
-						on:{click:this.selecttocitem}},"/"+t);
-				})
-		} 
-
-
+		const ancestorspan=ancestor.map((item,idx)=>{
+			let t=item.t;
+			const at=t.indexOf("|");
+			if (at>-1) t=t.substr(at+1);
+			return h("span",{class:"tocitem",
+				on:{click:this.selecttocitem},
+				attrs:{depth:item.d}},"/"+t);
+		})
 		return h("span",{},[
 			h("input",{value:this.bkdoc}),
 			h("button",{on:{click:this.prevpara}},"〈"),
 			h("button",{on:{click:this.nextpara}},"〉"),
-			h("span",{},ancestor),
+			h("span",{},ancestorspan),
 			this.selectingtocitem?h("tocitempopup",
-				{props:{db:this.db,toclink:this.toclink,
-					thissibling:this.thissibling,
-					onselecttocitem:this.onselecttocitem,
-					firstsibling:this.firstsibling}}):null
+				{props:{db:this.db,tid:tid&&tid.prefix,depth:this.depth,
+					onselecttocitem:this.onselecttocitem,}}):null
 		]
 		);
 	}
 })
-Vue.component('tocitempopup',{
-	props:['db','toclink','firstsibling','thissibling','onselecttocitem'],
-	methods:{
-		selectitem(event){
-			const linkto=event.srcElement.attributes.linkto.value;
-			this.onselecttocitem(linkto);
-		},
-		closepopup(){
-			this.onselecttocitem('');
-		},
-		getsiblings(){
-			const toc=this.db.gettoc();
-			let cur=this.firstsibling;
-			let n=toc[cur];
-			const out=[];
-			const d=n.d;
-			while (cur<toc.length&&n.d==d){
-				out.push([cur,n.t,n.l]);
-				if (n.n) {
-					cur=n.n
-				} else {
-					cur++					
-				}
-				n=toc[cur];
-			}
-			return out;
-		}
 
-	},
-	render(h){
-		const siblings=this.getsiblings(this.firstsibling).map(item=>{
-			let cls='tocitem';
-			if (item[0]==this.thissibling) {
-				cls="selectedtocitem"
-			}
-			return h("div",{on:{click:this.selectitem},
-				attrs:{linkto:item[2]},class:cls},item[1])
-		});
-		return h("fullscreenpopup",{props:{close:this.closepopup,
-			content:siblings}});
-	}
-})
 Vue.component('topleveltextmenu',{
 	props:['depth','bkdoc','command','db'],
 	render(h){

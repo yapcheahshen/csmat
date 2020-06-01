@@ -7,6 +7,8 @@
 .hi {color:#ffafaf;}
 .proper{color:blue;}
 
+.fullscreenpopup .ancestor{background:silver;cursor:pointer;}
+.fullscreenpopup .ancestor_active {background: yellow;cursor:pointer;}
 .tocitem{cursor:pointer;}
 .selectedtocitem{background:yellow;}
 
@@ -22,7 +24,7 @@
 }
 .popupcontent{width:60%;height:80%;
 	overflow-y: scroll; border: dotted silver 1px;
-	background:#dddddd;
+	background:rgba(255,255,255,0.9);
 	box-shadow:  2px 2px 4px 4px #AAAAAA;}
 
 .underline {border-bottom: dotted 1px blue}

@@ -1,4 +1,5 @@
 require("./card");
+require("./tocpopup");
 require("./dictionary");
 
 Vue.component("cards",{
