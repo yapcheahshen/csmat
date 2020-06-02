@@ -147,16 +147,17 @@ new Vue({
 		  },500);
 		});
 
-		Dengine.open(dbname[0],function(db){
+		Dengine.openSearchable(dbname[0],function(db){
 			this.log(dbname[0]+" opened, built on "+db.getDate());
-			Dengine.open(dbname[1],db2=>{
+			Dengine.openSearchable(dbname[1],db2=>{
 				this.log(dbname[1]+" opened, built on "+db2.getDate());
-				Dengine.open(dbname[2],db3=>{
+				Dengine.openSearchable(dbname[2],db3=>{
 					this.log(dbname[2]+" opened, built on "+db3.getDate());
+					this.ready=true;
 				});
 			})
 			let {a}=URLParams();
-			a=a?a:"s0201mp273";
+			a=a?a:"s0201m_p273";
 			const cardsaddr=[];
 			const addrarr=a.split(";");
 			for (let addr of addrarr){
@@ -166,7 +167,7 @@ new Vue({
 				}
 			}
 			if (cardsaddr.length==0){
-				cardsaddr.push("s0201mp273");
+				cardsaddr.push("s0201m_p273");
 			}
 			this.addrs=cardsaddr;
 
@@ -179,6 +180,7 @@ new Vue({
 	data(){
 		return {
 			addrs:[],
+			ready:false,
 			seltext:'',
 			rawtext:helpmessage,
 			logmessages:[],

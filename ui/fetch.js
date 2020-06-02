@@ -1,39 +1,19 @@
-const {open}=require("dengine");
+const {SEGSEP,open,readlines,CAPStr}=require("dengine");
 const {filename2set}=require("./linkparser");
-const getaux=db=>{
-	const aux=db.getaux();
-	if (typeof aux.paranum=="string") aux.paranum=eval(aux.paranum);
-	return {paranum:aux.paranum};
-}
-const getparallel=(db,set,bktoc)=>{
-	const m=bktoc.match(/(.+?[mat]\d?)/);
-	if (!m) throw "invalid bktoc"
 
-	const bktocset=filename2set(m[1])
-	if (bktocset!=db.getname()){
-		db=open(bktocset);
-		if (!db) return set+" not open yet";		
-	}
+const getparallel=(cap,set)=>{
+	const str=CAPstr(cap);
+	const paranum=cap.p;
+	parallel={"att":"a","tik":"t","mul":"m"};
 
-	const paranum=vpl2paranum(db,bktoc)-1;
-	if (set=="att") {
-		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1a$2p"+paranum);
-	}
-	if (set=="tik") {
-		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1t$2p"+paranum);
-	}
-
-	if (set=="mul") {
-		return bktoc.replace(/(\d+)[mat](\d?)(.+)/,"$1m$2p"+paranum);
-	}
-	return addr;
+	return str.replace(/[mat](\d?)_/,parallel[set]+"$1_");
 }
 
 const vpl2paranum=(db,vpl)=>{
-	let at=vpl.indexOf(":");
+	let at=vpl.indexOf(SEGSEP);
 	const bookname=vpl.substr(0,at);
 	const page=parseInt( vpl.substr(at+1));
-	const {paranum}=getaux(db);
+	const {paranum}=db.getaux();
 	let book;
 	if (parseInt(bookname).toString()==bookname) {
 		book=parseInt(bookname)
@@ -52,9 +32,10 @@ const vpl2paranum=(db,vpl)=>{
 	}
 	return 0;
 }
+/*
 const parseId=(db,opts)=>{
 	const m=opts.rawid.match(/(.+?)p(\d+)/);
-	const {paranum}=getaux(db);
+	const {paranum}=db.getaux();
 
 	if (!m) {
 		const m2=opts.rawid.match(/(.+?):(.+)/);
@@ -100,7 +81,7 @@ const parseId=(db,opts)=>{
 	const pagecount=end-start;
 	return Object.assign(opts,{prefix,pagecount});
 }
-
+*/
 const An=(m1,m2)=>{
 	if (m1=="2") {
 		return parseInt(m2)+1
@@ -134,5 +115,33 @@ const matlabel=hyperlink=>{
 	})
 	return o;
 }
+
 const id_regex=/([vinseabh\d]+[mat]\d?)[:p]([\.\d]+)/
-module.exports={parseId,vpl2paranum,getparallel,id_regex,matlabel};
+
+
+const readtext=(cap,cb)=>{
+	if (!cap) throw "invalid db orcap"
+	let x=cap.x,count=1;
+	let x0=cap.x0;
+	//	
+	if (cap.p && cap.x==0) {
+		//from addr or user input paranum
+		//p ~ p+1
+	} else {
+		if (cap.p==0) {//from toc node
+			//cap.x ~ p+1, cap.x = toc line
+		} else { //from backlink
+			//closest p ~ p+1
+		}
+	}
+
+	//end=paranum[bkq][cap.p+1];
+	//count=end-x;
+
+
+
+	readlines(cap.db,x0,count,cb);
+}
+
+module.exports={vpl2paranum,getparallel,id_regex,matlabel
+,readtext};

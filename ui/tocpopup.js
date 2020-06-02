@@ -1,21 +1,12 @@
-const getancestor=(db,id)=>{
+const {parseCAP}=require("dengine");
+const getancestor=(cap)=>{
 	let ancestor=[];
-	if (id){
-		const m=id.match(/(.+?):(\d+)/);
-		if (!m)return [];
-		let bookseq=parseInt(m[1]);
-		if (bookseq.toString()!==m[1]){
-			bookseq=db.bookname2seq(m[1]);
-		}
-
-		ancestor=db.gettocancestor(bookseq+":"+m[2]).
-			filter(item=>item.t!="-");
-	} 
+	ancestor=cap.db.gettocancestor(cap.bkx).filter(item=>item.t!="-");
 	return ancestor;
 }
 
 const Siblings=Vue.extend({
-	props:['db','firstsibling','thissibling','onselect'],
+	props:['cap','firstsibling','thissibling','onselect'],
 	methods:{
 		selectitem(event){
 			const tocseq=parseInt(event.srcElement.attributes.tocseq.value);
@@ -23,7 +14,7 @@ const Siblings=Vue.extend({
 		},
 
 		getsiblings(){
-			const toc=this.db.gettoc();
+			const toc=this.cap.db.gettoc();
 			let cur=this.firstsibling;
 			let n=toc[cur];
 			const out=[];
@@ -64,20 +55,26 @@ const Siblings=Vue.extend({
 
 })
 Vue.component('tocitempopup',{
-	props:['db','tid','depth','onselecttocitem'],
+	props:['cap','depth','onselecttocitem'],
 	methods:{
 		closepopup(){
 			this.onselecttocitem('');
 		},
 		onselect(tocseq){
-			const toc=this.db.gettoc();
+			const toc=this.cap.db.gettoc();
 			const tocitem=toc[tocseq];
-			if (toc[tocseq+1].d>tocitem.d){//has children
-				this.curdepth=toc[tocseq+1].d;
-				this.curid=toc[tocseq+1].l;
-			} else {
+			if (toc[tocseq+1].d<=tocitem.d){
 				this.onselecttocitem(tocitem.l);
+				return;
 			}
+			let l=tocitem.l;
+			//go deepest
+			if (tocseq<toc.length &&toc[tocseq+1].d>toc[tocseq].d){
+				tocseq++;
+				this.curdepth=toc[tocseq].d;
+				l=toc[tocseq].l;
+			}
+			this.curcap=parseCAP(l,this.cap.db);
 		},
 		quickselect(event){
 			const linkto=event.srcElement.attributes.linkto.value;
@@ -89,25 +86,16 @@ Vue.component('tocitempopup',{
 		}
 	},	
 	data(){
-		return {curid:'',previd:'',curdepth:0,prevdepth:0};
+		return {curcap:this.cap,curdepth:this.depth};
 	},
 	render(h){
-		if (this.prevdepth!==this.depth){
-			this.curdepth=this.depth;
-		}
-		if (this.previd!==this.tid) {
-			this.curid=this.tid;
-		}
-		this.prevdepth=this.depth;
-		this.previd=this.tid;
-
-		const ancestor=getancestor(this.db,this.curid);
-		const toc=this.db.gettoc();
+		const ancestor=getancestor(this.curcap);
+		const toc=this.curcap.db.gettoc();
 		
 		const curitem=ancestor.filter(item=>item.d>=this.curdepth)[0];
 		const firstsibling=curitem.first;
 		const thissibling=curitem.cur;
-		const props={db:this.db,onselect:this.onselect
+		const props={cap:this.curcap,onselect:this.onselect
 			,thissibling,firstsibling};
 		const depth=curitem.d;
 

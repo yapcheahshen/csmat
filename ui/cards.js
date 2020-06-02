@@ -1,11 +1,13 @@
 require("./card");
 require("./tocpopup");
 require("./dictionary");
+const {CAPstr}=require("dengine")
 
 Vue.component("cards",{
 	props:{'seltext':{type:String},
 			'addrs':{type:Array,required:true},
-			'setaddrs':{type:Function,required:true}
+			'setaddrs':{type:Function,required:true},
+			'ready':{type:Boolean,required:true}
 	},
 	data(){
 		return {prevseltext:'',dictshown:false}
@@ -14,15 +16,19 @@ Vue.component("cards",{
 		hidedictionary(){
 			this.dictshown=false;
 		},
-		fetched(res,newid,cardid){
-			const arr=this.addrs.map((addr,idx)=>idx==cardid?newid:addr);
+		fetched(res,cap,cardid){
+			const arr=this.addrs.map((addr,idx)=>idx==cardid?CAPstr(cap):addr);
 			this.setaddrs(arr);
 		}
 	},
 	render(h){
+		if (!this.ready){
+			return h("div",{},"opening database");
+		}
 		const children=this.addrs.map((addr,cardid)=>{
 			return h("card",{props:{cardid,addr,fetched:this.fetched}});
 		})
+
 		const out=[h("div",{class:"cards"},children)];
 		if (this.prevseltext!==this.seltext||this.dictshown){
 			if(this.seltext.length>1&&this.seltext.indexOf(" ")==-1){
