@@ -8,7 +8,7 @@ const getparallel=(cap,set)=>{
 
 	return str.replace(/[mat](\d?)_/,parallel[set]+"$1_");
 }
-
+/*
 const vpl2paranum=(db,vpl)=>{
 	let at=vpl.indexOf(SEGSEP);
 	const bookname=vpl.substr(0,at);
@@ -32,7 +32,7 @@ const vpl2paranum=(db,vpl)=>{
 	}
 	return 0;
 }
-/*
+
 const parseId=(db,opts)=>{
 	const m=opts.rawid.match(/(.+?)p(\d+)/);
 	const {paranum}=db.getaux();
@@ -123,12 +123,13 @@ const readtext=(cap,cb)=>{
 	if (!cap) throw "invalid db orcap"
 	let x=cap.x,count=1;
 	let x0=cap.x0;
-	//	
+		
 	if (cap.p && cap.x==0) {
 		//from addr or user input paranum
 		//p ~ p+1
 	} else {
 		if (cap.p==0) {//from toc node
+
 			//cap.x ~ p+1, cap.x = toc line
 		} else { //from backlink
 			//closest p ~ p+1
@@ -143,5 +144,5 @@ const readtext=(cap,cb)=>{
 	readlines(cap.db,x0,count,cb);
 }
 
-module.exports={vpl2paranum,getparallel,id_regex,matlabel
+module.exports={getparallel,id_regex,matlabel
 ,readtext};

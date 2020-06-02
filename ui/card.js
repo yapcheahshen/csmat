@@ -2,7 +2,7 @@
 	nestable text
 
 */
-const {getdbbookname,parseCAP,CAPstr,open}=require("dengine");
+const {getdbbookname,parse,stringify,open}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel,readtext}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
@@ -127,10 +127,11 @@ const CardNav=Vue.extend({
 			this.command('setcap',this.cap.prevp());
 		},
 		nextpara(){
+			console.log("nextpara")
 			this.command('setcap',this.cap.nextp());
 		},
 		selectsid(sid){
-			const cap=parseCAP(sid,this.cap.db);
+			const cap=CAP.parse(sid,this.cap.db);
 			this.command('setcap',cap);
 		},
 
@@ -309,7 +310,7 @@ Vue.component('card', {
 
 
 		if (!this.rawtext) {
-			return h("span",{},"Loading "+CAPstr(this.cap,this.db));
+			return h("span",{},"Loading "+this.cap.stringify());
 		}
 
 		const depth=this.depth||0;

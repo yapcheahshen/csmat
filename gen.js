@@ -65,17 +65,18 @@ const parseP=(attrs,docseq,linetext)=>{
 			extra=m[2];
 		} else if (m[1]=='pn' || m[1]=='PN') {
 			//check continuity , pack as array of book+docseq
+
 			if (!matpara[bookseq])matpara[bookseq]=[0];
-			const arr=matpara[bookseq];
+			const pnarr=matpara[bookseq];
 			const range=m[2].split("-");
 			paranum=m[2];
 			if (range.length==1) {
 				let at=parseInt(range[0]);
-				if (arr[at]) {
+				if (pnarr[at]) {
 					if (!repeatnum[filename])repeatnum[filename]=[];
 					repeatnum[filename].push(sourcelinenumber);
 				}
-				arr[at] = docseq;
+				pnarr[at] = docseq-1; //zero-base
 			} else {
 				const from=parseInt(range[0]);
 				let to=parseInt(range[1]);
@@ -83,9 +84,9 @@ const parseP=(attrs,docseq,linetext)=>{
 				if (to<from) {
 					console.log("para range error",range,filename,sourcelinenumber+1);
 				}
-				arr[from]=docseq;
+				pnarr[from]=docseq-1; //zero-base
 				// search backward if item is null
-				arr[to]=docseq;
+				pnarr[to]=docseq-1; //zero-base
 			}
 		} else {
 			console.log("unknown p attributes ",m[1],filename,sourcelinenumber);

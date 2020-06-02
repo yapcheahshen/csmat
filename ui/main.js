@@ -157,7 +157,7 @@ new Vue({
 				});
 			})
 			let {a}=URLParams();
-			a=a?a:"s0201m_p273";
+			a=a?a:"s0101m_p1";
 			const cardsaddr=[];
 			const addrarr=a.split(";");
 			for (let addr of addrarr){
@@ -167,7 +167,7 @@ new Vue({
 				}
 			}
 			if (cardsaddr.length==0){
-				cardsaddr.push("s0201m_p273");
+				cardsaddr.push("vin01m_p1");
 			}
 			this.addrs=cardsaddr;
 
