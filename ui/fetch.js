@@ -2,7 +2,7 @@ const {SEGSEP,open,readlines,stringify}=require("dengine");
 const {filename2set}=require("./linkparser");
 
 const getparallel=(cap,set)=>{
-	const str=stringify(cap);
+	const str=cap.stringify();
 	const paranum=cap.p;
 	parallel={"att":"a","tik":"t","mul":"m"};
 

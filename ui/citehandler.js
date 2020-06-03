@@ -11,64 +11,64 @@ const anbook=[
 ];
 const dn_a=(n)=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'ap'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'a_p'+o[1];
 	return 1;
 }
 const mn_a=(n)=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'ap'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'a_p'+o[1];
 	return 1;
 }
 const sn_a=(n)=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'ap'+o[1];
+	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'a_p'+o[1];
 	return 1;
 }
 const an_a=(n)=>{
 	const o=parseBookPara(n);
 	if (o&&o[0]>=1&&o[0]<=11) {
 		bn=anbook[o[0]-1].replace('m','a');
-		return bn+'p'+o[1];		
+		return bn+'_p'+o[1];		
 	}
 	return 1;
 }
 const dn_t=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'tp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'t_p'+o[1];
 	return 1;
 }
 const mn_t=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'tp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'t_p'+o[1];
 	return 1;
 }
 const sn_t=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'tp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'t_p'+o[1];
 	return 1;
 }
 const an_t=n=>{
 	const o=parseBookPara(n);
 	if (o&&o[0]>=1&&o[0]<=11) {
 		bn=anbook[o[0]-1].replace('m','t');
-		return bn+'p'+o[1];		
+		return bn+'_p'+o[1];		
 	}
 	return 1;
 }
 
 const dn=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'mp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's010'+o[0]+'m_p'+o[1];
 	return 1;
 }
 const mn=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'mp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=3) return 's020'+o[0]+'m_p'+o[1];
 	return 1;
 }
 const sn=n=>{
 	const o=parseBookPara(n);
-	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'mp'+o[1];
+	if (o&&o[0]>=1&&o[0]<=5) return 's030'+o[0]+'m_p'+o[1];
 	return 1;
 }
 
@@ -76,7 +76,7 @@ const an=n=>{
 	const o=parseBookPara(n);
 	if (o&&o[0]>=1&&o[0]<=11) {
 		bn=anbook[o[0]-1];
-		return bn+'p'+o[1];		
+		return bn+'_p'+o[1];		
 	}
 	return 1;
 }

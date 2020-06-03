@@ -117,10 +117,15 @@ const CardNav=Vue.extend({
 			}
 		},
 		inputparanum(event){
+			//TODO mn1 short cut
 			if (event.key=="Enter"){
-				const para=parseInt(event.srcElement.value)||this.cap.p;
-				this.command('setcap',
-					this.cap.newp(para))
+				//allow x100 for line number
+				const v=event.srcElement.value.trim(); 
+				const para=parseInt(v);
+				let n=this.cap.bk+"_";
+				n+=(para.toString()==v)?("p"+para):v;
+				const cap=parse(n,this.cap.db);
+				this.command('setcap',cap);
 			}
 		},
 		prevpara(){
@@ -136,7 +141,7 @@ const CardNav=Vue.extend({
 		},
 
 		onselecttocitem(linkto){
-			this.selectsid(linkto)
+			if (linkto) this.selectsid(linkto)
 			this.selectingtocitem=false;
 		},
 		selecttocitem(event){
@@ -166,7 +171,7 @@ const CardNav=Vue.extend({
 				on:{click:this.selecttocitem},
 				attrs:{depth:item.d}},"/"+t);
 		})
-		return h("span",{},[
+		return h("span",{class:"cardnav"},[
 			h("button",{class:"btnnav",on:{click:this.prevpara}},"〈"),
 			h("input",{class:"address",ref:"paranum",
 				on:{keyup:this.inputparanum},
@@ -181,16 +186,24 @@ const CardNav=Vue.extend({
 	}
 })
 
-Vue.component('topleveltextmenu',{
+Vue.component('toptextmenu',{
 	props:['depth','cap','command'],
+	methods:{
+		close(){
+			this.command("close");
+		}
+	},
 	render(h){
+
 		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.getname());
 		const children=sets.map(setname=>h("paralleltextbutton",
 			{props:{db:this.db,setname,cap:this.cap,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
-		children.push(h("cardnav",{props:{command:this.command,cap:this.cap}}));
-		return h("div",{class:"topleveltextmenu"},children);
+		children.unshift(h("cardnav",{props:{command:this.command,cap:this.cap}}));
+		
+		children.unshift(h("span",{on:{click:close},class:"btnclose"}));
+		return h("div",{class:"toptextmenu"},children);
 	},
 	components:{
 		'cardnav':CardNav
@@ -204,27 +217,29 @@ Vue.component('autotran',{
 		}
 	},
 	render(h){
-		return h("span",{class:"translatebtn",on:{click:this.toggletranslate}},
-			"䛊")
+		return h("span",{class:"btntrans",on:{click:this.toggletranslate}})
 	}
 })
 Vue.component('textmenu',{
 	props:['depth','command','cap'],
 	methods:{
-		onclose(){
+		close(){
 			this.command("close");
+		},
+		bringtop(){
+			this.command("bringtop");	
 		}
 	},
 	render(h){
-		const attr={on:{click:this.onclose},
-		props:{cap:this.cap,depth:this.depth,command:this.command}};
+		const props={cap:this.cap,depth:this.depth,command:this.command};
 		if (this.depth==0) {
-			return h("topleveltextmenu",attr);
+			return h("toptextmenu",{props});
 		}
 		return h("div",{},
-			 [h("button",attr,"close"),
-			 h("cardnav",{props:{cap:this.cap,command:this.command}}),
-			 h("autotran",{props:{command:this.command}})]
+			 [h("span",{on:{click:this.close},class:"btnclose"}),
+			 h("cardnav",{props}),
+			 h("autotran",{props}),
+			 h("span",{on:{click:this.bringtop},class:"btnbringtop",props})]
 		);
 	},
 	components:{
@@ -239,8 +254,9 @@ Vue.component('backlinkmenu',{
 			const tdb=link[0];
 			const vpl=unpackmataddr(link[1]);
 			const fn=getdbbookname(tdb,vpl[0]);
-			const bkdoc=fn+":"+vpl[1]
-			return bkdoc;
+			let addr=fn+"_x"+(vpl[1]-1)
+			if (vpl[2]) addr+="y"+vpl[2];
+			return parse(addr).stringify();
 		}
 	},
 	render(h){
@@ -287,8 +303,7 @@ Vue.component('card', {
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
 				if (this.fetched) this.fetched(res,cap,this.cardid);
-
-				this.backlinks=cap.db.getbacklinks(this.addr);
+				this.backlinks=cap.db.getbacklinks(cap.stringify());
 			});	
 			this.prevaddr=this.addr;
 		},

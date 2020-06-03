@@ -2,8 +2,6 @@
 .unknown{color:red;}
 .known {color:black;}
 .solo {color:orange;}
-.translatebtn{border-radius: 5px;cursor:pointer;color:brown;
-	background:orange;}
 .hi {color:#ffafaf;}
 .proper{color:blue;}
 
@@ -29,8 +27,9 @@
 	box-shadow:  2px 2px 4px 4px #AAAAAA;}
 
 .underline {border-bottom: dotted 1px blue}
-.topleveltextmenu {background: #ffffaf}
+.cardnav {border-bottom:dotted 1px black}
 .backlinkmenu {background: #ffffaf}
+.toptextmenu{border-top:dotted 1px black;}
 
 .card0 { font-family: Tahoma}
 .card {display:block;margin-left:1em;overflow-y: scroll;
@@ -57,17 +56,25 @@ rt {font-size:90%;font-family:"Microsoft YaHei"}
 .btnnav {font-size:85%;}
 .btnbacklink {font-size:70%;}
 
-@media (orientation: portrait) {
-	tr{display:block;}
-
-	td {display: block}
-	.segid{border-top: dashed silver 1px}
+.btnclose{width:1em;height: 1em;}
+.btnclose:hover {cursor:pointer;
+border-radius: 50%;background-color: #CFCFCF;
 }
-@media (orientation: landscape) {
-	tr {display:table-row;}
-	td {display:table-cell;border-spacing:0px;border-bottom: dashed silver 1px
-	;padding-left:0.5em;font-family: Courier}
-}	
+.btnclose:before{content:"✖ ";font-size:75%;}
+
+.btnbringtop{width:1em;height: 1em;}
+.btnbringtop:hover {cursor:pointer;
+border-radius: 50%;background-color: #CFCFCF;
+}
+.btnbringtop:before{content:"↑↑↑";font-size:75%;}
+
+.btntrans{width:1em;height: 1em;}
+.btntrans:hover {cursor:pointer;
+border-radius: 50%;background-color: #CFCFCF;
+}
+.btntrans:before{content:"䛊 ";font-size:85%;font-weight: bold}
+
+
 .xreftext{font-family: Tahoma;color:brown}
 .inlinenote{border:dashed 1px silver;color:brown;overflow-wrap: wrap}
 .notebutton{border:dashed 1px silver;}

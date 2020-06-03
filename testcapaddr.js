@@ -70,20 +70,53 @@ const test1=()=>{
 
 const testnav=()=>{
 	let cap=parse("mul@1:76");
-	assert("vin01m_p45x3",cap.stringify())
+	assert(7,cap.px,'line count of para 45');
+	assert("vin01m_p45x3",cap.stringify(),'1:76')
+	
+	
 	let next=cap.nextp();
-	assert("vin01m_p46",next.stringify())
+	assert("vin01m_p46",next.stringify(),'nextp')
 	next=next.nextp();
-	assert("vin01m_p47",next.stringify())
+	assert("vin01m_p47",next.stringify(),'nextp')
 
 	cap=parse("mul@1:76");
 	let prev=cap.prevp(); //roll to begining of paranum
-	assert("vin01m_p45",prev.stringify())
+	assert("vin01m_p45",prev.stringify(),'prevp')
 	next=cap.nextp();
-	assert("vin01m_p46",next.stringify())
+	assert("vin01m_p46",next.stringify(),'nextp')
+
+	cap=parse("s0403a3_x63");//missing p25,p26
+	assert("s0403a3_p24x1",cap.stringify());
+
+	next=cap.nextp();
+	assert("s0403a3_p27",next.stringify(),'nextp in paranum gap');
+
+	prev=next.prevp();
+	assert("s0403a3_p24",prev.stringify());
+
+}
+const testpx=()=>{
+	let cap=parse(135852,"mul");
+	assert("e0102n_p896x4",cap.stringify())
+	assert(5,cap.px)
+
+	cap=parse("e0102n_p893","mul");
+	assert(4,cap.px);
+
+	cap=parse("1:2405","mul");
+	assert("vin01m_p662",cap.stringify());
+	assert(3,cap.px)
+
+	cap=parse("s0403a3_p25"); //not exists
+	assert("s0403a3_p27",cap.stringify(),"to next existing paranum");
+
+	cap=parse("s0403a3_p26"); //not exists
+	assert("s0403a3_p27",cap.stringify(),"to next existing paranum");
+
 }
 const test=()=>{
 	test1();
+	testpx();
 	testnav();
 }
 
