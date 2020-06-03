@@ -1,7 +1,7 @@
 require("./card");
 require("./tocpopup");
 require("./dictionary");
-const {CAPstr}=require("dengine")
+const {stringify}=require("dengine")
 
 Vue.component("cards",{
 	props:{'seltext':{type:String},
@@ -17,7 +17,7 @@ Vue.component("cards",{
 			this.dictshown=false;
 		},
 		fetched(res,cap,cardid){
-			const arr=this.addrs.map((addr,idx)=>idx==cardid?CAPstr(cap):addr);
+			const arr=this.addrs.map((addr,idx)=>idx==cardid?cap.stringify():addr);
 			this.setaddrs(arr);
 		}
 	},

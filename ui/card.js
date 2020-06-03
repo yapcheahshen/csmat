@@ -2,8 +2,8 @@
 	nestable text
 
 */
-const {getdbbookname,parse,stringify,open}=require("dengine");
-const {parseId,vpl2paranum,getparallel,matlabel,readtext}=require("./fetch");
+const {getdbbookname,parse,stringify,open,readlines}=require("dengine");
+const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText}=require("./decorate");
@@ -131,7 +131,7 @@ const CardNav=Vue.extend({
 			this.command('setcap',this.cap.nextp());
 		},
 		selectsid(sid){
-			const cap=CAP.parse(sid,this.cap.db);
+			const cap=parse(sid,this.cap.db);
 			this.command('setcap',cap);
 		},
 
@@ -156,7 +156,7 @@ const CardNav=Vue.extend({
 		const arr=ancestor.filter(item=>item.d>=this.depth);
 		if (this.depth&&arr.length){
 			selecting=arr[0].l;
-			cap=parseCAP(selecting,this.cap.db );
+			cap=parse(selecting,this.cap.db );
 		}
 		const ancestorspan=ancestor.map((item,idx)=>{
 			let t=item.t;
@@ -247,7 +247,7 @@ Vue.component('backlinkmenu',{
 		const children=this.links?this.links.map( link=>{
 			const setname=link[0];
 			const bkdoc=this.decodelink(link,setname);
-			const cap=parseCAP(bkdoc, setname);
+			const cap=parse(bkdoc, setname);
 			const depth=this.depth+1;
 			const label=bkdoc;//matlabel(bkdoc);
 			return h("paralleltextbutton",
@@ -270,17 +270,21 @@ Vue.component('card', {
 		},
 		setcap(cap){
 			this.cap=cap;
-			this.fetch(cap);
+			this.fetch(cap,true);
 		},
 		mounted(){
 			fetch(this.cap);
 		},
-		fetch(cap){
+		fetch(cap,updating){
 			let obj={},dbname;
-
+			let start=cap.x0-cap.x,count=1;
 			this.rawtext=null;
-
-			readtext(cap,res=>{
+			if (updating){
+				start=cap.x0;
+			}
+			count=cap.nextp(cap.x?2:1).x0 - start;
+	
+			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
 				if (this.fetched) this.fetched(res,cap,this.cardid);
 
@@ -302,7 +306,7 @@ Vue.component('card', {
 	},
 	render(h){
 		if (this.prevaddr!==this.addr ) {
-			this.cap=parseCAP(this.addr,this.db);
+			this.cap=parse(this.addr,this.db);
 			this.prevaddr=this.addr;
 			this.fetch(this.cap);
 			return;

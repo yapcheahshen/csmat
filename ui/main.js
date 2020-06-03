@@ -26,7 +26,7 @@ const setHash=(newobj)=>{
 	}
 	document.location.hash="#"+p.toString();
 }
-
+ADDR_SEP="*" //will not urlencoded 
 
 //const {conjugate,conjugateWord,analyzeword,G_outwords,G_shortdefpost,outputAnalysis}=require("./fromdpr")
 const {vpl2paranum,id_regex}=require("./fetch");
@@ -128,7 +128,7 @@ new Vue({
 
 		},
 		setaddrs(addrs){
-			setHash({a:addrs.join(";")})
+			setHash({a:addrs.join(ADDR_SEP)})
 		}
 
 	},
@@ -157,9 +157,8 @@ new Vue({
 				});
 			})
 			let {a}=URLParams();
-			a=a?a:"s0101m_p1";
 			const cardsaddr=[];
-			const addrarr=a.split(";");
+			const addrarr=a.split(ADDR_SEP);
 			for (let addr of addrarr){
 				const m=addr.match(id_regex);
 				if (m){

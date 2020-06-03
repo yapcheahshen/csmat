@@ -1,4 +1,4 @@
-const {parseCAP}=require("dengine");
+const {parse}=require("dengine");
 const getancestor=(cap)=>{
 	let ancestor=[];
 	ancestor=cap.db.gettocancestor(cap.bkx).filter(item=>item.t!="-");
@@ -74,7 +74,7 @@ Vue.component('tocitempopup',{
 				this.curdepth=toc[tocseq].d;
 				l=toc[tocseq].l;
 			}
-			this.curcap=parseCAP(l,this.cap.db);
+			this.curcap=parse(l,this.cap.db);
 		},
 		quickselect(event){
 			const linkto=event.srcElement.attributes.linkto.value;

@@ -1,8 +1,8 @@
-const {SEGSEP,open,readlines,CAPStr}=require("dengine");
+const {SEGSEP,open,readlines,stringify}=require("dengine");
 const {filename2set}=require("./linkparser");
 
 const getparallel=(cap,set)=>{
-	const str=CAPstr(cap);
+	const str=stringify(cap);
 	const paranum=cap.p;
 	parallel={"att":"a","tik":"t","mul":"m"};
 
@@ -116,33 +116,8 @@ const matlabel=hyperlink=>{
 	return o;
 }
 
-const id_regex=/([vinseabh\d]+[mat]\d?)[:p]([\.\d]+)/
-
-
-const readtext=(cap,cb)=>{
-	if (!cap) throw "invalid db orcap"
-	let x=cap.x,count=1;
-	let x0=cap.x0;
-		
-	if (cap.p && cap.x==0) {
-		//from addr or user input paranum
-		//p ~ p+1
-	} else {
-		if (cap.p==0) {//from toc node
-
-			//cap.x ~ p+1, cap.x = toc line
-		} else { //from backlink
-			//closest p ~ p+1
-		}
-	}
-
-	//end=paranum[bkq][cap.p+1];
-	//count=end-x;
+const id_regex=/([vinseabh\d]+[mat]\d?)_(.+)/
 
 
 
-	readlines(cap.db,x0,count,cb);
-}
-
-module.exports={getparallel,id_regex,matlabel
-,readtext};
+module.exports={getparallel,id_regex,matlabel};
