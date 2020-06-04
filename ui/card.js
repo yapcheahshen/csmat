@@ -12,7 +12,7 @@ const {getancestor}=require("./tocpopup");
 const dbname=["mul","att","tik"];
 
 Vue.component('notebutton',{
-	props:['note','id','depth'],
+	props:['note','id','depth','command','cardcommand'],
 	methods:{
 		toggle(){
 			this.show=!this.show;
@@ -32,11 +32,14 @@ Vue.component('notebutton',{
 			notetext.replace(hyperlink_regex_g,(m,m1,m2,idx)=>{
 				const t=notetext.substring(prev,idx)
 				if (t) children.push( h('span',{},t));
-				const rawid=m1+"p"+m2;
+				const rawid=m1+"_p"+m2;
 				const label=matlabel(rawid);
 				const setname=filename2set(rawid);
+				const cap=parse(rawid);
 				children.push( h('paralleltextbutton',
-					{props:{rawid,depth:this.depth,setname,label}}));
+					{props:{cap,depth:this.depth,
+						cardcommand:this.cardcommand,
+						command:this.command,setname,label}}));
 				prev=idx+m.length;
 			});
 			let t=notetext.substr(prev)
@@ -52,7 +55,7 @@ Vue.component('notebutton',{
 	}
 })
 
-const renderInlineNote=(h,text,notes,nline,depth)=>{
+const renderInlineNote=(h,text,notes,nline,depth,tprops)=>{
 	let p=0;
 	const children=[];
 
@@ -64,13 +67,15 @@ const renderInlineNote=(h,text,notes,nline,depth)=>{
 		if (note) {
 			const m=note.trim().match(hyperlink_regex);
 			if (m){
-				const rawid=m[1]+"p"+m[2];
+				const rawid=m[1]+"_p"+m[2];
 				const label=matlabel(rawid);
 				const setname=filename2set(rawid);
-				children.push( h('paralleltextbutton',
-					{props:{rawid,depth,setname,label}}));
+				const cap=parse(rawid);
+				const props=Object.assign({cap,depth,setname,label},tprops);
+				children.push( h('paralleltextbutton',{props}));
 			} else {
-				children.push(h('notebutton',{props:{id:m1,note,depth}}));
+				const props=Object.assign({id:m1,note,depth},tprops);
+				children.push(h('notebutton',{props}));
 			}
 		}
 		p=p1+m.length;
@@ -83,7 +88,7 @@ const renderInlineNote=(h,text,notes,nline,depth)=>{
 }
 
 Vue.component('paralleltextbutton',{
-	props:['cap','setname','depth','label','command'],
+	props:['cap','setname','depth','label','command','cardcommand'],
 	methods:{
 		execcommand(cmd,arg){
 			if (cmd=="close") {
@@ -103,7 +108,8 @@ Vue.component('paralleltextbutton',{
 		} else {
 			const addr=getparallel(this.cap,this.setname);
 			return h("card",{props:{depth:this.depth+1,
-				command:this.execcommand,addr }});
+				command:this.execcommand,
+				cardcommand:this.cardcommand,addr }});
 		}
 	},
 	data(){
@@ -194,15 +200,22 @@ Vue.component('toptextmenu',{
 	methods:{
 		close(){
 			this.command("closecard");
+		},
+		movetop(){
+			this.command("movetop");
 		}
 	},
 	render(h){
 
 		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.getname());
 		const children=sets.map(setname=>h("paralleltextbutton",
-			{props:{db:this.db,setname,cap:this.cap,command:this.command,
+			{props:{db:this.db,setname,cap:this.cap,
+				command:this.command,cardcommand:this.cardcommand,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
+		children.push(h("span",{on:{click:this.movetop},class:"btnbringtop",
+			props:{command:this.command}}));
+
 		children.unshift(h("cardnav",{props:{command:this.command,cap:this.cap}}));
 		
 		children.unshift(h("span",{on:{click:this.close},class:"btnclose"}));
@@ -251,7 +264,7 @@ Vue.component('textmenu',{
 	}
 });
 Vue.component('backlinkmenu',{
-	props:['cap','links','depth','command'],
+	props:['cap','links','depth','command','cardcommand'],
 	//props:['setname','closeme','depth','rawid','label'],
 	methods:{
 		decodelink(link,setname){
@@ -260,18 +273,20 @@ Vue.component('backlinkmenu',{
 			const fn=getdbbookname(tdb,vpl[0]);
 			let addr=fn+"_x"+(vpl[1]-1)
 			if (vpl[2]) addr+="y"+vpl[2];
-			return parse(addr).stringify();
+			return parse(addr,setname).stringify();
 		}
 	},
 	render(h){
 		const children=this.links?this.links.map( link=>{
 			const setname=link[0];
-			const bkdoc=this.decodelink(link,setname);
-			const cap=parse(bkdoc, setname);
+			const lnk=this.decodelink(link,setname);
+			
+			const cap=parse(lnk, setname);
 			const depth=this.depth+1;
-			const label=bkdoc;//matlabel(bkdoc);
+			const label=lnk.replace(/y.+/,'');
 			return h("paralleltextbutton",
-				{props:{command:this.command,cap,label,setname,depth}})
+				{props:{command:this.command,cardcommand:this.cardcommand,
+					cap,label,setname,depth}})
 		}):[];
 		return h('div',{},children)
 	}
@@ -279,8 +294,7 @@ Vue.component('backlinkmenu',{
 })
 
 Vue.component('card', { 
-	props:['cardid','addr','depth','fetched','command',
-	'newcard','close'],
+	props:['cardid','addr','depth','command','cardcommand'],
 	data(){
 		return {rawtext:null,prevaddr:'',
 		cap:null,backlinks:[],autotranslate:false}
@@ -307,25 +321,32 @@ Vue.component('card', {
 	
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
-				if (this.fetched) this.fetched(res,cap,this.cardid);
+				if (this.fetched) {
+					this.cardcommand("fetched",this.cardid,res);
+				}
 				this.backlinks=cap.db.getbacklinks(cap.stringify());
 			});	
 			this.prevaddr=this.addr;
 		},
 		execcommand(cmd,arg){
 			let r=null;
-			if (this.command) r=this.command(cmd,arg);
-			//if (r)return;
-
 			if (cmd=='toggletranslate') {
 				this.autotranslate=!this.autotranslate;
+				return;
 			} else if (cmd=='setcap'){
 				this.setcap(arg);
+				return;
 			} else if (cmd=='closecard'){
-				this.close(this.cardid);
+				this.cardcommand('close',this.cardid);
 			} else if (cmd=='bringtop'){
-				this.newcard(arg);
+				this.cardcommand("new",this.cardid,arg);
+				return;
+			} else if (cmd=='movetop'){//all nested card will be close
+				this.cardcommand('close',this.cardid);
+				this.cardcommand("new",this.cardid,this.cap);
+				return;
 			}
+			if (this.command) r=this.command(cmd,arg);//pass to parent
 		}
 	},
 	render(h){
@@ -380,10 +401,7 @@ Vue.component('card', {
 							const rt=h('rt',{class:cls},rtspan);
 							children.push(h('ruby',{class:"known"},[rb,rt]));
 
-						} else {
-							const textwithotebtn=renderInlineNote(h,t,notes,j,depth+1);
-							children.push(h('span',{class:prevclass},textwithotebtn));
-						}
+						} 
 						t='';
 						prevclass=snippet[n][1];
 						n++;
@@ -396,16 +414,18 @@ Vue.component('card', {
 		} else {
 			for (var j=0;j<this.rawtext.length;j++){
 				const text=this.rawtext[j][1];
-				const textwithotebtn=renderInlineNote(h,text,notes,j,depth+1);
+				const props={cardcommand:this.cardcommand,command:this.command};
+				const textwithotebtn=renderInlineNote(h,text,notes,j,depth+1,props);
 				children.push(h('span',{},textwithotebtn));
 				children.push(h('br'));
 			}
 		}
 		children.unshift(h('textmenu',
-			{props:{depth,cap:this.cap,command:this.execcommand}}));
+			{props:{depth,cap:this.cap,command:this.execcommand,
+			cardcommand:this.cardcommand,}}));
 		children.push(h('backlinkmenu',
 			{class:"backlinkmenu",props:{
-				command:this.execcommand,
+				command:this.execcommand,cardcommand:this.cardcommand,
 				cap:this.cap,links:this.backlinks,depth}}));
 
 		let cls='card0';

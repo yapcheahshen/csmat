@@ -16,17 +16,17 @@ Vue.component("cards",{
 		hidedictionary(){
 			this.dictshown=false;
 		},
-		fetched(res,cap,cardid){
-			const arr=this.address.map((addr,idx)=>idx==cardid?cap.stringify():addr);
-			this.setaddrs(arr);
-		},
-		closecard(cardid){
-			this.address=this.address.filter((addr,idx)=>cardid!==idx);
-			this.setaddrs(this.address);
-		},
-		newcard(cap){
-			this.address.unshift(cap.stringify());
-			this.setaddrs(this.address);
+		cardcommand(cmd,cardid,arg1,arg2){
+			if (cmd=="fetched"){
+				const arr=this.address.map((addr,idx)=>idx==cardid?cap.stringify():addr);
+				this.setaddrs(arr);				
+			} else if (cmd=="close"){
+				this.address=this.address.filter((addr,idx)=>cardid!==idx);
+				this.setaddrs(this.address);				
+			} else if (cmd=="new"){
+				this.address.unshift(arg1.stringify());
+				this.setaddrs(this.address);
+			}
 		}
 	},
 	render(h){
@@ -37,8 +37,8 @@ Vue.component("cards",{
 		}
 		const children=this.address.map((addr,cardid)=>{
 			return h("card",{props:{cardid,addr,
-				fetched:this.fetched,
-				close:this.closecard,newcard:this.newcard}});
+				cardcommand:this.cardcommand,
+			}});
 		})
 
 		const out=[h("div",{class:"cards"},children)];

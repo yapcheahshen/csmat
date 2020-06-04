@@ -29,7 +29,9 @@ const recognise=(link)=>{
 		}
 	}
 }
+const anna={"e0101n":"mul","e0102n":"mul","e0103n":"att","e0104":"att"}
 const filename2set=fn=>{
+	if (anna[fn.substr(0,6)]) return anna[fn.substr(0,6)];
 	const m=fn.match(/\d+([mat])/);
 	if (m) {
 		return {m:"mul","a":"att","t":"tik"}[m[1]];
