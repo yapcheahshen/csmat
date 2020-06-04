@@ -13,8 +13,8 @@ const linkpatterns=[
 ]
 
 
-const hyperlink_regex=/@([sabhvine]+\d+[mat]\d?)_p(\d+);/
-const hyperlink_regex_g=/@([sabhvine]+\d+[mat]\d?)_p(\d+);/g
+const hyperlink_regex=/#([sabhvine]+\d+[mat]\d?)_p(\d+);/
+const hyperlink_regex_g=/#([sabhvine]+\d+[mat]\d?)_p(\d+);/g
 
 const citehandler=require("./citehandler");
 

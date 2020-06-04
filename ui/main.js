@@ -12,12 +12,16 @@ const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
 const dbname=["mul","att","tik"];
 const URLParams=()=>{
 	let hash=document.location.hash.substr(1);
+	return hash;
 	const p=new URLSearchParams(hash);
 	const out={};
 	p.forEach( (v,k)=>out[k]=v);
 	return out;
 }
 const setHash=(newobj)=>{
+	document.location.hash="#"+newobj;
+	return;
+
 	let hash=document.location.hash.substr(1);
 	const p=new URLSearchParams(hash);
 	for (var key in newobj){
@@ -128,7 +132,8 @@ new Vue({
 
 		},
 		setaddrs(addrs){
-			setHash({a:addrs.join(ADDR_SEP)})
+			//setHash({a:addrs.join(ADDR_SEP)})
+			setHash(addrs.join(ADDR_SEP))
 		}
 
 	},
@@ -156,7 +161,7 @@ new Vue({
 					this.ready=true;
 				});
 			})
-			let {a}=URLParams();
+			let a=URLParams();
 			const cardsaddr=[];
 			const addrarr=a.split(ADDR_SEP);
 			for (let addr of addrarr){

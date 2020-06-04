@@ -1,5 +1,7 @@
 ﻿/* remind me to backup*/
 `
+2020.6.3  improve paranum navigation
+2020.6.1  new CAP addressing model
 2020.5.31 90% translated, UI rewrite for multiple cards
 2020.5.27 show translated word on ruby text
 2020.5.25 cluster links to 4nikaya, top 5 are mn26,12,22,44,129
@@ -14,71 +16,22 @@
 2020.5.13 start project
 	
 
-bookmark fast jump to selected page
-multiple card
-
-prev/next para move to per card
-bookname+docseq as address bar and store in hash
- 
-TODO
-
-CAPaddress
-
-
-
-s0101p102  第100段+1行
-s0101p100
-s0101mb100   第100行   
-
-
-跳到轉法輪經時breadcrumb中間downdrop selected index不對。
-click on ancestor to show all sublings
-  (store first sublings)
-
-āvusovādena 錯誤為avuso
-file:///D:/!mywork/csmat/index.html#a=s0201mp286
-
-link format
-s0305m3p200
-s0305m3p200y33 33th syllable
-s0305m3p200y33z 33th syllable until end of word
-s0305m3p200y33z3 33th syllable and 3 syllable forward
-
 
 
 TODO
-computer aided pariyatti  CAP
+查字典
+cards 介面，移到最頂及關閉。
+塗引文及出處。
+Pali endings table
+
+s0201m_p273 backlink vin06t_x120y166 很長也無p
+                     s0403t1_x209y366
 
 
-move <note> to main text ,like nanchuan.
-display att,mul on same screen.
-clickable forward note citation link.
-
-parse link and convert to mataddr.
 觀察字典的拆分與原字的差異，歸納連音法則
 when mul is loaded, build reverse link and show button.
 
 
 find a page suitable for compound breakup demo
-
-
-change file name for easy sorting
-
-mul01-s0101m.xml
-mul02-s0102m.xml
-mul03-s0102m.xml //break into smaller files if needed
-att9-s0101.xml	
-tik
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 `

@@ -10,23 +10,35 @@ Vue.component("cards",{
 			'ready':{type:Boolean,required:true}
 	},
 	data(){
-		return {prevseltext:'',dictshown:false}
+		return {prevseltext:'',dictshown:false,address:null}
 	},
 	methods:{
 		hidedictionary(){
 			this.dictshown=false;
 		},
 		fetched(res,cap,cardid){
-			const arr=this.addrs.map((addr,idx)=>idx==cardid?cap.stringify():addr);
+			const arr=this.address.map((addr,idx)=>idx==cardid?cap.stringify():addr);
 			this.setaddrs(arr);
+		},
+		closecard(cardid){
+			this.address=this.address.filter((addr,idx)=>cardid!==idx);
+			this.setaddrs(this.address);
+		},
+		newcard(cap){
+			this.address.unshift(cap.stringify());
+			this.setaddrs(this.address);
 		}
 	},
 	render(h){
 		if (!this.ready){
 			return h("div",{},"opening database");
+		} else if (!this.address){
+			this.address=this.addrs;
 		}
-		const children=this.addrs.map((addr,cardid)=>{
-			return h("card",{props:{cardid,addr,fetched:this.fetched}});
+		const children=this.address.map((addr,cardid)=>{
+			return h("card",{props:{cardid,addr,
+				fetched:this.fetched,
+				close:this.closecard,newcard:this.newcard}});
 		})
 
 		const out=[h("div",{class:"cards"},children)];

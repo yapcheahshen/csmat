@@ -117,7 +117,7 @@ const parseLine=(line,docseq)=>{
 					nc=nc.replace(pat,m=>{
 						let translated=recognise([m,mataddr]);
 						if (typeof translated=="string") {
-							const hyperlink= "@"+translated+";";
+							const hyperlink= "#"+translated+";";
 							matlinks.push([mataddr.toString(16),hyperlink]);
 							return hyperlink;
 						} else {
