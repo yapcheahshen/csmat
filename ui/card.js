@@ -79,7 +79,7 @@ Vue.component('paralleltextbutton',{
 		} else {
 			const addr=getparallel(this.cap,this.setname);
 			return h("card",{props:{depth:this.depth+1,
-				command:this.execcommand,
+				command:this.execcommand,from:this.cap,
 				cardcommand:this.cardcommand,addr }});
 		}
 	},
@@ -179,7 +179,7 @@ Vue.component('toptextmenu',{
 
 		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.getname());
 		const children=sets.map(setname=>h("paralleltextbutton",
-			{props:{db:this.db,setname,cap:this.cap,
+			{props:{setname,cap:this.cap,
 				command:this.command,cardcommand:this.cardcommand,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
@@ -207,7 +207,7 @@ Vue.component('autotran',{
 	}
 })
 Vue.component('textmenu',{
-	props:['depth','command','cap'],
+	props:['depth','command','cap','cardcommand'],
 	methods:{
 		close(){
 			this.command("close");
@@ -218,7 +218,8 @@ Vue.component('textmenu',{
 		}
 	},
 	render(h){
-		const props={cap:this.cap,depth:this.depth,command:this.command};
+		const props={cap:this.cap,depth:this.depth,
+			cardcommand:this.cardcommand,command:this.command};
 		if (this.depth==0) {
 			return h("toptextmenu",{props});
 		}
@@ -274,9 +275,9 @@ const findselx=()=>{
 	return -1;
 };
 Vue.component('card', { 
-	props:['cardid','addr','depth','command','cardcommand'],
+	props:['cardid','addr','depth','from','command','cardcommand'],
 	data(){
-		return {rawtext:null,prevaddr:'',
+		return {rawtext:null,prevaddr:'',nti:'',
 		cap:null,backlinks:[],autotranslate:false}
 	},
 	methods:{
@@ -290,7 +291,7 @@ Vue.component('card', {
 		mounted(){
 			fetch(this.cap);
 		},
-		checkselection(){
+		checkselection(event){
 			const sel=getCAPSelection();
 			if (sel) {
 				if (sel.z>1) {
@@ -298,7 +299,8 @@ Vue.component('card', {
 					cap.y=sel.y;
 					cap.z=sel.z;
 					this.cap=cap;
-					if (!this.depth) this.cardcommand('fetched',this.cardid,cap);
+					if (typeof this.cardid!=="undefined") this.cardcommand('fetched',this.cardid,cap);
+					console.log('checkselection',this.cap.stringify())
 				}
 			}
 		},
@@ -313,13 +315,21 @@ Vue.component('card', {
 	
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
-				this.cardcommand("fetched",this.cardid,this.cap,res);
+				if(typeof this.cardid!=="undefined") {
+					this.cardcommand("fetched",this.cardid,this.cap,res);
+				}
 				this.backlinks=cap.db.getbacklinks(cap.stringify());
 			});	
 			this.prevaddr=this.addr;
 		},
-		selectionclick(){
-			alert(this.cap.getsel())
+		onSnippetClick(event){
+			const ele=event.srcElement;
+			const cl=ele.classList
+			if (cl.contains("nti")){
+				this.command("setnti",ele.textContent);
+			} else if(cl.contains("yzrange")){
+				
+			}
 		},
 		nissaya(h,children){
 			for (var j=0;j<this.rawtext.length;j++){
@@ -375,6 +385,8 @@ Vue.component('card', {
 				this.cardcommand('close',this.cardid);
 				this.cardcommand("new",this.cardid,this.cap);
 				return;
+			} else if (cmd=='setnti'){
+				this.nti=arg;
 			}
 			if (this.command) r=this.command(cmd,arg);//pass to parent
 		}
@@ -411,8 +423,8 @@ Vue.component('card', {
 				const x0=this.rawtext[i][0]
 				const props={depth:depth+1,cardcommand:this.cardcommand,command:this.command};
 				const selectionclick=this.selectionclick;
-				const decorated=decorateText({cap:this.cap,
-					i,x:x0,t:this.rawtext[i][1],props,notes,h,selectionclick
+				const decorated=decorateText({cap:this.cap,nti:this.nti,
+					i,x:x0,t:this.rawtext[i][1],props,notes,h,onclick:this.onSnippetClick
 				});
 				//const text=this.rawtext[j][1];
 				//const textwithotebtn=renderInlineNote(h,text,notes,i,depth+1,props);
@@ -423,7 +435,7 @@ Vue.component('card', {
 		}
 		children.unshift(h('textmenu',
 			{props:{depth,cap:this.cap,command:this.execcommand,
-			cardcommand:this.cardcommand,}}));
+			cardcommand:this.cardcommand}}));
 		children.push(h('backlinkmenu',
 			{class:"backlinkmenu",props:{
 				command:this.execcommand,cardcommand:this.cardcommand,

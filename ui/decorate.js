@@ -94,14 +94,26 @@ const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 	}
 	return btn;
 }
-const {syllabify,isSyllable,isPaliword}=require("../paliutil")
-const decorateText=({cap,i,x,t,props,notes,h,selectionclick})=>{
+const {syllabify,isSyllable,isPaliword}=require("dengine")
+const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 	const decorations=[];
 	const syl=syllabify(t);
 	let bold=0;
 	let marker=-1;
 	if (cap.z<1 && cap.y>0) marker=cap.y;
-	let y=0,off=0,start=-1,z=cap.z;		
+	let y=0,off=0,start=-1,z=cap.z;
+
+	nti=nti.substr(0,nti.length-1);
+	nti=nti.replace(/[iī]$/g,"[iī]").
+	replace(/[uū]$/g,"[uū]").replace(/[aā]$/g,"[aā]")
+	const ntiregex=new RegExp(nti,"gi");
+
+	t.replace(/‘‘[^’]+?’’n?ti *\^/g,(m,idx)=>{
+		decorations.push([idx,m.length-1,"quote"]);
+	});
+	t.replace(ntiregex,(m,idx)=>{
+		decorations.push([idx,m.length,"ti"]);
+	})
 	for (let j=0;j<syl.length;j++){
 		if (y==cap.y) start=off;
 		if (syl[j][syl[j].length-1]=="{") {
@@ -132,7 +144,7 @@ const decorateText=({cap,i,x,t,props,notes,h,selectionclick})=>{
 	let j=0,n=0,str='',prevclass='',yinc=0, syl_i=0 ,ch='';
 	let sycnt=syl[0].length;
 	const addspan=()=>{
-		const on=prevclass.indexOf('yzrange')>-1?{click:selectionclick}:null;
+		const on={click:onclick};
 		if (str) children.push(h('span',{on,attrs:{y},class:prevclass},str));
 	}
 	while(j<=t.length){ 

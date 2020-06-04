@@ -10,8 +10,10 @@ Vue.component('bookmarklist',{
 	},
 	data(){
 		return {bookmarks:[
-			['hilight text','s0102a_p137x1y34z'],
-			["聖求經","s0201m_p272"],
+			['hilight text','s0102a_p137x1y105z29*s0201m_p273x1y294z29'],
+			["聖求經","s0201m_p280"],
+			["象跡喻小經ATT","s0201m_p289"],
+			["心材喻小經 ATT an3.138","s0201m_p312"],
 			["轉法輪經","s0305m_p1081"]
 		]};
 	},

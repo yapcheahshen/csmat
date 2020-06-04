@@ -17,7 +17,8 @@ Vue.component("cards",{
 			this.dictshown=false;
 		},
 		openbookmark(addr){
-			this.address.unshift(addr);
+			const arr=addr.split("*")
+			arr.forEach(a=>this.address.unshift(a));
 			this.setaddrs(this.address);
 		},
 		cardcommand(cmd,cardid,arg1,arg2){

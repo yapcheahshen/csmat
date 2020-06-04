@@ -20,8 +20,9 @@
 
 
 TODO
+quick jump by mn vol.para
 點選取區查字典
-
+自動連結 nti 和mul 的字 加號碼
 
 Pali endings table
 

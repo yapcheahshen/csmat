@@ -6,7 +6,9 @@
 .proper{color:blue;}
 .yzrange{background:yellow;cursor: pointer}
 .hiddenselecting{display: none}
-.nti {font-weight: bold;color:brown;}
+.nti {font-weight: bold;color:brown;cursor: pointer}
+.ti {background:#FFAFAF;}
+.quote {border-bottom:dashed 1px green;}
 .marker{}
 .marker:before{content:"●";color: red}
 
