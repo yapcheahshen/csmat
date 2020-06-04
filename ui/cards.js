@@ -1,8 +1,8 @@
 require("./card");
 require("./tocpopup");
 require("./dictionary");
-const {stringify}=require("dengine")
-const {isPaliword}=require("../paliutil")
+const {stringify,isPaliword}=require("dengine")
+
 Vue.component("cards",{
 	props:{'seltext':{type:String},
 			'addrs':{type:Array,required:true},//initial from hash

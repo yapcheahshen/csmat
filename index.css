@@ -4,9 +4,9 @@
 .solo {color:orange;}
 .hi {color:#ffafaf;}
 .proper{color:blue;}
-.yzrange{background:yellow;}
+.yzrange{background:yellow;cursor: pointer}
 .hiddenselecting{display: none}
-
+.nti {font-weight: bold;color:brown;}
 .marker{}
 .marker:before{content:"●";color: red}
 

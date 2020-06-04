@@ -20,8 +20,9 @@
 
 
 TODO
-查字典
-塗引文及出處。
+點選取區查字典
+
+
 Pali endings table
 
 s0201m_p273 backlink vin06t_x120y166 很長也無p

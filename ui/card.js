@@ -56,37 +56,7 @@ Vue.component('notebutton',{
 	}
 })
 
-const renderInlineNote=(h,text,notes,nline,depth,tprops)=>{
-	let p=0;
-	const children=[];
 
-	text.replace(/\^(\d+)/g,(m,m1,p1)=>{
-		const t=text.substring(p,p1);
-		if (t) children.push( h('span',t));
-
-		const note=notes[nline+"_"+m1];
-		if (note) {
-			const m=note.trim().match(hyperlink_regex);
-			if (m){
-				const rawid=m[1]+"_p"+m[2];
-				const label=matlabel(rawid);
-				const setname=filename2set(rawid);
-				const cap=parse(rawid);
-				const props=Object.assign({cap,depth,setname,label},tprops);
-				children.push( h('paralleltextbutton',{props}));
-			} else {
-				const props=Object.assign({id:m1,note,depth},tprops);
-				children.push(h('notebutton',{props}));
-			}
-		}
-		p=p1+m.length;
-	})
-	if (children.length==0) {
-		return text;
-	}
-	children.push( h('span',{},text.substr(p)))
-	return children;
-}
 
 Vue.component('paralleltextbutton',{
 	props:['cap','setname','depth','label','command','cardcommand'],
@@ -142,7 +112,6 @@ const CardNav=Vue.extend({
 			this.command('setcap',this.cap.prevp());
 		},
 		nextpara(){
-			console.log("nextpara")
 			this.command('setcap',this.cap.nextp());
 		},
 		selectsid(sid){
@@ -197,7 +166,7 @@ const CardNav=Vue.extend({
 })
 
 Vue.component('toptextmenu',{
-	props:['depth','cap','command'],
+	props:['depth','cap','command','cardcommand'],
 	methods:{
 		close(){
 			this.command("closecard");
@@ -329,7 +298,7 @@ Vue.component('card', {
 					cap.y=sel.y;
 					cap.z=sel.z;
 					this.cap=cap;
-					this.cardcommand('fetched',this.cardid,cap);
+					if (!this.depth) this.cardcommand('fetched',this.cardid,cap);
 				}
 			}
 		},
@@ -344,12 +313,13 @@ Vue.component('card', {
 	
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
-				if (this.fetched) {
-					this.cardcommand("fetched",this.cardid,res);
-				}
+				this.cardcommand("fetched",this.cardid,this.cap,res);
 				this.backlinks=cap.db.getbacklinks(cap.stringify());
 			});	
 			this.prevaddr=this.addr;
+		},
+		selectionclick(){
+			alert(this.cap.getsel())
 		},
 		nissaya(h,children){
 			for (var j=0;j<this.rawtext.length;j++){
@@ -439,10 +409,10 @@ Vue.component('card', {
 		} else {
 			for (var i=0;i<this.rawtext.length;i++){
 				const x0=this.rawtext[i][0]
-				const props={cardcommand:this.cardcommand,command:this.command};
+				const props={depth:depth+1,cardcommand:this.cardcommand,command:this.command};
+				const selectionclick=this.selectionclick;
 				const decorated=decorateText({cap:this.cap,
-					i,x:x0,t:this.rawtext[i][1],
-					props,notes,h,inlinenoterenderer:renderInlineNote
+					i,x:x0,t:this.rawtext[i][1],props,notes,h,selectionclick
 				});
 				//const text=this.rawtext[j][1];
 				//const textwithotebtn=renderInlineNote(h,text,notes,i,depth+1,props);

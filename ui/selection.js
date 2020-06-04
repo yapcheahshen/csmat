@@ -1,4 +1,4 @@
-const {syllabify,isSyllable}=require("../paliutil");
+const {syllabify,isSyllable}=require("dengine");
 
 const getattr=(node,attr)=>{
 	while (node) {

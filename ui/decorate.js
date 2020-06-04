@@ -1,6 +1,9 @@
 const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
+const {parse}=require("dengine");
 const {getdef}=require("./lexicon");
 const {suggestedBreak}=require("paliword");
+const {filename2set,hyperlink_regex}=require("./linkparser");
+const {matlabel}=require("./fetch");
 const trimdef=d=>{
 	let o='';
 	if (!d)return '';
@@ -71,48 +74,75 @@ const snip=(str,decoration)=>{
 	}
 	return out;
 }
+
+const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
+	let p=0;
+	const note=notes[nline+"_"+m1];
+	if (note) {
+		const m=note.trim().match(hyperlink_regex);
+		if (m){
+			const rawid=m[1]+"_p"+m[2];
+			const label=matlabel(rawid);
+			const setname=filename2set(rawid);
+			const cap=parse(rawid);
+			const props=Object.assign({cap,setname,label},tprops);
+			btn= h('paralleltextbutton',{props});
+		} else {
+			const props=Object.assign({id:m1,note},tprops);
+			btn=h('notebutton',{props});
+		}
+	}
+	return btn;
+}
 const {syllabify,isSyllable,isPaliword}=require("../paliutil")
-const decorateText=({cap,i,x,t,props,notes,h,inlinenoterenderer})=>{
+const decorateText=({cap,i,x,t,props,notes,h,selectionclick})=>{
 	const decorations=[];
 	const syl=syllabify(t);
-
-	if (cap.x0==x && cap.y){ //the cap line
-		let y=0,off=0,start=-1,z=cap.z,endword=false;		
-		for (var j=0;j<syl.length;j++){
-			
-			if (y==cap.y) start=off;
-
-			if ( (z!==-1&&y==cap.y+z) || endword){
-				if (!(decorations.length&&decorations[decorations.length-1][0]!==off)){
-					if (off==start){ //null marker
-						decorations.push([start, 0,""]);//no style for zero span, 
-					} else {
-						decorations.push([start, off-start, "yzrange"]);
-					}
+	let bold=0;
+	let marker=-1;
+	if (cap.z<1 && cap.y>0) marker=cap.y;
+	let y=0,off=0,start=-1,z=cap.z;		
+	for (let j=0;j<syl.length;j++){
+		if (y==cap.y) start=off;
+		if (syl[j][syl[j].length-1]=="{") {
+			bold=off+syl[j].length;
+		}
+		if (syl[j].trim()=="}"){
+			decorations.push([bold,off-bold,"nti"]);
+		}
+		if ( (z!==-1&&y==cap.y+z&&cap.x0==x)){
+			if (!(decorations.length&&decorations[decorations.length-1][0]==off)){
+				if (off==start){ //null marker
+					decorations.push([start, 0,""]);//no style for zero span, 
+				} else {
+					decorations.push([start, off-start, "yzrange"]);
 				}
 			}
-			if (isSyllable(syl[j])) {
-				y++;
-			} else if (start>-1 && z==-1) {
-				endword=true;//
-			}
-			
-			off+=syl[j].length;
 		}
-
+		if (isSyllable(syl[j])) {
+			y++;
+		} 
+		
+		off+=syl[j].length;
 	}
+
 	const children=[];
 	const snippet=snip(t,decorations);
-	let n=0,str='',prevclass='',y=0 ,yinc=0, syl_i=0;
+	y=0 ;
+	let j=0,n=0,str='',prevclass='',yinc=0, syl_i=0 ,ch='';
 	let sycnt=syl[0].length;
-	for (var j=0;j<=t.length;j++){ 
+	const addspan=()=>{
+		const on=prevclass.indexOf('yzrange')>-1?{click:selectionclick}:null;
+		if (str) children.push(h('span',{on,attrs:{y},class:prevclass},str));
+	}
+	while(j<=t.length){ 
 		if (!sycnt) {
 			if (isSyllable(syl[syl_i]))yinc++
 			if( syl_i+1<syl.length) sycnt=syl[++syl_i].length;
 		}
 
 		if (n<snippet.length&&snippet[n][0]==j) {
-			children.push(h('span',{attrs:{y},class:prevclass},str));
+			addspan();
 			str='';
 			prevclass=snippet[n][1];
 			if (!prevclass) prevclass='';
@@ -122,11 +152,27 @@ const decorateText=({cap,i,x,t,props,notes,h,inlinenoterenderer})=>{
 			off=j;
 			y=yinc;
 		}
-		if (j<t.length) str+=t[j];
+		ch=t[j];
+		if (ch=="{"||ch=="}") ch='';
+		if (ch=="^"){
+			let num=j+1;
+			const m=t.substr(j+1).match(/(\d+)/);
+			j+=m[1].length;
+			addspan();
+			let btn=inlinenotebtn(h,m[1],notes,i,props);
+			children.push(btn);
+			ch='';
+			str='';
+		}
+		if (y==marker){ //marking backlink source pos
+			children.push(h('span',{attrs:{y},class:'marker'}));
+			marker=-1;
+		}
+		if (j<t.length) str+=ch;
+		j++;
 		sycnt--;
 	}
-	if (snippet.length==1)prevclass='marker';//for source book page marker
-	children.push(h('span',{attrs:{y},class:prevclass},str));
+	addspan();
 	children.push(h('br'));	
 	return children;
 }
