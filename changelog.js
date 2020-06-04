@@ -1,5 +1,6 @@
 ﻿/* remind me to backup*/
 `
+2020.6.4  Newcard and movetop
 2020.6.3  improve paranum navigation
 2020.6.1  new CAP addressing model
 2020.5.31 90% translated, UI rewrite for multiple cards
@@ -20,7 +21,6 @@
 
 TODO
 查字典
-cards 介面，移到最頂及關閉。
 塗引文及出處。
 Pali endings table
 

@@ -6,9 +6,10 @@ const {getdbbookname,parse,stringify,open,readlines}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
-const {decorateText}=require("./decorate");
+const {decorateText,nissayaText}=require("./decorate");
 const {parsedef}=require("./lexicon");
 const {getancestor}=require("./tocpopup");
+const {getCAPSelection}=require("./selection");
 const dbname=["mul","att","tik"];
 
 Vue.component('notebutton',{
@@ -292,7 +293,17 @@ Vue.component('backlinkmenu',{
 	}
 
 })
-
+const findselx=()=>{
+	let node=document.getSelection().baseNode;
+	while (node){
+		if (node.attributes && node.attributes['x0']){
+			return parseInt(node.attributes['x0'].value);
+		}
+		node=node.parentNode;
+		if (node==document) break;
+	}
+	return -1;
+};
 Vue.component('card', { 
 	props:['cardid','addr','depth','command','cardcommand'],
 	data(){
@@ -309,6 +320,18 @@ Vue.component('card', {
 		},
 		mounted(){
 			fetch(this.cap);
+		},
+		checkselection(){
+			const sel=getCAPSelection();
+			if (sel) {
+				if (sel.z>1) {
+					const cap=parse(sel.x0 ,this.cap.db);
+					cap.y=sel.y;
+					cap.z=sel.z;
+					this.cap=cap;
+					this.cardcommand('fetched',this.cardid,cap);
+				}
+			}
 		},
 		fetch(cap,updating){
 			let obj={},dbname;
@@ -328,58 +351,11 @@ Vue.component('card', {
 			});	
 			this.prevaddr=this.addr;
 		},
-		execcommand(cmd,arg){
-			let r=null;
-			if (cmd=='toggletranslate') {
-				this.autotranslate=!this.autotranslate;
-				return;
-			} else if (cmd=='setcap'){
-				this.setcap(arg);
-				return;
-			} else if (cmd=='closecard'){
-				this.cardcommand('close',this.cardid);
-			} else if (cmd=='bringtop'){
-				this.cardcommand("new",this.cardid,arg);
-				return;
-			} else if (cmd=='movetop'){//all nested card will be close
-				this.cardcommand('close',this.cardid);
-				this.cardcommand("new",this.cardid,this.cap);
-				return;
-			}
-			if (this.command) r=this.command(cmd,arg);//pass to parent
-		}
-	},
-	render(h){
-		if (this.prevaddr!==this.addr ) {
-			this.cap=parse(this.addr,this.db);
-			this.prevaddr=this.addr;
-			this.fetch(this.cap);
-			return;
-		}
-
-
-		if (!this.rawtext) {
-			return h("span",{},"Loading "+this.cap.stringify());
-		}
-
-		const depth=this.depth||0;
-		const notes={};
-
-		this.rawtext.map((item,idx)=>{
-			if (item[2]) { //has note
-				const ns=item[2].split(/(\d+)\^/).filter(item=>item);
-				for (var i=0;i<ns.length>>1;i++) {
-					notes[idx+"_"+ns[i*2]]=ns[i*2+1];
-				}
-			} 
-		})
-
-		const children=[];
-		if (this.autotranslate){
+		nissaya(h,children){
 			for (var j=0;j<this.rawtext.length;j++){
 				const text=this.rawtext[j][1];
 				
-				const snippet=decorateText(text);	
+				const snippet=nissayaText(text);	
 				
 				let n=0,t='',prevclass='';
 				//need to loop until text.length, or last word is not rendered
@@ -411,12 +387,67 @@ Vue.component('card', {
 				children.push(h('span',{class:prevclass},t));
 				children.push(h('br'));
 			}
+		},
+		execcommand(cmd,arg){
+			let r=null;
+			if (cmd=='toggletranslate') {
+				this.autotranslate=!this.autotranslate;
+				return;
+			} else if (cmd=='setcap'){
+				this.setcap(arg);
+				return;
+			} else if (cmd=='closecard'){
+				this.cardcommand('close',this.cardid);
+			} else if (cmd=='bringtop'){
+				this.cardcommand("new",this.cardid,arg);
+				return;
+			} else if (cmd=='movetop'){//all nested card will be close
+				this.cardcommand('close',this.cardid);
+				this.cardcommand("new",this.cardid,this.cap);
+				return;
+			}
+			if (this.command) r=this.command(cmd,arg);//pass to parent
+		}
+	},
+	render(h){
+		if (this.prevaddr!==this.addr ) {
+			this.cap=parse(this.addr,this.db);
+			this.prevaddr=this.addr;
+			this.fetch(this.cap);
+			return;
+		}
+
+		if (!this.rawtext) {
+			return h("span",{},"Loading "+this.cap.stringify());
+		}
+
+		const depth=this.depth||0;
+		const notes={};
+
+		this.rawtext.map((item,idx)=>{
+			if (item[2]) { //has note
+				const ns=item[2].split(/(\d+)\^/).filter(item=>item);
+				for (var i=0;i<ns.length>>1;i++) {
+					notes[idx+"_"+ns[i*2]]=ns[i*2+1];
+				}
+			} 
+		})
+
+		const children=[];
+		if (this.autotranslate){
+			this.nissaya(h,children);
 		} else {
-			for (var j=0;j<this.rawtext.length;j++){
-				const text=this.rawtext[j][1];
+			for (var i=0;i<this.rawtext.length;i++){
+				const x0=this.rawtext[i][0]
 				const props={cardcommand:this.cardcommand,command:this.command};
-				const textwithotebtn=renderInlineNote(h,text,notes,j,depth+1,props);
-				children.push(h('span',{},textwithotebtn));
+				const decorated=decorateText({cap:this.cap,
+					i,x:x0,t:this.rawtext[i][1],
+					props,notes,h,inlinenoterenderer:renderInlineNote
+				});
+				//const text=this.rawtext[j][1];
+				//const textwithotebtn=renderInlineNote(h,text,notes,i,depth+1,props);
+
+				children.push(h('span',{attrs:{x0},on:{mouseup:this.checkselection}},decorated));
 				children.push(h('br'));
 			}
 		}
@@ -427,10 +458,9 @@ Vue.component('card', {
 			{class:"backlinkmenu",props:{
 				command:this.execcommand,cardcommand:this.cardcommand,
 				cap:this.cap,links:this.backlinks,depth}}));
-
 		let cls='card0';
 		if (this.depth) cls="card";
 		if (this.autotranslate) cls+=' unknown';
-		return h("div",{class:cls},children);
+		return h("div",{attrs:{cardid:this.cardid},class:cls},children);
 	}
 })

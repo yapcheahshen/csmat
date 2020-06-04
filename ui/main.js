@@ -128,9 +128,7 @@ new Vue({
 		log(msg){
 			this.logmessages.unshift((new Date()).toISOString()+":"+msg);
 		},
-		openbookmark(){
 
-		},
 		setaddrs(addrs){
 			//setHash({a:addrs.join(ADDR_SEP)})
 			setHash(addrs.join(ADDR_SEP))
@@ -138,6 +136,7 @@ new Vue({
 
 	},
 	mounted(){
+		/*
 		let selectiontimer=0;
 		document.addEventListener('selectionchange', (event) => {
 		  clearTimeout(selectiontimer);
@@ -147,11 +146,11 @@ new Vue({
 		  	const f=sel.baseNode.parentElement;
 		  	let tf=sel.toString().toLowerCase().trim();
 		  	if (!tf) return;
-		  	if (parseInt(tf))return;
-		  	this.seltext=tf;
-		  },500);
-		});
 
+		  //	this.seltext=tf;
+		  },200);
+		});
+		*/
 		Dengine.openSearchable(dbname[0],function(db){
 			this.log(dbname[0]+" opened, built on "+db.getDate());
 			Dengine.openSearchable(dbname[1],db2=>{

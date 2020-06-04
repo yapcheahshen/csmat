@@ -4,6 +4,11 @@
 .solo {color:orange;}
 .hi {color:#ffafaf;}
 .proper{color:blue;}
+.yzrange{background:yellow;}
+.hiddenselecting{display: none}
+
+.marker{}
+.marker:before{content:"●";color: red}
 
 .fullscreenpopup .ancestor{background:silver;cursor:pointer;}
 .fullscreenpopup .ancestor_active {background: yellow;cursor:pointer;}

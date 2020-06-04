@@ -3,7 +3,6 @@ const {filename2set}=require("./linkparser");
 
 const getparallel=(cap,set)=>{
 	const str=cap.stringify();
-	const paranum=cap.p;
 	parallel={"att":"a","tik":"t","mul":"m"};
 
 	return str.replace(/[mat](\d?)_/,parallel[set]+"$1_");

@@ -1,9 +1,9 @@
 const isSyllable=s=>{
-	const m=s.match(/[bcdghjklmnprstvyṅñṇḍṭḷṁṃŋ]*[aāiīuūeo]/i);
+	const m=s.match(/[bcdghjklmnprstvyṅñṇḍṭḷṁṃŋ]*[aāiīuūeo][ṁṃ]?/i);
 	return (m&&m[0]==s);
 }
 const syllabify=s=>{
-	return s.split(/([bcdghjklmnprstvyṅñṇḍṭḷṁṃŋ]*[aāiīuūeo])/i).filter(i=>i);
+	return s.split(/([bcdghjklmnprstvyṅñṇḍṭḷṁṃŋ]*[aāiīuūeo][ṁṃ]?)/i).filter(i=>i);
 }
 
 const isPaliword=s=>{
