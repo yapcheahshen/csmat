@@ -22,7 +22,7 @@ const recognise=(link)=>{
 	let res=0,ok=false,lastpat;
 	for (var i=0;i<citehandler.length;i++){
 		const pat=citehandler[i];
-		const m=link[0].match(pat[0]);
+		const m=link.match(pat[0]);
 		if (m) {
 			res=pat[1]( m[1]);
 			return res;

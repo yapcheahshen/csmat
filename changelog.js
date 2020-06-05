@@ -20,6 +20,8 @@
 
 
 TODO
+backlink in quoted text (moveover show multiple choice at the end, 
+  click to open card)
 quick jump by mn vol.para
 點選取區查字典
 自動連結 nti 和mul 的字 加號碼

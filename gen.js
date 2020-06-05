@@ -3,8 +3,7 @@ const {dofiles,getfiles}=require("./dofile");
 const set=process.argv[2] || "mul"
 const maxfile=parseInt(process.argv[3],0);
 const files=getfiles("./raw/");
-const {isSyllable,syllabify,isPaliword,palialpha}=require("./paliutil");
-const {LANGSEP}=require("dengine")
+const {LANGSEP,isSyllable,syllabify,isPaliword,parse}=require("dengine");
 
 let bookseq=0;
 const output=[];
@@ -32,8 +31,23 @@ const parseInlineTag=(tagstr)=>{
 	}
 	return savetag;
 }
+//deal with range short
+const expandrange=(from,to)=>{ //  310-21 => 310-320
+	if (isNaN(to))return from;
+	if (to>from)return to;
+	if (to<10) {
+		to+=from-from%10;
+	} else if (to<100) {
+		to+=from-from%100;
+	} else if (to<1000) {
+		to+=from-from%1000;
+	} else {
+		console.log("too big",to)
+		throw " range error"+filename+sourcelinenumber;
+	}
+	return to;
+}
 const {makemataddr}=require("./ui/mataddr");
-const {expandrange}=require("./paliutil")
 const {recognise,linkpatterns,filename2set,hyperlink_regex}=require("./ui/linkparser");
 const repeatnum={};
 let nikaya='',lastdepth=0;
@@ -94,12 +108,32 @@ const parseP=(attrs,docseq,linetext)=>{
 	})
 	return paranum+extra;
 }
-const matlinks=[];
+const matlinks=[]; //for backlinks
+
 const parseLine=(line,docseq)=>{
 	let units=line.split(/(<.+?>)/);
 	let l='';
-	let nsyl=0; //syllable pointer
-	let nnote=0,notestr=''; // inline note counter
+	let nsyl=0,z=0; //syllable pointer
+	let nnote=0,notestr='',qqopen=-1,qqclose=-1,qopen=-1,qclose=-1; // inline note counter
+	
+
+	const nearestquote=()=>{
+		let capaddr=bookseq+"_x"+(docseq-1)+"y"+nsyl;
+		let qdist=line.length,qqdist=line.length; //not more than this
+
+		if (qclose>qopen) qdist=nsyl-qclose;
+		if (qqclose>qqopen) qqdist=nsyl-qqclose;
+		
+		if (qqdist<line.length||qdist<line.length) {
+			if (qqdist<qdist) {
+				capaddr=bookseq+"_x"+(docseq-1)+"y"+qqopen+"z"+(qqclose-qqopen);
+			} else {
+				capaddr=bookseq+"_x"+(docseq-1)+"y"+qopen+"z"+(qclose-qopen);
+			}
+		}
+		return capaddr;
+	}
+
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
 		if (unit[0]=="<") {
@@ -112,14 +146,13 @@ const parseLine=(line,docseq)=>{
 				l+="^"+nnote;
 				if (notestr) notestr+=" ";
 				let nc=unit.match(/<note [a-z]+="(.+?)"/)[1]
-		
 				linkpatterns.forEach(pat=>{
 					nc=nc.replace(pat,m=>{
-						let translated=recognise([m,mataddr]);
+						let translated=recognise(m);
 						if (typeof translated=="string") {
-							const hyperlink= "#"+translated+";";
-							matlinks.push([mataddr.toString(16),hyperlink]);
-							return hyperlink;
+							let capaddr=nearestquote();
+							matlinks.push([ capaddr ,"#"+translated+";"]);
+							return "#"+translated+";";
 						} else {
 							return m;
 						}
@@ -131,6 +164,20 @@ const parseLine=(line,docseq)=>{
 			const syllables=syllabify(unit);
 			syllables.forEach(syl=>{
 				if (isSyllable(syl)) nsyl++;
+				else {
+					if (syl.indexOf("“")>-1) qqopen=nsyl;
+					if (syl.indexOf("”")>-1) qqclose=nsyl;
+					if (syl.indexOf("‘")>-1) qopen=nsyl;
+					if (syl.indexOf("’")>-1) qclose=nsyl;
+					if (syl.indexOf(".")>-1) { //reset
+						if (qclose>qopen) qclose=qopen=-1;
+						if (qqclose>qqopen) qqclose=qqopen=-1;
+					}
+					//normally “  ”ti ^
+					//“  ‘’ti ^    ”  rare
+					//there are 5000+ inline note following double quote in att
+					//only 37 following single quote 
+				}
 			});
 			l+=unit;
 		}
@@ -139,6 +186,12 @@ const parseLine=(line,docseq)=>{
 		l+=LANGSEP+notestr;
 	}
 	return l;
+}
+const changepunc=line=>{
+	return line.replace(/‘‘‘/g,"“‘")
+			   .replace(/’’’/g,"’”")
+			   .replace(/‘‘/g,"“")
+			   .replace(/’’/g,"”");
 }
 //const booknames=[];
 const gen=(content,fn)=>{
@@ -151,6 +204,8 @@ const gen=(content,fn)=>{
 		if (i==lines.length-1){
 			L=L.replace(/\r?<\/cscd>/,''); //missing one \n at second line line
 		}
+
+		L=changepunc(L)
 		sourcelinenumber=i;
 		if (L.substr(L.length-4,4)!=="</p>") {
 			continue;
@@ -207,7 +262,7 @@ const groupmatlinksindb=()=>{
 
 		const m=hyperlink.match(hyperlink_regex);
 		if (!groups[set][m[1]]) groups[set][m[1]]=[];
-		groups[set][m[1]].push(srcmataddr+"p"+m[2]);
+		groups[set][m[1]].push(srcmataddr+"|p"+m[2]);
 	}
 	return groups;
 }

@@ -114,10 +114,19 @@ const testpx=()=>{
 	assert("s0403a3_p27",cap.stringify(),"to next existing paranum");
 
 }
+
+const test_numbk=()=>{
+	let cap=parse("6_p100","mul");
+	assert("s0101m_p100",cap.stringify())
+
+	cap=parse("mul@6_p100");
+	assert("s0101m_p100",cap.stringify())
+}
 const test=()=>{
 	test1();
 	testpx();
 	testnav();
+	test_numbk()
 }
 
 test();

@@ -4,13 +4,12 @@ require("./dictionary");
 const {stringify,isPaliword}=require("dengine")
 
 Vue.component("cards",{
-	props:{'seltext':{type:String},
-			'addrs':{type:Array,required:true},//initial from hash
+	props:{	'addrs':{type:Array,required:true},//initial from hash
 			'setaddrs':{type:Function,required:true},
 			'ready':{type:Boolean,required:true}
 	},
 	data(){
-		return {prevseltext:'',dictshown:false,address:null}
+		return {dictshown:false,address:null,seltext:'',prevseltext:''}
 	},
 	methods:{
 		hidedictionary(){
@@ -31,6 +30,8 @@ Vue.component("cards",{
 			} else if (cmd=="new"){
 				this.address.unshift(arg1.stringify());
 				this.setaddrs(this.address);
+			} else if (cmd=="dictionary"){
+				this.seltext=arg1;
 			}
 		}
 	},
@@ -48,13 +49,11 @@ Vue.component("cards",{
 
 		
 		let selectid=0,dictpopup=null;
-		if (this.prevseltext!==this.seltext||this.dictshown){
-			if(this.seltext.length>1&&isPaliword(this.seltext)){
-				this.prevseltext=this.seltext;
+		if ((this.seltext!==this.prevseltext)||this.dictshown){
 				this.dictshown=true;
 				dictpopup=(h("dictionarypopup",{
 					props:{close:this.hidedictionary,seltext:this.seltext}}));
-			}
+			this.prevseltext=this.seltext;
 		}
 		
 		const children=this.address.map((addr,cardid)=>{

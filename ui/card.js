@@ -2,7 +2,7 @@
 	nestable text
 
 */
-const {getdbbookname,parse,stringify,open,readlines}=require("dengine");
+const {getdbbookname,parse,stringify,open,readlines,isPaliword}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
@@ -56,7 +56,34 @@ Vue.component('notebutton',{
 	}
 })
 
-
+Vue.component('cardbutton',{
+	props:['cap','addr','depth','label','command','cardcommand'],
+	methods:{
+		execcommand(cmd,arg){
+			if (cmd=="close") {
+				this.show=false;
+				return;
+			}
+			this.command&&this.command(cmd,arg);
+		},
+		showme(){
+			this.show=true;
+		}
+	},
+	data(){
+		return {show:false} 
+	},
+	render(h){
+		if (!this.show){
+			return h("button",{class:"btnnav",on:{click:this.showme}},
+				this.label?this.label:this.setname);
+		} else {
+			return h("card",{props:{depth:this.depth+1,
+				command:this.execcommand,from:this.cap,
+				cardcommand:this.cardcommand,addr :this.addr}});
+		}
+	}
+})
 
 Vue.component('paralleltextbutton',{
 	props:['cap','setname','depth','label','command','cardcommand'],
@@ -91,16 +118,16 @@ Vue.component('paralleltextbutton',{
 const CardNav=Vue.extend({
 	props:['cap','command'],
 	methods:{
-		inputaddress(event){
-			if (event.key=="Enter"){
-				this.command('setcap',event.srcElement.value);
-			}
-		},
 		inputparanum(event){
 			//TODO mn1 short cut
 			if (event.key=="Enter"){
 				//allow x100 for line number
 				const v=event.srcElement.value.trim(); 
+				if (v.indexOf("_")>-1 || v.indexOf(":")>-1) {
+					const cap=parse(v,this.cap.db);
+					this.command('setcap',cap);
+					return;
+				}
 				const para=parseInt(v);
 				let n=this.cap.bk+"_";
 				n+=(para.toString()==v)?("p"+para):v;
@@ -250,14 +277,13 @@ Vue.component('backlinkmenu',{
 	render(h){
 		const children=this.links?this.links.map( link=>{
 			const setname=link[0];
-			const lnk=this.decodelink(link,setname);
-			
-			const cap=parse(lnk, setname);
+			const cap=parse(link[1], setname);
 			const depth=this.depth+1;
-			const label=lnk.replace(/y.+/,'');
-			return h("paralleltextbutton",
+			const addr=cap.stringify();
+			const label=addr.replace(/y.+/,'');
+			return h("cardbutton",
 				{props:{command:this.command,cardcommand:this.cardcommand,
-					cap,label,setname,depth}})
+					addr,cap:this.cap,label,setname,depth}})
 		}):[];
 		return h('div',{},children)
 	}
@@ -300,7 +326,6 @@ Vue.component('card', {
 					cap.z=sel.z;
 					this.cap=cap;
 					if (typeof this.cardid!=="undefined") this.cardcommand('fetched',this.cardid,cap);
-					console.log('checkselection',this.cap.stringify())
 				}
 			}
 		},
@@ -326,9 +351,9 @@ Vue.component('card', {
 			const ele=event.srcElement;
 			const cl=ele.classList
 			if (cl.contains("nti")){
-				this.command("setnti",ele.textContent);
+				this.command&&this.command("setnti",ele.textContent);
 			} else if(cl.contains("yzrange")){
-				
+				this.cardcommand("dictionary",this.cardid,ele.textContent);
 			}
 		},
 		nissaya(h,children){
@@ -393,7 +418,7 @@ Vue.component('card', {
 	},
 	render(h){
 		if (this.prevaddr!==this.addr ) {
-			this.cap=parse(this.addr,this.db);
+			this.cap=parse(this.addr);
 			this.prevaddr=this.addr;
 			this.fetch(this.cap);
 			return;
