@@ -33,12 +33,12 @@ Vue.component('notebutton',{
 			notetext.replace(hyperlink_regex_g,(m,m1,m2,idx)=>{
 				const t=notetext.substring(prev,idx)
 				if (t) children.push( h('span',{},t));
-				const rawid=m1+"_p"+m2;
-				const label=matlabel(rawid);
-				const setname=filename2set(rawid);
-				const cap=parse(rawid);
-				children.push( h('paralleltextbutton',
-					{props:{cap,depth:this.depth,
+				const addr=m1+"_p"+m2;
+				console.log(addr)
+				const label=matlabel(addr);
+				const setname=filename2set(addr);
+				children.push( h('cardbutton',
+					{props:{cap:this.cap,addr,depth:this.depth,
 						cardcommand:this.cardcommand,
 						command:this.command,setname,label}}));
 				prev=idx+m.length;
@@ -178,11 +178,11 @@ const CardNav=Vue.extend({
 				attrs:{depth:item.d}},"/"+t);
 		})
 		return h("span",{class:"cardnav"},[
-			h("button",{class:"btnnav",on:{click:this.prevpara}},"〈"),
+			h("button",{class:"btnnav",on:{click:this.prevpara}},"‹"),
 			h("input",{class:"address",ref:"paranum",
 				on:{keyup:this.inputparanum},
 				attrs:{size:3,value:this.thispara,title:this.cap.bkx}}),
-			h("button",{class:"btnnav",on:{click:this.nextpara}},"〉"),
+			h("button",{class:"btnnav",on:{click:this.nextpara}},"›"),
 			h("span",{},ancestorspan),
 			this.selectingtocitem?h("tocitempopup",
 				{props:{cap,depth:this.depth,
@@ -424,8 +424,6 @@ Vue.component('card', {
 			this.fetch(this.cap);
 			return;
 		}
-		console.log("render",this.addr)
-
 		if (!this.rawtext) {
 			return h("span",{},"Loading "+this.cap.stringify());
 		}

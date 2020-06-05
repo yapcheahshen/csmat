@@ -80,13 +80,11 @@ const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 	const note=notes[nline+"_"+m1];
 	const btns=[];
 	if (note) {
-		note.trim().replace(hyperlink_regex_g,(m,bk,para)=>{
-			const rawid=bk+"_p"+para;
-			const label=matlabel(rawid);
-			const setname=filename2set(rawid);
-			const cap=parse(rawid);
-			const props=Object.assign({cap,setname,label},tprops);
-			btns.push(h('paralleltextbutton',{props}));
+		note.trim().replace(/#(.+?);/,(m,addr)=>{
+			const label=matlabel(addr);
+			const setname=filename2set(addr);
+			const props=Object.assign({addr,setname,label},tprops);
+			btns.push(h('cardbutton',{props}));
 		})
 		if (!btns.length){
 			const props=Object.assign({id:m1,note},tprops);
