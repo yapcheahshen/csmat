@@ -341,6 +341,7 @@ Vue.component('card', {
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
 				if(typeof this.cardid!=="undefined") {
+					this.prevaddr=this.cap.stringify();//so that it will not get refresh
 					this.cardcommand("fetched",this.cardid,this.cap,res);
 				}
 				this.backlinks=cap.db.getbacklinks(cap.stringify());
@@ -417,12 +418,13 @@ Vue.component('card', {
 		}
 	},
 	render(h){
-		if (this.prevaddr!==this.addr ) {
+		if (this.prevaddr!==this.addr) {
 			this.cap=parse(this.addr);
 			this.prevaddr=this.addr;
 			this.fetch(this.cap);
 			return;
 		}
+		console.log("render",this.addr)
 
 		if (!this.rawtext) {
 			return h("span",{},"Loading "+this.cap.stringify());

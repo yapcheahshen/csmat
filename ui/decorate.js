@@ -2,7 +2,7 @@ const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
 const {parse}=require("dengine");
 const {getdef}=require("./lexicon");
 const {suggestedBreak}=require("paliword");
-const {filename2set,hyperlink_regex}=require("./linkparser");
+const {filename2set,hyperlink_regex,hyperlink_regex_g}=require("./linkparser");
 const {matlabel}=require("./fetch");
 const trimdef=d=>{
 	let o='';
@@ -78,21 +78,22 @@ const snip=(str,decoration)=>{
 const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 	let p=0;
 	const note=notes[nline+"_"+m1];
+	const btns=[];
 	if (note) {
-		const m=note.trim().match(hyperlink_regex);
-		if (m){
-			const rawid=m[1]+"_p"+m[2];
+		note.trim().replace(hyperlink_regex_g,(m,bk,para)=>{
+			const rawid=bk+"_p"+para;
 			const label=matlabel(rawid);
 			const setname=filename2set(rawid);
 			const cap=parse(rawid);
 			const props=Object.assign({cap,setname,label},tprops);
-			btn= h('paralleltextbutton',{props});
-		} else {
+			btns.push(h('paralleltextbutton',{props}));
+		})
+		if (!btns.length){
 			const props=Object.assign({id:m1,note},tprops);
-			btn=h('notebutton',{props});
+			btns.push(h('notebutton',{props}));
 		}
 	}
-	return btn;
+	return btns;
 }
 const {syllabify,isSyllable,isPaliword}=require("dengine")
 const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
@@ -179,8 +180,10 @@ const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 			const m=t.substr(j+1).match(/(\d+)/);
 			j+=m[1].length;
 			addspan();
-			let btn=inlinenotebtn(h,m[1],notes,i,props);
-			children.push(btn);
+			let btns=inlinenotebtn(h,m[1],notes,i,props);
+			for (let k=0;k<btns.length;k++){
+				children.push(btns[k]);
+			}
 			ch='';
 			str='';
 		}

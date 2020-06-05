@@ -22,8 +22,8 @@ Vue.component("cards",{
 		},
 		cardcommand(cmd,cardid,arg1,arg2){
 			if (cmd=="fetched"){
-				const arr=this.address.map((addr,idx)=>idx==cardid?arg1.stringify():addr);
-				this.setaddrs(arr);		
+				this.address=this.address.map((addr,idx)=>idx==cardid?arg1.stringify():addr);
+				this.setaddrs(this.address);		
 			} else if (cmd=="close"){
 				this.address=this.address.filter((addr,idx)=>cardid!==idx);
 				this.setaddrs(this.address);				
