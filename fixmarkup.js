@@ -10,7 +10,7 @@
 	<note c=""> <n c=""> converted from ()
 */
 const {dofiles,getfiles}=require("./dofile");
-const {isPaliword,palialpha}=require("./paliutil");
+const {isPaliword,palialpha}=require("dengine");
 const folder="./cscd-book/";
 const errata=require("./errata");
 const files=getfiles(folder);

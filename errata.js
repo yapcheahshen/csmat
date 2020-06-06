@@ -86,13 +86,19 @@ module.exports={
 	"s0404a4.xml":[
 		['<p rend="chapter">1. Nissayavaggo</p>',
 		'<p rend="centre"> Namo tassa bhagavato arahato sammāsambuddhassa</p>\n\n<p rend="nikaya">Aṅguttaranikāye</p>\n\n<p rend="book">Ekādasakanipāta-aṭṭhakathā</p>\n\n<p rend="chapter">1. Nissayavaggo</p>']
-	],		
+	],
+	"s0508a1.xml":[
+		['pariṇatiyā atisāyaṃ, sāyaggahaṇeneva cettha pātopi saṅgayhati <pb ed="P" n="1.0092" />',
+		'pariṇatiyā atisāyaṃ, sāyaggahaṇeneva cettha pātopi saṅgayhati <pb ed="P" n="2.0092" />']
+	],
 	"s0510a.xml":[
 	['<p rend="bodytext" n="314"><hi rend="paranum">314</hi></p>\n\n<p rend="bodytext"><hi rend="dot">.</hi>',
 	'<p rend="bodytext" n="314"><hi rend="paranum">314</hi><hi rend="dot">.</hi>']//extra <p>
 	,[/<hi rend="bold"><\/hi>/g,""]
 	],//4 redundant?
-
+	"s0513a1.xml":[
+		['ed="P" n="0.0367"','ed="P" n="1.0367"']
+	],
 	"s0513a2.xml":[
 	['<p rend="hangnum" n="136"><hi rend="paranum">136</hi><hi rend="dot">.</hi></p>\n\n<p rend="gatha1"> ‘‘Sukhaṃ',
 	'<p rend="hangnum" n="139"><hi rend="paranum">139</hi><hi rend="dot">.</hi></p>\n\n<p rend="gatha1"> ‘‘Sukhaṃ'],

@@ -118,7 +118,7 @@ const parseLine=(line,docseq)=>{
 	
 
 	const nearestquote=()=>{
-		let capaddr=bookseq+"_x"+(docseq-1)+"y"+nsyl;
+		let capaddr=bookseq+"_x"+(docseq-1)+(nsyl?"y"+nsyl:"");
 		let qdist=line.length,qqdist=line.length; //not more than this
 
 		if (qclose>qopen) qdist=nsyl-qclose;
@@ -137,10 +137,11 @@ const parseLine=(line,docseq)=>{
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
 		if (unit[0]=="<") {
-			const mataddr=makemataddr(bookseq,docseq,nsyl);
+			//const mataddr=makemataddr(bookseq,docseq,nsyl);
+			let capaddr=bookseq+"_x"+(docseq-1)+(nsyl?"y"+nsyl:"");
 			const savetag=parseInlineTag(unit);
 			const tagline=unit.substr(1,unit.length-3);
-			if (savetag) rawtags.push([mataddr.toString(16),tagline]);
+			if (savetag) rawtags.push([capaddr,tagline]);
 			if (unit.substr(0,6)=="<note ") {
 				nnote++;
 				l+="^"+nnote;
