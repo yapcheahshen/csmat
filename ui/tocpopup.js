@@ -46,7 +46,9 @@ const Siblings=Vue.extend({
 			const t1=item[1].substr(0,at);
 			const t2=item[1].substr(at+1)+isleaf;
 
-			const attrs={tocseq:item[0]};
+			const toccap=parse(item[2],this.cap.db);
+			const title=toccap.stringify().replace(/_.+/,'')+"|"+toccap.bkseq+":"+toccap.bk0;
+			const attrs={tocseq:item[0],title};
 			return h("tr",{on:{click:this.selectitem},class:cls},
 				[h("td",{attrs},t1),h("td",{attrs},t2)]);
 		});

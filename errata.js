@@ -3,17 +3,45 @@ module.exports={
 	[`<note>imā tiracchānakathāyo dī. 1.17; ma. ni. 2.223; saṃ. ni. <pb ed="T" n="5.1080" />; a. ni. 10.69</note>`
 	 ,`<pb ed="T" n="5.1080" /><note>imā tiracchānakathāyo dī. 1.17; ma. ni. 2.223; saṃ. ni. Thai 5.1080 ; a. ni. 10.69</note>`]
 	] ,
+	"s0102m.xml":[
+	['<pb ed="P" n="2.0264" /> me sutaṃ – ekaṃ samayaṃ bhagavā magadhesu viharati',
+	'<pb ed="P" n="2.0263" /> me sutaṃ – ekaṃ samayaṃ bhagavā magadhesu viharati'],
+	['‘‘ayaṃ, tāta pañcasikha, bhagavā magadhesu viharati',
+	'<pb ed="P" n="2.0264" />‘‘ayaṃ, tāta pañcasikha, bhagavā magadhesu viharati']
+	],
+	"s0103m.xml":[
+		['<pb ed="P" n="3.0330" />','<pb ed="P" n="3.0230" />']
+	],
 	"s0201m.xml":[
 		['<p rend="nikaya">Majjhimanikāyo</p>','<p rend="nikaya">Majjhimanikāye</p>']
 	],
 	"s0203m.xml":[
-	['(ma. ni. 2.166 naḷakapāne</note>','(ma. ni. 2.166) naḷakapāne</note>']
+		['(ma. ni. 2.166 naḷakapāne</note>','(ma. ni. 2.166) naḷakapāne</note>']
+	],
+	"s0304m.xml":[
+	/// actual breaking in PTS, kal<pb t="p4.107"/>laṃ
+	//PTS
+	//15:106.35	Yam panāniccaṃ dukkhaṃ vipariṇamadhammam kal-
+	//15:107.1	laṃ nu taṃ samanupassituṃ Etam mama eso ham asmi
+		['<p>‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?</p>',
+		'<p>‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, <pb t="p4.107"/>kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?</p>']
 	],
 	"s0305m.xml":[
-	  [/(\d+)<\/hi><\/p>/g,'$1</hi><hi rend="dot">.</hi></p>'] 
+	  [/(\d+)<\/hi><\/p>/g,'$1</hi><hi rend="dot">.</hi></p>'] ,
+	  ['<p rend="bodytext">Uddānaṃ –</p>\n\n<p rend="gatha1">',
+	  '<p rend="bodytext"><pb ed="P" n="5.0139" />Uddānaṃ –</p>\n\n<p rend="gatha1">'],
+	  ['<p rend="centre">Bojjhaṅgasaṃyuttaṃ dutiyaṃ.</p>',
+	  '<p rend="centre">Bojjhaṅgasaṃyuttaṃ dutiyaṃ.</p>'],
+	  ['<p rend="bodytext">Uddānaṃ –</p>\n\n<p rend="gatha1">Ogho yogo upādānaṃ',
+	  '<p rend="bodytext"><pb ed="P" n="5.0140" />Uddānaṃ –</p>\n\n<p rend="gatha1">Ogho yogo upādānaṃ']
 	],
 	"s0505m.xml":[
 		//274,274 duplicate  (270 and 271 in PTS numbering)
+	],
+	"s0506m.xml":[
+	['<p rend="bodytext">Tassuddānaṃ –</p>\n\n<p rend="gatha1">Pañca pīṭhā',
+	'<p rend="bodytext"><pb ed="P" n="0.0020" />Tassuddānaṃ –</p>\n\n<p rend="gatha1">Pañca pīṭhā']
+//more to fix see gen-pts.js
 	],
 	"s0508m.xml":[
 		['<p rend="hangnum" n="1204"><hi rend="paranum">1204</hi><hi rend="dot">.</hi></p>\n\n<p rend="gatha1"> ‘‘Yo etamabhijānāti…pe… kaṇha dukkhaṃ nigacchasi.</p>\n\n','']

@@ -1834,7 +1834,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 11:1299,5|10. Indriyabhāvanāsuttaṃ|152根修習經
 12:2,1|Saṃyuttanikāyo|相應部
 12:3,2|Sagāthāvaggo|有偈篇
-12:4,3|1. Devatāsaṃyuttaṃ|諸天相應
+12:4,3|1. Devatāsaṃyuttaṃ|1諸天相應
 12:5,4|1. Naḷavaggo|葦品
 12:6,5|1. Oghataraṇasuttaṃ|瀑流
 12:10,5|2. Nimokkhasuttaṃ|解脫
@@ -1924,7 +1924,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:445,5|9. Pātheyyasuttaṃ
 12:448,5|10. Pajjotasuttaṃ
 12:453,5|11. Araṇasuttaṃ
-12:462,3|2. Devaputtasaṃyuttaṃ|天子相應
+12:462,3|2. Devaputtasaṃyuttaṃ|2天子相應
 12:463,4|1. Paṭhamavaggo
 12:464,5|1. Paṭhamakassapasuttaṃ
 12:468,5|2. Dutiyakassapasuttaṃ
@@ -1958,7 +1958,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:661,5|8. Nandivisālasuttaṃ
 12:665,5|9. Susimasuttaṃ
 12:681,5|10. Nānātitthiyasāvakasuttaṃ
-12:703,3|3. Kosalasaṃyuttaṃ|拘薩羅相應
+12:703,3|3. Kosalasaṃyuttaṃ|3拘薩羅相應
 12:704,4|1. Paṭhamavaggo
 12:705,5|1. Daharasuttaṃ
 12:720,5|2. Purisasuttaṃ
@@ -1987,7 +1987,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:896,5|3. Lokasuttaṃ|世界經
 12:899,5|4. Issattasuttaṃ
 12:910,5|5. Pabbatūpamasuttaṃ
-12:925,3|4. Mārasaṃyuttaṃ|惡魔相應
+12:925,3|4. Mārasaṃyuttaṃ|4惡魔相應
 12:926,4|1. Paṭhamavaggo
 12:927,5|1. Tapokammasuttaṃ
 12:935,5|2. Hatthirājavaṇṇasuttaṃ
@@ -2016,7 +2016,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1068,5|3. Godhikasuttaṃ
 12:1083,5|4. Sattavassānubandhasuttaṃ
 12:1094,5|5. Māradhītusuttaṃ
-12:1124,3|5. Bhikkhunīsaṃyuttaṃ|比丘尼相應
+12:1124,3|5. Bhikkhunīsaṃyuttaṃ|5比丘尼相應
 12:1125,4|-
 12:1125,5|1. Āḷavikāsuttaṃ
 12:1132,5|2. Somāsuttaṃ
@@ -2028,7 +2028,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1177,5|8. Sīsupacālāsuttaṃ
 12:1184,5|9. Selāsuttaṃ
 12:1192,5|10. Vajirāsuttaṃ
-12:1204,3|6. Brahmasaṃyuttaṃ|梵天相應
+12:1204,3|6. Brahmasaṃyuttaṃ|6梵天相應
 12:1205,4|1. Paṭhamavaggo
 12:1206,5|1. Brahmāyācanasuttaṃ
 12:1218,5|2. Gāravasuttaṃ
@@ -2046,7 +2046,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1308,5|3. Andhakavindasuttaṃ
 12:1316,5|4. Aruṇavatīsuttaṃ
 12:1329,5|5. Parinibbānasuttaṃ
-12:1345,3|7. Brāhmaṇasaṃyuttaṃ|婆羅門相應
+12:1345,3|7. Brāhmaṇasaṃyuttaṃ|7婆羅門相應
 12:1346,4|1. Arahantavaggo|阿羅漢品
 12:1347,5|1. Dhanañjānīsuttaṃ
 12:1357,5|2. Akkosasuttaṃ
@@ -2071,7 +2071,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1521,5|10. Bhikkhakasuttaṃ
 12:1526,5|11. Saṅgāravasuttaṃ
 12:1531,5|12. Khomadussasuttaṃ
-12:1539,3|8. Vaṅgīsasaṃyuttaṃ|婆耆沙長老相應
+12:1539,3|8. Vaṅgīsasaṃyuttaṃ|8婆耆沙長老相應
 12:1540,4|-
 12:1540,5|1. Nikkhantasuttaṃ
 12:1547,5|2. Aratisuttaṃ
@@ -2085,7 +2085,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1610,5|10. Moggallānasuttaṃ
 12:1616,5|11. Gaggarāsuttaṃ
 12:1620,5|12. Vaṅgīsasuttaṃ
-12:1630,3|9. Vanasaṃyuttaṃ|森林相應
+12:1630,3|9. Vanasaṃyuttaṃ|9森林相應
 12:1631,4|-
 12:1631,5|1. Vivekasuttaṃ
 12:1637,5|2. Upaṭṭhānasuttaṃ
@@ -2101,7 +2101,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1692,5|12. Majjhanhikasuttaṃ
 12:1696,5|13. Pākatindriyasuttaṃ
 12:1703,5|14. Gandhatthenasuttaṃ
-12:1717,3|10. Yakkhasaṃyuttaṃ|夜叉相應
+12:1717,3|10. Yakkhasaṃyuttaṃ|10夜叉相應
 12:1718,4|-
 12:1718,5|1. Indakasuttaṃ
 12:1723,5|2. Sakkanāmasuttaṃ
@@ -2115,7 +2115,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:1784,5|10. Dutiyasukkāsuttaṃ
 12:1787,5|11. Cīrāsuttaṃ
 12:1790,5|12. Āḷavakasuttaṃ|林住品
-12:1807,3|11. Sakkasaṃyuttaṃ|帝釋相應
+12:1807,3|11. Sakkasaṃyuttaṃ|11帝釋相應
 12:1808,4|1. Paṭhamavaggo
 12:1809,5|1. Suvīrasuttaṃ
 12:1818,5|2. Susīmasuttaṃ
@@ -2146,7 +2146,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 12:2004,5|5. Akkodhasuttaṃ
 12:2011,5|Sagāthāvaggo paṭhamo.
 13:3,2|Nidānavaggo|因緣品
-13:4,3|1. Nidānasaṃyuttaṃ|因緣相應
+13:4,3|1. Nidānasaṃyuttaṃ|12因緣相應
 13:5,4|1. Buddhavaggo|佛品
 13:6,5|1. Paṭiccasamuppādasuttaṃ|緣起經
 13:10,5|2. Vibhaṅgasuttaṃ
@@ -2231,7 +2231,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:572,5|1. Satthusuttaṃ
 13:575,5|2-11. Dutiyasatthusuttādidasakaṃ
 13:587,5|2-12. Sikkhāsuttādipeyyālaekādasakaṃ
-13:607,3|2. Abhisamayasaṃyuttaṃ|現觀相應
+13:607,3|2. Abhisamayasaṃyuttaṃ|13現觀相應
 13:608,4|-
 13:608,5|1. Nakhasikhāsuttaṃ
 13:611,5|2. Pokkharaṇīsuttaṃ
@@ -2244,7 +2244,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:632,5|9. Pabbatasuttaṃ
 13:635,5|10. Dutiyapabbatasuttaṃ
 13:639,5|11. Tatiyapabbatasuttaṃ
-13:645,3|3. Dhātusaṃyuttaṃ|界相應
+13:645,3|3. Dhātusaṃyuttaṃ|14界相應
 13:646,4|1. Nānattavaggo
 13:647,5|1. Dhātunānattasuttaṃ
 13:650,5|2. Phassanānattasuttaṃ
@@ -2288,7 +2288,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:819,5|8. Samaṇabrāhmaṇasuttaṃ
 13:822,5|9. Dutiyasamaṇabrāhmaṇasuttaṃ
 13:824,5|10. Tatiyasamaṇabrāhmaṇasuttaṃ
-13:831,3|4. Anamataggasaṃyuttaṃ|無始相應
+13:831,3|4. Anamataggasaṃyuttaṃ|15無始相應
 13:832,4|1. Paṭhamavaggo
 13:833,5|1. Tiṇakaṭṭhasuttaṃ
 13:836,5|2. Pathavīsuttaṃ
@@ -2311,7 +2311,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:888,5|8. Puttasuttaṃ
 13:890,5|9. Dhītusuttaṃ
 13:892,5|10. Vepullapabbatasuttaṃ
-13:905,3|5. Kassapasaṃyuttaṃ|迦葉相應
+13:905,3|5. Kassapasaṃyuttaṃ|16迦葉相應
 13:906,4|-
 13:906,5|1. Santuṭṭhasuttaṃ
 13:913,5|2. Anottappīsuttaṃ
@@ -2326,7 +2326,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:995,5|11. Cīvarasuttaṃ|衣經
 13:1014,5|12. Paraṃmaraṇasuttaṃ
 13:1017,5|13. Saddhammappatirūpakasuttaṃ
-13:1026,3|6. Lābhasakkārasaṃyuttaṃ|利得與供養相應
+13:1026,3|6. Lābhasakkārasaṃyuttaṃ|17利得與供養相應
 13:1027,4|1. Paṭhamavaggo
 13:1028,5|1. Dāruṇasuttaṃ
 13:1031,5|2. Baḷisasuttaṃ
@@ -2362,7 +2362,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:1111,5|6. Pañcarathasatasuttaṃ
 13:1114,5|7. Mātusuttaṃ
 13:1116,5|8-13. Pitusuttādichakkaṃ
-13:1122,3|7. Rāhulasaṃyuttaṃ|羅睺羅相應
+13:1122,3|7. Rāhulasaṃyuttaṃ|18羅睺羅相應
 13:1123,4|1. Paṭhamavaggo
 13:1124,5|1. Cakkhusuttaṃ
 13:1128,5|2. Rūpasuttaṃ
@@ -2379,7 +2379,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:1152,5|2-10. Rūpādisuttanavakaṃ
 13:1162,5|11. Anusayasuttaṃ
 13:1164,5|12. Apagatasuttaṃ
-13:1171,3|8. Lakkhaṇasaṃyuttaṃ|相相應
+13:1171,3|8. Lakkhaṇasaṃyuttaṃ|19相相應
 13:1172,4|1. Paṭhamavaggo
 13:1173,5|1. Aṭṭhisuttaṃ
 13:1178,5|2. Pesisuttaṃ
@@ -2403,7 +2403,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:1216,5|9. Pāpasikkhamānasuttaṃ
 13:1218,5|10. Pāpasāmaṇerasuttaṃ
 13:1220,5|11. Pāpasāmaṇerīsuttaṃ
-13:1231,3|9. Opammasaṃyuttaṃ|譬喻相應
+13:1231,3|9. Opammasaṃyuttaṃ|20譬喻相應
 13:1232,4|-
 13:1232,5|1. Kūṭasuttaṃ
 13:1234,5|2. Nakhasikhasuttaṃ
@@ -2417,7 +2417,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:1259,5|10. Biḷārasuttaṃ
 13:1263,5|11. Siṅgālasuttaṃ
 13:1265,5|12. Dutiyasiṅgālasuttaṃ
-13:1270,3|10. Bhikkhusaṃyuttaṃ|比丘相應
+13:1270,3|10. Bhikkhusaṃyuttaṃ|21比丘相應
 13:1271,4|-
 13:1271,5|1. Kolitasuttaṃ
 13:1275,5|2. Upatissasuttaṃ
@@ -2432,7 +2432,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 13:1322,5|11. Mahākappinasuttaṃ
 13:1327,5|12. Sahāyakasuttaṃ
 14:3,2|Khandhavaggo|蘊品
-14:4,3|1. Khandhasaṃyuttaṃ|蘊相應
+14:4,3|1. Khandhasaṃyuttaṃ|22蘊相應
 14:5,4|1. Nakulapituvaggo
 14:6,5|1. Nakulapitusuttaṃ
 14:26,5|2. Devadahasuttaṃ
@@ -2607,7 +2607,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:824,5|8. Abhinivesasuttaṃ
 14:826,5|9. Dutiyaabhinivesasuttaṃ
 14:828,5|10. Ānandasuttaṃ
-14:838,3|2. Rādhasaṃyuttaṃ|羅陀相應
+14:838,3|2. Rādhasaṃyuttaṃ|23羅陀相應
 14:839,4|1. Paṭhamavaggo
 14:840,5|1. Mārasuttaṃ
 14:844,5|2. Sattasuttaṃ
@@ -2638,7 +2638,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:915,4|4. Upanisinnavaggo
 14:916,5|1-11. Mārādisuttaekādasakaṃ
 14:928,5|12. Nirodhadhammasuttaṃ
-14:934,3|3. Diṭṭhisaṃyuttaṃ|見相應
+14:934,3|3. Diṭṭhisaṃyuttaṃ|24見相應
 14:935,4|1. Sotāpattivaggo
 14:936,5|1. Vātasuttaṃ
 14:942,5|2. Etaṃmamasuttaṃ
@@ -2675,7 +2675,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1046,4|4. Catutthagamanavaggo
 14:1047,5|1. Navātasuttaṃ
 14:1053,5|26. Adukkhamasukhīsuttaṃ
-14:1063,3|4. Okkantasaṃyuttaṃ|入相應
+14:1063,3|4. Okkantasaṃyuttaṃ|25入相應
 14:1064,4|-
 14:1064,5|1. Cakkhusuttaṃ
 14:1067,5|2. Rūpasuttaṃ
@@ -2687,7 +2687,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1080,5|8. Rūpataṇhāsuttaṃ
 14:1082,5|9. Pathavīdhātusuttaṃ
 14:1084,5|10. Khandhasuttaṃ
-14:1090,3|5. Uppādasaṃyuttaṃ|生相應
+14:1090,3|5. Uppādasaṃyuttaṃ|26生相應
 14:1091,4|-
 14:1091,5|1. Cakkhusuttaṃ
 14:1093,5|2. Rūpasuttaṃ
@@ -2699,7 +2699,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1106,5|8. Taṇhāsuttaṃ
 14:1108,5|9. Dhātusuttaṃ
 14:1110,5|10. Khandhasuttaṃ
-14:1115,3|6. Kilesasaṃyuttaṃ|煩惱相應
+14:1115,3|6. Kilesasaṃyuttaṃ|27煩惱相應
 14:1116,4|-
 14:1116,5|1. Cakkhusuttaṃ
 14:1118,5|2. Rūpasuttaṃ
@@ -2711,7 +2711,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1130,5|8. Taṇhāsuttaṃ
 14:1132,5|9. Dhātusuttaṃ
 14:1134,5|10. Khandhasuttaṃ
-14:1139,3|7. Sāriputtasaṃyuttaṃ|舍利弗相應
+14:1139,3|7. Sāriputtasaṃyuttaṃ|28舍利弗相應
 14:1140,4|-
 14:1140,5|1. Vivekajasuttaṃ
 14:1144,5|2. Avitakkasuttaṃ
@@ -2723,7 +2723,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1159,5|8. Nevasaññānāsaññāyatanasuttaṃ
 14:1161,5|9. Nirodhasamāpattisuttaṃ
 14:1163,5|10. Sūcimukhīsuttaṃ
-14:1173,3|8. Nāgasaṃyuttaṃ|龍相應
+14:1173,3|8. Nāgasaṃyuttaṃ|29龍相應
 14:1174,4|-
 14:1174,5|1. Suddhikasuttaṃ
 14:1176,5|2. Paṇītatarasuttaṃ
@@ -2737,7 +2737,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1195,5|10. Catutthasutasuttaṃ
 14:1198,5|11-20. Aṇḍajadānūpakārasuttadasakaṃ
 14:1201,5|21-50. Jalābujādidānūpakārasuttattiṃsakaṃ
-14:1208,3|9. Supaṇṇasaṃyuttaṃ|金翅鳥相應
+14:1208,3|9. Supaṇṇasaṃyuttaṃ|30金翅鳥相應
 14:1209,4|-
 14:1209,5|1. Suddhikasuttaṃ
 14:1211,5|2. Harantisuttaṃ
@@ -2745,7 +2745,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1215,5|4-6. Dutiyādidvayakārīsuttattikaṃ
 14:1217,5|7-16. Aṇḍajadānūpakārasuttadasakaṃ
 14:1219,5|17-46. Jalābujādidānūpakārasuttatiṃsakaṃ
-14:1225,3|10. Gandhabbakāyasaṃyuttaṃ|乾達婆相應
+14:1225,3|10. Gandhabbakāyasaṃyuttaṃ|31乾達婆相應
 14:1226,4|-
 14:1226,5|1. Suddhikasuttaṃ
 14:1228,5|2. Sucaritasuttaṃ
@@ -2753,7 +2753,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1232,5|4-12. Sāragandhādidātāsuttanavakaṃ
 14:1234,5|13-22. Mūlagandhadānūpakārasuttadasakaṃ
 14:1236,5|23-112. Sāragandhādidānūpakārasuttanavutikaṃ
-14:1242,3|11. Valāhakasaṃyuttaṃ|雲相應
+14:1242,3|11. Valāhakasaṃyuttaṃ|32雲相應
 14:1243,4|-
 14:1243,5|1. Suddhikasuttaṃ
 14:1245,5|2. Sucaritasuttaṃ
@@ -2764,7 +2764,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1255,5|55. Abbhavalāhakasuttaṃ
 14:1257,5|56. Vātavalāhakasuttaṃ
 14:1259,5|57. Vassavalāhakasuttaṃ
-14:1265,3|12. Vacchagottasaṃyuttaṃ|婆蹉種相應
+14:1265,3|12. Vacchagottasaṃyuttaṃ|33婆蹉種相應
 14:1266,4|-
 14:1266,5|1. Rūpaaññāṇasuttaṃ
 14:1268,5|2. Vedanāaññāṇasuttaṃ
@@ -2782,7 +2782,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1300,5|46-50. Rūpaappaccupekkhaṇādisuttapañcakaṃ
 14:1302,5|51-54. Rūpaappaccakkhakammādisuttacatukkaṃ
 14:1307,5|55. Viññāṇaappaccakkhakammasuttaṃ
-14:1312,3|13. Jhānasaṃyuttaṃ|禪定相應
+14:1312,3|13. Jhānasaṃyuttaṃ|34禪定相應
 14:1313,4|-
 14:1313,5|1. Samādhimūlakasamāpattisuttaṃ
 14:1315,5|2. Samādhimūlakaṭhitisuttaṃ
@@ -2812,7 +2812,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 14:1368,5|53-54. Sakkaccamūlakasātaccakārīsuttādidukaṃ
 14:1371,5|55. Sātaccamūlakasappāyakārīsuttaṃ
 15:3,2|Saḷāyatanavaggo|六處品
-15:4,3|1. Saḷāyatanasaṃyuttaṃ|六處相應
+15:4,3|1. Saḷāyatanasaṃyuttaṃ|35六處相應
 15:5,4|1. Aniccavaggo
 15:6,5|1. Ajjhattāniccasuttaṃ
 15:9,5|2. Ajjhattadukkhasuttaṃ
@@ -3033,7 +3033,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1103,5|9. Vīṇopamasuttaṃ
 15:1108,5|10. Chappāṇakopamasuttaṃ
 15:1115,5|11. Yavakalāpisuttaṃ
-15:1130,3|2. Vedanāsaṃyuttaṃ|受相應
+15:1130,3|2. Vedanāsaṃyuttaṃ|36受相應
 15:1131,4|1. Sagāthāvaggo
 15:1132,5|1. Samādhisuttaṃ
 15:1136,5|2. Sukhasuttaṃ
@@ -3068,7 +3068,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1254,5|9. Tatiyasamaṇabrāhmaṇasuttaṃ
 15:1256,5|10. Suddhikasuttaṃ
 15:1258,5|11. Nirāmisasuttaṃ
-15:1275,3|3. Mātugāmasaṃyuttaṃ|女人相應
+15:1275,3|3. Mātugāmasaṃyuttaṃ|37女人相應
 15:1276,4|1. Paṭhamapeyyālavaggo
 15:1277,5|1. Mātugāmasuttaṃ
 15:1279,5|2. Purisasuttaṃ
@@ -3106,7 +3106,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1350,5|8. Ṭhānasuttaṃ
 15:1353,5|9. Pañcasīlavisāradasuttaṃ
 15:1355,5|10. Vaḍḍhīsuttaṃ
-15:1362,3|4. Jambukhādakasaṃyuttaṃ|閻浮車相應
+15:1362,3|4. Jambukhādakasaṃyuttaṃ|38閻浮車相應
 15:1363,4|-
 15:1363,5|1. Nibbānapañhāsuttaṃ
 15:1366,5|2. Arahattapañhāsuttaṃ
@@ -3124,11 +3124,11 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1392,5|14. Dukkhapañhāsuttaṃ
 15:1394,5|15. Sakkāyapañhāsuttaṃ
 15:1396,5|16. Dukkarapañhāsuttaṃ
-15:1401,3|5. Sāmaṇḍakasaṃyuttaṃ|沙門出家相應
+15:1401,3|5. Sāmaṇḍakasaṃyuttaṃ|39沙門出家相應
 15:1402,4|-
 15:1402,5|1. Sāmaṇḍakasuttaṃ
 15:1407,5|2. Dukkarasuttaṃ
-15:1411,3|6. Moggallānasaṃyuttaṃ|目犍連相應
+15:1411,3|6. Moggallānasaṃyuttaṃ|40目犍連相應
 15:1412,4|-
 15:1412,5|1. Paṭhamajhānapañhāsuttaṃ
 15:1416,5|2. Dutiyajhānapañhāsuttaṃ
@@ -3141,7 +3141,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1437,5|9. Animittapañhāsuttaṃ
 15:1440,5|10. Sakkasuttaṃ
 15:1495,5|11. Candanasuttaṃ
-15:1505,3|7. Cittasaṃyuttaṃ|質多相應
+15:1505,3|7. Cittasaṃyuttaṃ|41質多相應
 15:1506,4|-
 15:1506,5|1. Saṃyojanasuttaṃ
 15:1510,5|2. Paṭhamaisidattasuttaṃ
@@ -3153,7 +3153,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1557,5|8. Nigaṇṭhanāṭaputtasuttaṃ
 15:1563,5|9. Acelakassapasuttaṃ
 15:1567,5|10. Gilānadassanasuttaṃ
-15:1574,3|8. Gāmaṇisaṃyuttaṃ|聚落主相應
+15:1574,3|8. Gāmaṇisaṃyuttaṃ|42聚落主相應
 15:1575,4|-
 15:1575,5|1. Caṇḍasuttaṃ
 15:1579,5|2. Tālapuṭasuttaṃ
@@ -3168,7 +3168,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1627,5|11. Bhadrakasuttaṃ
 15:1633,5|12. Rāsiyasuttaṃ
 15:1657,5|13. Pāṭaliyasuttaṃ
-15:1692,3|9. Asaṅkhatasaṃyuttaṃ|無為相應
+15:1692,3|9. Asaṅkhatasaṃyuttaṃ|43無為相應
 15:1693,4|1. Paṭhamavaggo
 15:1694,5|1. Kāyagatāsatisuttaṃ
 15:1697,5|2. Samathavipassanāsuttaṃ
@@ -3186,7 +3186,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1733,5|2. Anatasuttaṃ
 15:1735,5|3-32. Anāsavādisuttaṃ
 15:1740,5|33. Parāyanasuttaṃ
-15:1748,3|10. Abyākatasaṃyuttaṃ|無記說相應
+15:1748,3|10. Abyākatasaṃyuttaṃ|44無記說相應
 15:1749,4|-
 15:1749,5|1. Khemāsuttaṃ
 15:1763,5|2. Anurādhasuttaṃ
@@ -3200,7 +3200,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 15:1823,5|10. Ānandasuttaṃ
 15:1826,5|11. Sabhiyakaccānasuttaṃ
 16:3,2|Mahāvaggo|大品
-16:4,3|1. Maggasaṃyuttaṃ|道相應
+16:4,3|1. Maggasaṃyuttaṃ|45道相應
 16:5,4|1. Avijjāvaggo
 16:6,5|1. Avijjāsuttaṃ
 16:10,5|2. Upaḍḍhasuttaṃ
@@ -3330,7 +3330,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:369,5|8. Upādānakkhandhasuttaṃ
 16:371,5|9. Orambhāgiyasuttaṃ
 16:373,5|10. Uddhambhāgiyasuttaṃ
-16:384,3|2. Bojjhaṅgasaṃyuttaṃ|覺支相應
+16:384,3|2. Bojjhaṅgasaṃyuttaṃ|46覺支相應
 16:385,4|1. Pabbatavaggo
 16:386,5|1. Himavantasuttaṃ
 16:388,5|2. Kāyasuttaṃ
@@ -3441,7 +3441,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:809,5| Punaesanādisuttaṃ
 16:813,4|18. Punaoghavaggo
 16:815,5| Punaoghādisuttaṃ
-16:821,3|3. Satipaṭṭhānasaṃyuttaṃ|念處相應
+16:821,3|3. Satipaṭṭhānasaṃyuttaṃ|47念處相應
 16:822,4|1. Ambapālivaggo
 16:823,5|1. Ambapālisuttaṃ
 16:827,5|2. Satisuttaṃ
@@ -3507,7 +3507,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1070,5|1-10. Esanādisuttadasakaṃ
 16:1075,4|10. Oghavaggo
 16:1076,5|1-10. Uddhambhāgiyādisuttadasakaṃ
-16:1084,3|4. Indriyasaṃyuttaṃ|根相應
+16:1084,3|4. Indriyasaṃyuttaṃ|48根相應
 16:1085,4|1. Suddhikavaggo
 16:1086,5|1. Suddhikasuttaṃ
 16:1088,5|2. Paṭhamasotāpannasuttaṃ
@@ -3593,7 +3593,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1363,5|1-12. Pācīnādisuttadvādasakaṃ
 16:1369,4|17. Oghavaggo
 16:1370,5|1-10. Oghādisuttadasakaṃ
-16:1376,3|5. Sammappadhānasaṃyuttaṃ|正勤相應
+16:1376,3|5. Sammappadhānasaṃyuttaṃ|49正勤相應
 16:1377,4|1. Gaṅgāpeyyālavaggo
 16:1378,5|1-12. Pācīnādisuttadvādasakaṃ
 16:1384,4|2. Appamādavaggo
@@ -3603,7 +3603,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1395,5|1-10. Esanādisuttadasakaṃ
 16:1400,4|5. Oghavaggo
 16:1401,5|1-10. Oghādisuttadasakaṃ
-16:1407,3|6. Balasaṃyuttaṃ|力相應
+16:1407,3|6. Balasaṃyuttaṃ|50力相應
 16:1408,4|1. Gaṅgāpeyyālavaggo
 16:1409,5|1-12. Balādisuttadvādasakaṃ
 16:1414,4|2. Appamādavaggo
@@ -3615,7 +3615,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1438,5|1-12. Esanādisuttadvādasakaṃ
 16:1443,4|10. Oghavaggo
 16:1444,5|1-10. Oghādisuttadasakaṃ
-16:1450,3|7. Iddhipādasaṃyuttaṃ|神足相應
+16:1450,3|7. Iddhipādasaṃyuttaṃ|51神足相應
 16:1451,4|1. Cāpālavaggo
 16:1452,5|1. Apārasuttaṃ
 16:1454,5|2. Viraddhasuttaṃ
@@ -3655,7 +3655,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1634,5|1-12. Gaṅgānadīādisuttadvādasakaṃ
 16:1649,4|8. Oghavaggo
 16:1650,5|1-10. Oghādisuttadasakaṃ
-16:1657,3|8. Anuruddhasaṃyuttaṃ|阿那律相應
+16:1657,3|8. Anuruddhasaṃyuttaṃ|52阿那律相應
 16:1658,4|1. Rahogatavaggo
 16:1659,5|1. Paṭhamarahogatasuttaṃ
 16:1670,5|2. Dutiyarahogatasuttaṃ
@@ -3682,12 +3682,12 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1729,5|12. Pubbenivāsasuttaṃ
 16:1731,5|13. Dibbacakkhusuttaṃ
 16:1733,5|14. Āsavakkhayasuttaṃ
-16:1739,3|9. Jhānasaṃyuttaṃ|禪那相應
+16:1739,3|9. Jhānasaṃyuttaṃ|53禪那相應
 16:1740,4|1. Gaṅgāpeyyālavaggo
 16:1741,5|1-12. Jhānādisuttadvādasakaṃ
 16:1756,4|5. Oghavaggo
 16:1757,5|1-10. Oghādisuttaṃ
-16:1763,3|10. Ānāpānasaṃyuttaṃ|入出息相應
+16:1763,3|10. Ānāpānasaṃyuttaṃ|54入出息相應
 16:1764,4|1. Ekadhammavaggo
 16:1765,5|1. Ekadhammasuttaṃ
 16:1767,5|2. Bojjhaṅgasuttaṃ
@@ -3710,7 +3710,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:1896,5|8. Anusayasamugghātasuttaṃ
 16:1898,5|9. Addhānapariññāsuttaṃ
 16:1900,5|10. Āsavakkhayasuttaṃ
-16:1906,3|11. Sotāpattisaṃyuttaṃ|預流相應
+16:1906,3|11. Sotāpattisaṃyuttaṃ|55預流相應
 16:1907,4|1. Veḷudvāravaggo
 16:1908,5|1. Cakkavattirājasuttaṃ
 16:1911,5|2. Brahmacariyogadhasuttaṃ
@@ -3792,7 +3792,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 16:2276,5|11. Javanapaññāsuttaṃ
 16:2278,5|12. Tikkhapaññāsuttaṃ
 16:2280,5|13. Nibbedhikapaññāsuttaṃ
-16:2286,3|12. Saccasaṃyuttaṃ|諦相應
+16:2286,3|12. Saccasaṃyuttaṃ|56諦相應
 16:2287,4|1. Samādhivaggo
 16:2288,5|1. Samādhisuttaṃ
 16:2291,5|2. Paṭisallānasuttaṃ
@@ -7216,7 +7216,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 38:2625,5|9. Sivakattheraapadānaṃ
 38:2634,5|10. Upavānattheraapadānaṃ
 38:2695,5|11. Raṭṭhapālattheraapadānaṃ
-38:2724,2|Therīapadānapāḷi||長老尼傳記
+38:2724,2|Therīapadānapāḷi|長老尼傳記
 38:2725,3|1. Sumedhāvaggo
 38:2726,4|-
 38:2726,5|1. Sumedhātherīapadānaṃ
@@ -18529,9 +18529,9 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 61:5156,5|Hetu-anantarapaccayā
 61:5159,5|Paccanīyuddhāro
 62:2,1|Añña|其他
-62:2,2|Visuddhimaggo
+62:2,2|Visuddhimaggo|清淨道論
 62:3,3|(Paṭhamo bhāgo)
-62:44,3|1. Sīlaniddeso
+62:44,3|1. Sīlaniddeso|戒品
 62:45,4|-
 62:45,5|Sīlasarūpādikathā
 62:59,5|Sīlānisaṃsakathā
@@ -18544,7 +18544,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:215,5|Paṭhamasīlapañcakaṃ
 62:241,5|Dutiyasīlapañcakaṃ
 62:246,5|Sīlasaṃkilesavodānaṃ
-62:299,3|2. Dhutaṅganiddeso
+62:299,3|2. Dhutaṅganiddeso|頭陀支
 62:318,4|-
 62:318,5|1. Paṃsukūlikaṅgakathā
 62:332,5|2. Tecīvarikaṅgakathā
@@ -18560,7 +18560,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:437,5|12. Yathāsanthatikaṅgakathā
 62:447,5|13. Nesajjikaṅgakathā
 62:457,5|Dhutaṅgapakiṇṇakakathā
-62:479,3|3. Kammaṭṭhānaggahaṇaniddeso
+62:479,3|3. Kammaṭṭhānaggahaṇaniddeso|獲得業處
 62:486,4|-
 62:486,5|Samādhiekakadukavaṇṇanā
 62:491,5|Samādhitikavaṇṇanā
@@ -18569,7 +18569,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:536,5|Kammaṭṭhānadāyakavaṇṇanā
 62:555,5|Cariyāvaṇṇanā
 62:592,5|Cattālīsakammaṭṭhānavaṇṇanā
-62:629,3|4. Pathavīkasiṇaniddeso
+62:629,3|4. Pathavīkasiṇaniddeso|地遍
 62:631,4|-
 62:631,5|Ananurūpavihāro
 62:654,5|Anurūpavihāro
@@ -18588,7 +18588,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:804,5|Tatiyajjhānakathā
 62:831,5|Catutthajjhānakathā
 62:845,5|Pañcakajjhānakathā
-62:853,3|5. Sesakasiṇaniddeso
+62:853,3|5. Sesakasiṇaniddeso|其他的遍
 62:854,4|-
 62:854,5|Āpokasiṇakathā
 62:859,5|Tejokasiṇakathā
@@ -18600,7 +18600,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:873,5|Ālokakasiṇakathā
 62:875,5|Paricchinnākāsakasiṇakathā
 62:879,5|Pakiṇṇakakathā
-62:897,3|6. Asubhakammaṭṭhānaniddeso
+62:897,3|6. Asubhakammaṭṭhānaniddeso|不淨業處
 62:898,4|-
 62:898,5|Uddhumātakādipadatthavaṇṇanā
 62:909,5|Uddhumātakakammaṭṭhānaṃ
@@ -18615,28 +18615,28 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 62:1109,5|5. Cāgānussatikathā
 62:1118,5|6. Devatānussatikathā
 62:1125,5|Pakiṇṇakakathā
-62:1139,3|8. Anussatikammaṭṭhānaniddeso
+62:1139,3|8. Anussatikammaṭṭhānaniddeso|隨念業處
 62:1140,4|-
 62:1140,5|Maraṇassatikathā
 62:1208,5|Kāyagatāsatikathā
 62:1250,5|Koṭṭhāsavavatthāpanakathā
 62:1308,5|Ānāpānassatikathā
 62:1418,5|Upasamānussatikathā
-62:1430,3|9. Brahmavihāraniddeso
+62:1430,3|9. Brahmavihāraniddeso|梵住
 62:1431,4|-
 62:1431,5|Mettābhāvanākathā
 62:1565,5|Karuṇābhāvanākathā
 62:1572,5|Muditābhāvanākathā
 62:1578,5|Upekkhābhāvanākathā
 62:1583,5|Pakiṇṇakakathā
-62:1620,3|10. Āruppaniddeso
+62:1620,3|10. Āruppaniddeso|無色
 62:1621,4|-
 62:1621,5|Paṭhamāruppavaṇṇanā
 62:1641,5|Viññāṇañcāyatanakathā
 62:1649,5|Ākiñcaññāyatanakathā
 62:1657,5|Nevasaññānāsaññāyatanakathā
 62:1672,5|Pakiṇṇakakathā
-62:1695,3|11. Samādhiniddeso
+62:1695,3|11. Samādhiniddeso|定品
 62:1696,4|-
 62:1696,5|Āhārepaṭikkūlabhāvanā
 62:1726,5|Catudhātuvavatthānabhāvanā
@@ -18655,7 +18655,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 63:155,5|Pubbenivāsānussatiñāṇakathā
 63:208,5|Cutūpapātañāṇakathā
 63:233,5|Pakiṇṇakakathā
-63:260,3|14. Khandhaniddeso
+63:260,3|14. Khandhaniddeso|蘊品
 63:261,4|-
 63:261,5|Paññākathā
 63:271,5|Paññāpabhedakathā
@@ -18693,7 +18693,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 63:695,5|Nibbānakathā
 63:705,5|Magganiddesakathā
 63:723,5|Ekavidhādivinicchayakathā
-63:743,3|17. Paññābhūminiddeso
+63:743,3|17. Paññābhūminiddeso|慧地品
 63:744,4|-
 63:744,5|Paṭiccasamuppādakathā
 63:810,5|Avijjāpaccayāsaṅkhārapadakathā
@@ -18709,7 +18709,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 63:1061,5|Upādānapaccayābhavapadavitthārakathā
 63:1081,5|Bhavapaccayājātiādivitthārakathā
 63:1086,5|Bhavacakkakathā
-63:1146,3|18. Diṭṭhivisuddhiniddeso
+63:1146,3|18. Diṭṭhivisuddhiniddeso|見清淨
 63:1147,4|-
 63:1147,5|Nāmarūpapariggahakathā
 63:1165,5|Arūpadhammānaṃ upaṭṭhānākārakathā
@@ -18718,7 +18718,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 63:1208,3|19. Kaṅkhāvitaraṇavisuddhiniddeso
 63:1209,4|-
 63:1209,5|Paccayapariggahakathā
-63:1256,3|20. Maggāmaggañāṇadassanavisuddhiniddeso
+63:1256,3|20. Maggāmaggañāṇadassanavisuddhiniddeso|道非道智見清淨
 63:1257,4|-
 63:1257,5|Sammasanañāṇakathā
 63:1290,5|Cattārīsākāraanupassanākathā
@@ -18742,7 +18742,7 @@ jsonp({ "meta":{"name":"mul","type":"toc","field":"txt","date":"2020-05-20T14:58
 63:1527,5|Saṅkhārupekkhāñāṇakathā
 63:1609,5|Anulomañāṇakathā
 63:1614,5|Vuṭṭhānagāminīvipassanākathā
-63:1631,3|22. Ñāṇadassanavisuddhiniddeso
+63:1631,3|22. Ñāṇadassanavisuddhiniddeso|智見清淨
 63:1632,4|-
 63:1632,5|Paṭhamamaggañāṇakathā
 63:1644,5|Sotāpannapuggalakathā

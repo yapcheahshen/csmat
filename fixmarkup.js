@@ -23,11 +23,11 @@ const finalfixes=[
 	[/<p rend="bodytext">/g,"<p>"]
 	,[/<p PN="(\d+)"><\/p>\n<p>/g,'<p pn="$1">'] //empty p with hangnum, 
 	,[/;;<gbrk\/>/g,";<gbrk/>"]
-	,[/<p rend="title"><note c="(.+?)"\/><\/p>/g,
-	'<p rend="title">($1)</p>'
-	],
-	[/<p rend="subhead"><note c="(.+?)"\/><\/p>/g,
-	'<p rend="subhead">($1)</p>']
+//	,[/<p rend="title"><note c="(.+?)"\/><\/p>/g,
+//	'<p rend="title">($1)</p>'],
+//	[/<p rend="subhead"><note c="(.+?)"\/><\/p>/g,
+//	'<p rend="subhead">($1)</p>']
+
 ]
 const startingfixes=[
 	[/\n\n<p /g,"\n<p "],
@@ -63,9 +63,13 @@ const bracket2markup=(content,fn)=>{
 	//content=content.replace(/\(([^\d\s]+?)\)/g,'<note C="$1"/>');
 //(1234) , (Ka) cannot contain links
 	content=content.replace(/\(([^<]+?)\)/g,(m,m1)=>
-		(parseInt(m1).toString()==m1||alphas[m1])?m:'<note c="'+m1+'"/>');
+	//	(parseInt(m1).toString()==m1||alphas[m1])?m:'<note c="'+m1+'"/>');
+		(parseInt(m1)>0||!m1.match(/\d/))?m:'<note c="'+m1+'"/>');
 	content=content.replace(/\[([^<]+?)\]/g,(m,m1)=>
-		(parseInt(m1).toString()==m1||alphas[m1])?m:'<note b="'+m1+'"/>');
+	//	(parseInt(m1).toString()==m1||alphas[m1])?m:'<note b="'+m1+'"/>');
+		(parseInt(m1)>0||!m1.match(/\d/))?m:'<note b="'+m1+'"/>');
+//連結不以數字開頭 ，沒有數字就不可能是連結。不要轉為<note>
+
 	return content;
 }
 const reverse_bracket2markup=s=>{
@@ -207,7 +211,10 @@ const doit=()=>{
 
 		const hotfix=errata[fn.substr(3)];
 		if (hotfix) {
-			hotfix.forEach(r=>content=content.replace(r[0],r[1]));
+
+			hotfix.forEach(r=>{			
+				content=content.replace(r[0],r[1])
+			});
 			delete errata[fn.substr(3)];
 		}
 

@@ -14,8 +14,15 @@ Vue.component('bookmarklist',{
 			["聖求經","s0201m_p280"],
 			["象跡喻小經ATT","s0201m_p289"],
 			["心材喻小經 ATT an3.138","s0201m_p312"],
-			["轉法輪經","s0305m_p1081"]
+			["轉法輪經","s0305m_p1081"],
+			["無我相經 ","s0303m_x305"],
+			["燃燒經","s0304m_x81"]
 		]};
+
+//sujato suggest beginner to read
+//SN 56.11 SN22.59 SN35.28 
+
+
 	},
 	render(h){
 		const children=this.bookmarks.map(bm=>{

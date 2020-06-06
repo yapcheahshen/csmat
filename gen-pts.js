@@ -34,16 +34,27 @@ const pts2cap={};
 
 const {bk2pts}=require("./ptsvolpg");
 
-let pbk='';
+let pbk='',maxy=0;
+const combinebk={'s0510m1':true,'s0510m2':true,'s0515m':true}
+
 const addmapping=(bk,x,y,pts)=>{
 	const pv=bk2pts[set][bk];
+	let singlevol=true;
 	if (!pv) g=bk;
  	else {
  		m=pv.match(/^(\w+)\d+/);
  		g=m[1];
+ 		singlevol=false;
  	}
+
+
  	const arr=pts.split(".");
  	if (arr.length!==2) throw "invalid pts volpage" +pts;
+
+ 	if (combinebk[bk]){
+ 		g=bk;
+ 		singlevol=true;
+ 	}
 
  	let vol=parseInt(arr[0]);
  	const page=parseInt(arr[1]);
@@ -52,18 +63,20 @@ const addmapping=(bk,x,y,pts)=>{
  	if (vol>0) vol--;
 
  	if (!pts2cap[g]) pts2cap[g]=[];
- 	if (!pts2cap[g][vol]) pts2cap[g][vol]=[];
+ 	if (!singlevol&&!pts2cap[g][vol]) pts2cap[g][vol]=[];
  	
- 	if (pts2cap[g][vol][page]){
+ 	const VPG=singlevol?pts2cap[g]:pts2cap[g][vol];
+
+ 	if (VPG[page]){
  		console.log("WARNING repeating volpage",pts,bk,x);
  	}
-
- 	const VPG=pts2cap[g][vol];
+ 	if (y>maxy)maxy=y;
+ 	
  	if (VPG.length&& page&& !VPG[page-1]) {
- 		console.log("page number gap ",vol,page-1,'at',bk,"line",x+1);
+ 		console.log("page number gap ",(vol+"."+(page-1)),'at',bk,"line",x+1);
  	}
 
- 	VPG[page]=parseFloat(x+"."+y);
+ 	VPG[page]=x+(y?"y"+y:'');
 }	
 const db=openSync(set);
 rawtags.forEach(tag=>{
@@ -75,12 +88,19 @@ rawtags.forEach(tag=>{
 		
 		//  generate ptsvolpg.js
 		//gen_bk2pts(cap.bk,cap.bk0,cap.y,m[1])
-		
 		addmapping(cap.bk,cap.bk0,cap.y,m[1]);
 	}
 })
 
 const write=()=>{
+	//save 20%
+	for (var g in pts2cap) {
+		if (Array.isArray(pts2cap[g][0])) {
+			pts2cap[g]=pts2cap[g].map(arr=>arr.join(","));
+		} else {
+			pts2cap[g]=pts2cap[g].join(",");
+		}
+	}
 	const fn=set+"-pts.txt";
 	console.log("write to",fn);
 	str=JSON.stringify(pts2cap).replace(/null,/g,',');
@@ -88,35 +108,33 @@ const write=()=>{
 }
 //console.log(volmap)
 write();
-
+console.log('maxy',maxy)
 
 /* gap , need checking
+page number gap  3.210 at vin02m1 line 2149
+page number gap  1.263 at s0102m line 911  fixed in errata.js
+page number gap  2.329 at s0103m line 1002 fixed in errata.js
+page number gap  2.230 at s0103m line 1010 fixed in errata.js
+page number gap  3.107 at s0304m line 719 fixed in errata.js
+page number gap  4.140 at s0305m line 824 fixed in errata.js
+page number gap  0.20 at s0506m line 201
+page number gap  0.47 at s0506m line 533
+page number gap  0.75 at s0506m line 791
+page number gap  0.99 at s0506m line 1005
+page number gap  0.133 at s0506m line 1268
+page number gap  0.31 at s0507m line 309
+page number gap  0.38 at s0507m line 386
+page number gap  0.46 at s0507m line 454
+page number gap  0.52 at s0507m line 518
+page number gap  0.78 at s0507m line 765
+page number gap  0.84 at s0507m line 849
+page number gap  0.32 at s0520m line 193
+page number gap  0.192 at s0520m line 751
 
-D:\!mywork\csmat>node gen-pts att
-page number gap  0 160 at s0502a line 360
-page number gap  0 244 at s0512a line 1191
-page number gap  1 117 at s0513a2 line 539
-page number gap  5 329 at s0514a2 line 1062
-page number gap  5 156 at s0514a3 line 9
 
-D:\!mywork\csmat>node gen-pts mul
-page number gap  3 210 at vin02m1 line 2149
-page number gap  1 263 at s0102m line 911
-page number gap  2 329 at s0103m line 1002
-page number gap  2 230 at s0103m line 1010
-page number gap  3 107 at s0304m line 719
-page number gap  4 140 at s0305m line 824
-page number gap  0 20 at s0506m line 201
-page number gap  0 47 at s0506m line 533
-page number gap  0 75 at s0506m line 791
-page number gap  0 99 at s0506m line 1005
-page number gap  0 133 at s0506m line 1268
-page number gap  0 31 at s0507m line 309
-page number gap  0 38 at s0507m line 386
-page number gap  0 46 at s0507m line 454
-page number gap  0 52 at s0507m line 518
-page number gap  0 78 at s0507m line 765
-page number gap  0 84 at s0507m line 849
-page number gap  0 32 at s0520m line 193
-page number gap  0 192 at s0520m line 751
+page number gap  0.160 at s0502a line 360
+page number gap  0.244 at s0512a line 1191
+page number gap  1.117 at s0513a2 line 539
+page number gap  5.329 at s0514a2 line 1062
+page number gap  5.156 at s0514a3 line 9
 */
