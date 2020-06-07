@@ -23,15 +23,15 @@ module.exports={
 	//PTS
 	//15:106.35	Yam panāniccaṃ dukkhaṃ vipariṇamadhammam kal-
 	//15:107.1	laṃ nu taṃ samanupassituṃ Etam mama eso ham asmi
-		['<p>‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?</p>',
-		'<p>‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, <pb t="p4.107"/>kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?</p>']
+		['‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?',
+		'‘‘Yaṃ panāniccaṃ dukkhaṃ vipariṇāmadhammaṃ, <pb t="p4.107"/>kallaṃ nu taṃ samanupassituṃ ‘etaṃ mama, esohamasmi, eso me attā’’’ti?']
 	],
 	"s0305m.xml":[
 	  [/(\d+)<\/hi><\/p>/g,'$1</hi><hi rend="dot">.</hi></p>'] ,
-	  ['<p rend="bodytext">Uddānaṃ –</p>\n\n<p rend="gatha1">',
-	  '<p rend="bodytext"><pb ed="P" n="5.0139" />Uddānaṃ –</p>\n\n<p rend="gatha1">'],
-	  ['<p rend="centre">Bojjhaṅgasaṃyuttaṃ dutiyaṃ.</p>',
-	  '<p rend="centre">Bojjhaṅgasaṃyuttaṃ dutiyaṃ.</p>'],
+
+	  ['<p rend="bodytext">Uddānaṃ –</p>\n\n<p rend="gatha1">Esanā vidhā āsavo',
+	  '<p rend="bodytext"><pb ed="P" n="5.0139" />Uddānaṃ –</p>\n\n<p rend="gatha1">Esanā vidhā āsavo'],
+	 
 	  ['<p rend="bodytext">Uddānaṃ –</p>\n\n<p rend="gatha1">Ogho yogo upādānaṃ',
 	  '<p rend="bodytext"><pb ed="P" n="5.0140" />Uddānaṃ –</p>\n\n<p rend="gatha1">Ogho yogo upādānaṃ']
 	],

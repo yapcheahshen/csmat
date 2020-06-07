@@ -151,7 +151,7 @@ const backmovepb=(content,fn)=>{
 		return '<pb t="'+ed1+n1+'"/>'+w;
 	});
 
-	//not moved, capitalize attribute name
+	//無法往前移一個字的，大寫t屬性區分
 	const upat4=new RegExp(pb+pb+pb+pb,'g');
 	const upat3=new RegExp(pb+pb+pb,'g');
 	const upat2=new RegExp(pb+pb,'g');

@@ -16,7 +16,8 @@ paranum+=']';
 
 //const bookname=fs.readFileSync(set+"-bookname.txt","utf8");
 const matlinks=JSON.parse(fs.readFileSync(set+"-matlinks.txt","utf8"));
-const aux={paranum,matlinks}; // if eval(paranum), empty item will fill with null
+const ptsvolpg=JSON.parse(fs.readFileSync(set+"-pts.txt","utf8"))
+const aux={paranum,matlinks,ptsvolpg}; // if eval(paranum), empty item will fill with null
 
 build({name:set,outdir:set+"/", textonly:true, 
 	withtoc:true,continuouspage:true,aux, 

@@ -2,7 +2,7 @@
 	nestable text
 
 */
-const {getdbbookname,parse,stringify,open,readlines,isPaliword}=require("dengine");
+const {getdbbookname,parseCAP,stringify,open,readlines,isPaliword}=require("dengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
@@ -271,13 +271,13 @@ Vue.component('backlinkmenu',{
 			const fn=getdbbookname(tdb,vpl[0]);
 			let addr=fn+"_x"+(vpl[1]-1)
 			if (vpl[2]) addr+="y"+vpl[2];
-			return parse(addr,setname).stringify();
+			return parseCAP(addr,setname).stringify();
 		}
 	},
 	render(h){
 		const children=this.links?this.links.map( link=>{
 			const setname=link[0];
-			const cap=parse(link[1], setname);
+			const cap=parseCAP(link[1], setname);
 			const depth=this.depth+1;
 			const addr=cap.stringify();
 			const label=addr.replace(/y.+/,'');
@@ -321,7 +321,7 @@ Vue.component('card', {
 			const sel=getCAPSelection();
 			if (sel) {
 				if (sel.z>1) {
-					const cap=parse(sel.x0 ,this.cap.db);
+					const cap=parseCAP(sel.x0 ,this.cap.db);
 					cap.y=sel.y;
 					cap.z=sel.z;
 					this.cap=cap;
@@ -419,7 +419,7 @@ Vue.component('card', {
 	},
 	render(h){
 		if (this.prevaddr!==this.addr) {
-			this.cap=parse(this.addr);
+			this.cap=parseCAP(this.addr);
 			this.prevaddr=this.addr;
 			this.fetch(this.cap);
 			return;

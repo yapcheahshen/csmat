@@ -20,6 +20,8 @@
 
 
 TODO
+同時顯示每個字的緬文字母
+
 backlink in quoted text (moveover show multiple choice at the end, 
   click to open card)
 quick jump by mn vol.para

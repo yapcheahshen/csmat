@@ -1,4 +1,4 @@
-const {parse}=require("dengine");
+const {parseCAP}=require("dengine");
 const getancestor=(cap)=>{
 	let ancestor=[];
 	ancestor=cap.db.gettocancestor(cap.bkx).filter(item=>item.t!="-");
@@ -46,7 +46,7 @@ const Siblings=Vue.extend({
 			const t1=item[1].substr(0,at);
 			const t2=item[1].substr(at+1)+isleaf;
 
-			const toccap=parse(item[2],this.cap.db);
+			const toccap=parseCAP(item[2],this.cap.db);
 			const title=toccap.stringify().replace(/_.+/,'')+"|"+toccap.bkseq+":"+toccap.bk0;
 			const attrs={tocseq:item[0],title};
 			return h("tr",{on:{click:this.selectitem},class:cls},
@@ -76,7 +76,7 @@ Vue.component('tocitempopup',{
 				this.curdepth=toc[tocseq].d;
 				l=toc[tocseq].l;
 			}
-			this.curcap=parse(l,this.cap.db);
+			this.curcap=parseCAP(l,this.cap.db);
 		},
 		quickselect(event){
 			const linkto=event.srcElement.attributes.linkto.value;

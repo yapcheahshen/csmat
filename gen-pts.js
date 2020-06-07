@@ -22,7 +22,7 @@ const rawtags=fs.readFileSync(set+"-rawtag.txt","utf8").split(/\r?\n/);
   m45s0517  pts has two ranges. p1 1~196 p2 1~246
 */
 const volmap={};
-const gen_bk2pts=(bk,x,y,pts)=>{
+const gen_bk_pts=(bk,x,y,pts)=>{
 	const arr=pts.split(".");
 	if (arr.length!==2) throw "invalid pts page "+pts+"at "+bk+"_x"+x+"y"+y;
 	const vol=arr[0],page=arr[1];
@@ -32,13 +32,13 @@ const gen_bk2pts=(bk,x,y,pts)=>{
 
 const pts2cap={};
 
-const {bk2pts}=require("./ptsvolpg");
+const {bk_pts}=require("./ptsvolpg");
 
 let pbk='',maxy=0;
 const combinebk={'s0510m1':true,'s0510m2':true,'s0515m':true}
 
 const addmapping=(bk,x,y,pts)=>{
-	const pv=bk2pts[set][bk];
+	const pv=bk_pts[set][bk];
 	let singlevol=true;
 	if (!pv) g=bk;
  	else {
@@ -73,7 +73,7 @@ const addmapping=(bk,x,y,pts)=>{
  	if (y>maxy)maxy=y;
  	
  	if (VPG.length&& page&& !VPG[page-1]) {
- 		console.log("page number gap ",(vol+"."+(page-1)),'at',bk,"line",x+1);
+ 		console.log("page number gap ",((vol?vol+1:vol)+"."+(page-1)),'at',bk,"line",x+1);
  	}
 
  	VPG[page]=x+(y?"y"+y:'');
@@ -87,7 +87,7 @@ rawtags.forEach(tag=>{
 		const cap=parse(capaddr,db);
 		
 		//  generate ptsvolpg.js
-		//gen_bk2pts(cap.bk,cap.bk0,cap.y,m[1])
+		//gen_bk_pts(cap.bk,cap.bk0,cap.y,m[1])
 		addmapping(cap.bk,cap.bk0,cap.y,m[1]);
 	}
 })
@@ -111,12 +111,12 @@ write();
 console.log('maxy',maxy)
 
 /* gap , need checking
-page number gap  3.210 at vin02m1 line 2149
-page number gap  1.263 at s0102m line 911  fixed in errata.js
-page number gap  2.329 at s0103m line 1002 fixed in errata.js
-page number gap  2.230 at s0103m line 1010 fixed in errata.js
-page number gap  3.107 at s0304m line 719 fixed in errata.js
-page number gap  4.140 at s0305m line 824 fixed in errata.js
+page number gap  4.210 at vin02m1 line 2149  //缺 208~210
+page number gap  2.263 at s0102m line 911  fixed in errata.js
+page number gap  3.329 at s0103m line 1002 fixed in errata.js
+page number gap  3.230 at s0103m line 1010 fixed in errata.js
+page number gap  4.107 at s0304m line 719 fixed in errata.js
+page number gap  5.140 at s0305m line 824 fixed in errata.js
 page number gap  0.20 at s0506m line 201
 page number gap  0.47 at s0506m line 533
 page number gap  0.75 at s0506m line 791
@@ -132,9 +132,9 @@ page number gap  0.32 at s0520m line 193
 page number gap  0.192 at s0520m line 751
 
 
-page number gap  0.160 at s0502a line 360
-page number gap  0.244 at s0512a line 1191
-page number gap  1.117 at s0513a2 line 539
-page number gap  5.329 at s0514a2 line 1062
-page number gap  5.156 at s0514a3 line 9
+page number gap  0.160 at s0502a line 360   空頁
+page number gap  0.244 at s0512a line 1191  242, 245, 243 ,244, 256 //245跳號
+page number gap  2.117 at s0513a2 line 539   缺，待查原書
+page number gap  6.329 at s0514a2 line 1062  6.130 跳到 6.330 
+page number gap  6.156 at s0514a3 line 9     6.157~6.330 在這裡
 */

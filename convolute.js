@@ -56,7 +56,7 @@ const convolute=(t1,t2)=>{
 	console.log(arr2.length)
 	return out;
 }
-
+//TODO , combine overlap range
 
 const sc=convolute(text1,text2);
 print=sc=>{
