@@ -15,8 +15,12 @@
 2020.5.16  fix many numbering error, check mul-att-tika mapping (vin and first 4 nikaya ok)
 2020.5.15   too many syllable in e301n  , mul, att, tik passed
 2020.5.13 start project
-	
 
+	
+DOUBLE CLICK單字自動拆分，HOVER 顯示解釋
+輸入PTS頁碼，顯示PTS整頁。並標出頁碼
+用VUEX改寫
+試著找引文的目標，模糊比對
 
 
 TODO

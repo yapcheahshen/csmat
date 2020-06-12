@@ -373,16 +373,14 @@ Vue.component('card', {
 							let rtspan=def;
 
 							if (extra) {
-								rtspan=[def||"…",
-								h('span',{class:"tip"},extra
-									//[h('span',{},extra)]
-								)
-								]
+								rtspan=[def||"…",h('span',{class:"tip"},extra)]
 							}
 							const rt=h('rt',{class:cls},rtspan);
 							children.push(h('ruby',{class:"known"},[rb,rt]));
 
-						} 
+						} else {
+							children.push(h('span',t));
+						}
 						t='';
 						prevclass=snippet[n][1];
 						n++;

@@ -64,14 +64,14 @@ const parseP=(attrs,docseq,linetext)=>{
 				let depth=isToc(m[2]);
 				if (depth>lastdepth+1) {
 					//patch missing level
-					tocoutput.push([bookseq+":"+docseq+","+(depth-1)+"|"+"-"]);
+					tocoutput.push([bookseq+"_x"+docseq+","+(depth-1)+"|"+"-"]);
 				}
 
 				lastdepth=depth;
 				const purelinetext=linetext.replace(/<[^<]+?>/,"");
 
 				if (!(depth==1 && nikaya==purelinetext)) {
-					tocoutput.push([bookseq+":"+docseq+","+depth+"|"+purelinetext])					
+					tocoutput.push([bookseq+"_x"+docseq+","+depth+"|"+purelinetext])		
 				}
 								
 				if (depth==1) nikaya=purelinetext;
@@ -113,29 +113,32 @@ const matlinks=[]; //for backlinks
 const parseLine=(line,docseq)=>{
 	let units=line.split(/(<.+?>)/);
 	let l='';
+	let qopen_p,qqopen_p;//physical position at quote open
 	let nsyl=0,z=0; //syllable pointer
 	let nnote=0,notestr='',qqopen=-1,qqclose=-1,qopen=-1,qclose=-1; // inline note counter
-	
 
 	const nearestquote=()=>{
 		let capaddr=bookseq+"_x"+(docseq-1)+(nsyl?"y"+nsyl:"");
 		let qdist=line.length,qqdist=line.length; //not more than this
-
+		let quotetext='';
 		if (qclose>qopen) qdist=nsyl-qclose;
 		if (qqclose>qqopen) qqdist=nsyl-qqclose;
 		
 		if (qqdist<line.length||qdist<line.length) {
 			if (qqdist<qdist) {
 				capaddr=bookseq+"_x"+(docseq-1)+"y"+qqopen+"z"+(qqclose-qqopen);
+				quotetext=line.substring(qqopen_p, u.length);
 			} else {
 				capaddr=bookseq+"_x"+(docseq-1)+"y"+qopen+"z"+(qclose-qopen);
+				quotetext=line.substring(qopen_p, u.length);
 			}
 		}
-		return capaddr;
+		return {capaddr,quotetext};
 	}
-
+	let u='';//processed unit raw text
 	for (var i=0;i<units.length;i++){
 		unit=units[i];
+
 		if (unit[0]=="<") {
 			//const mataddr=makemataddr(bookseq,docseq,nsyl);
 			let capaddr=bookseq+"_x"+(docseq-1)+(nsyl?"y"+nsyl:"");
@@ -151,8 +154,8 @@ const parseLine=(line,docseq)=>{
 					nc=nc.replace(pat,m=>{
 						let translated=recognise(m);
 						if (typeof translated=="string") {
-							let capaddr=nearestquote();
-							matlinks.push([ capaddr ,"#"+translated+";"]);
+							let {capaddr,quotetext}=nearestquote();
+							matlinks.push([ capaddr ,"#"+translated+";", quotetext]);
 							return "#"+translated+";";
 						} else {
 							return m;
@@ -161,14 +164,16 @@ const parseLine=(line,docseq)=>{
 				})
 				notestr+=nnote+"^"+nc;
 			}
+			u+=unit; //just for positioning
 		} else {
 			const syllables=syllabify(unit);
 			syllables.forEach(syl=>{
+				u+=syl; //just for positioning
 				if (isSyllable(syl)) nsyl++;
 				else {
-					if (syl.indexOf("“")>-1) qqopen=nsyl;
+					if (syl.indexOf("“")>-1) { qqopen=nsyl;qqopen_p=u.length}
 					if (syl.indexOf("”")>-1) qqclose=nsyl;
-					if (syl.indexOf("‘")>-1) qopen=nsyl;
+					if (syl.indexOf("‘")>-1) { qopen=nsyl;qopen_p=u.length}
 					if (syl.indexOf("’")>-1) qclose=nsyl;
 					if (syl.indexOf(".")>-1) { //reset
 						if (qclose>qopen) qclose=qopen=-1;
@@ -182,6 +187,8 @@ const parseLine=(line,docseq)=>{
 			});
 			l+=unit;
 		}
+
+
 	};
 	if (notestr) {
 		l+=LANGSEP+notestr;
@@ -285,6 +292,7 @@ const write=()=>{
 	fs.writeFileSync(set+"-repeatnum.txt",JSON.stringify(repeatnum,'',' '),'utf8');
 	const groups=groupmatlinksindb();
 	fs.writeFileSync(set+"-matlinks.txt",JSON.stringify(groups),'utf8');
+	fs.writeFileSync(set+"-quotes.txt",matlinks.join("\n"),'utf8');
 }
 
 

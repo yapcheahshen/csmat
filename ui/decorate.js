@@ -17,7 +17,6 @@ const trimdef=d=>{
 }
 const nissayaText=(str)=>{
 	const tokens=str.split(PALI);
-
 	const decorations=[];
 	let offset=0;
 	for (var i=0;i<tokens.length;i++) {
