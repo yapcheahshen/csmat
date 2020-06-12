@@ -151,12 +151,12 @@ new Vue({
 		  },200);
 		});
 		*/
-		Dengine.openSearchable(dbname[0],function(db){
-			this.log(dbname[0]+" opened, built on "+db.getDate());
-			Dengine.openSearchable(dbname[1],db2=>{
-				this.log(dbname[1]+" opened, built on "+db2.getDate());
-				Dengine.openSearchable(dbname[2],db3=>{
-					this.log(dbname[2]+" opened, built on "+db3.getDate());
+		Dengine.open(dbname[0],function(db){
+			this.log(dbname[0]+" opened, built on "+db.builddate);
+			Dengine.open(dbname[1],db2=>{
+				this.log(dbname[1]+" opened, built on "+db2.builddate);
+				Dengine.open(dbname[2],db3=>{
+					this.log(dbname[2]+" opened, built on "+db3.builddate);
 					this.ready=true;
 				});
 			})
@@ -170,7 +170,7 @@ new Vue({
 				}
 			}
 			if (cardsaddr.length==0){
-				cardsaddr.push("vin01m_p1");
+				cardsaddr.push("vin01m_1");
 			}
 			this.addrs=cardsaddr;
 

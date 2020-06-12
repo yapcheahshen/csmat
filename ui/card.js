@@ -33,7 +33,7 @@ Vue.component('notebutton',{
 			notetext.replace(hyperlink_regex_g,(m,m1,m2,idx)=>{
 				const t=notetext.substring(prev,idx)
 				if (t) children.push( h('span',{},t));
-				const addr=m1+"_p"+m2;
+				const addr=m1+"_"+m2;
 				console.log(addr)
 				const label=matlabel(addr);
 				const setname=filename2set(addr);
@@ -124,14 +124,14 @@ const CardNav=Vue.extend({
 				//allow x100 for line number
 				const v=event.srcElement.value.trim(); 
 				if (v.indexOf("_")>-1 || v.indexOf(":")>-1) {
-					const cap=parse(v,this.cap.db);
+					const cap=parseCAP(v,this.cap.db);
 					this.command('setcap',cap);
 					return;
 				}
 				const para=parseInt(v);
 				let n=this.cap.bk+"_";
-				n+=(para.toString()==v)?("p"+para):v;
-				const cap=parse(n,this.cap.db);
+				n+=(para.toString()==v)?(para):v;
+				const cap=parseCAP(n,this.cap.db);
 				this.command('setcap',cap);
 			}
 		},
@@ -142,7 +142,7 @@ const CardNav=Vue.extend({
 			this.command('setcap',this.cap.nextp());
 		},
 		selectsid(sid){
-			const cap=parse(sid,this.cap.db);
+			const cap=parseCAP(sid,this.cap.db);
 			this.command('setcap',cap);
 		},
 
@@ -156,10 +156,10 @@ const CardNav=Vue.extend({
 		}
 	},
 	data(){
-		return {depth:0,selectingtocitem:false,thispara:this.cap.p}
+		return {depth:0,selectingtocitem:false,thispara:this.cap._}
 	},
 	updated(){
-		this.$refs.paranum.value=this.cap.p;
+		this.$refs.paranum.value=this.cap._;
 	},
 	render(h){
 		const ancestor=getancestor(this.cap);
@@ -167,7 +167,7 @@ const CardNav=Vue.extend({
 		const arr=ancestor.filter(item=>item.d>=this.depth);
 		if (this.depth&&arr.length){
 			selecting=arr[0].l;
-			cap=parse(selecting,this.cap.db );
+			cap=parseCAP(selecting,this.cap.db );
 		}
 		const ancestorspan=ancestor.map((item,idx)=>{
 			let t=item.t;
@@ -204,7 +204,7 @@ Vue.component('toptextmenu',{
 	},
 	render(h){
 
-		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.getname());
+		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.name);
 		const children=sets.map(setname=>h("paralleltextbutton",
 			{props:{setname,cap:this.cap,
 				command:this.command,cardcommand:this.cardcommand,
@@ -337,7 +337,6 @@ Vue.component('card', {
 				start=cap.x0;
 			}
 			count=cap.nextp(cap.x?2:1).x0 - start;
-	
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
 				if(typeof this.cardid!=="undefined") {
@@ -432,12 +431,15 @@ Vue.component('card', {
 		const notes={};
 
 		this.rawtext.map((item,idx)=>{
-			if (item[2]) { //has note
-				const ns=item[2].split(/(\d+)\^/).filter(item=>item);
-				for (var i=0;i<ns.length>>1;i++) {
-					notes[idx+"_"+ns[i*2]]=ns[i*2+1];
-				}
-			} 
+			const at2=item[1].indexOf("|||");
+			if (at2>0) {
+				notestext=item[1].substr(at2+3);
+			} else return;
+			const ns=notestext.split(/(\d+)\^/).filter(item=>item);
+			for (var i=0;i<ns.length>>1;i++) {
+				notes[idx+"_"+ns[i*2]]=ns[i*2+1];
+			}
+		
 		})
 
 		const children=[];
@@ -445,11 +447,14 @@ Vue.component('card', {
 			this.nissaya(h,children);
 		} else {
 			for (var i=0;i<this.rawtext.length;i++){
-				const x0=this.rawtext[i][0]
+				const x0=this.rawtext[i][0];
+				let t=this.rawtext[i][1];
+				const at2=t.indexOf("|||");
+				if (at2>0) t=t.substr(0,at2);
 				const props={depth:depth+1,cardcommand:this.cardcommand,command:this.command};
 				const selectionclick=this.selectionclick;
 				const decorated=decorateText({cap:this.cap,nti:this.nti,
-					i,x:x0,t:this.rawtext[i][1],props,notes,h,onclick:this.onSnippetClick
+					i,x:x0,t,props,notes,h,onclick:this.onSnippetClick
 				});
 				//const text=this.rawtext[j][1];
 				//const textwithotebtn=renderInlineNote(h,text,notes,i,depth+1,props);

@@ -96,7 +96,7 @@ const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 const {syllabify,isSyllable,isPaliword}=require("dengine")
 const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 	const decorations=[];
-	let bold=0;
+	let bold=0,paranum;
 	let marker=-1;
 	if (cap.z<1 && cap.y>0) marker=cap.y;
 	let y=0,off=0,start=-1,z=cap.z;
@@ -104,8 +104,12 @@ const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 	let mheader=t.match(/([a-z\d]+)\|/);
 	if (mheader) {
 		headerstyle=mheader[1];
+		paranum=parseInt(headerstyle);
+		
 		t=t.substr(mheader[0].length);
-		decorations.push([0,t.length,headerstyle]);
+		if (isNaN(paranum)){
+			decorations.push([0,t.length,headerstyle]);
+		}
 	}
 	const syl=syllabify(t);
 
@@ -194,6 +198,7 @@ const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 		sycnt--;
 	}
 	addspan();
+	if (paranum) children.unshift(h("span",paranum+"."))
 	children.push(h('br'));	
 	return children;
 }

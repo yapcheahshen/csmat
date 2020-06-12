@@ -1,3 +1,5 @@
+//generate CSCD to PTS mapping
+
 /*1002a03d,pb t="p3.14"
 
     pts page number to x.y
@@ -108,7 +110,7 @@ const write=()=>{
 }
 //console.log(volmap)
 write();
-console.log('maxy',maxy)
+
 
 /* gap , need checking
 page number gap  4.210 at vin02m1 line 2149  //缺 208~210

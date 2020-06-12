@@ -14,7 +14,7 @@ const Siblings=Vue.extend({
 		},
 
 		getsiblings(){
-			const toc=this.cap.db.gettoc();
+			const toc=this.cap.db.toc;
 			let cur=this.firstsibling;
 			let n=toc[cur];
 			const out=[];
@@ -63,7 +63,7 @@ Vue.component('tocitempopup',{
 			this.onselecttocitem('');
 		},
 		onselect(tocseq){
-			const toc=this.cap.db.gettoc();
+			const toc=this.cap.db.toc;
 			const tocitem=toc[tocseq];
 			if (toc[tocseq+1].d<=tocitem.d){
 				this.onselecttocitem(tocitem.l);
@@ -92,7 +92,7 @@ Vue.component('tocitempopup',{
 	},
 	render(h){
 		const ancestor=getancestor(this.curcap);
-		const toc=this.curcap.db.gettoc();
+		const toc=this.curcap.db.toc;
 		
 		const curitem=ancestor.filter(item=>item.d>=this.curdepth)[0];
 		const firstsibling=curitem.first;

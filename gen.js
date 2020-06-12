@@ -263,7 +263,7 @@ const groupmatlinksindb=()=>{
 
 		const m=hyperlink.match(hyperlink_regex);
 		if (!groups[set][m[1]]) groups[set][m[1]]=[];
-		groups[set][m[1]].push(srcmataddr+"|p"+m[2]);
+		groups[set][m[1]].push(srcmataddr+"|"+m[2]);
 	}
 	return groups;
 }
