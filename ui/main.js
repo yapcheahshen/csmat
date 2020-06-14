@@ -1,15 +1,17 @@
+'use strict';
 require("./popup");
 require("./cards");
 //require("./bigpopup");
 //require("./xref");
 require("./bookmark");
 require("./logger");
+const {open}=require("pengine");
 //const ptscite=require("./ptscite");
 const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
                //   ,["","版本：2020.5.11"]
                 //  ,["","https://github.com/ksanaforge/csmat/"]]
 
-const dbname=["mul","att","tik"];
+const dbname=["cs0mul","cs0att","cs0tik"];
 const URLParams=()=>{
 	let hash=document.location.hash.substr(1);
 	return hash;
@@ -30,7 +32,7 @@ const setHash=(newobj)=>{
 	}
 	document.location.hash="#"+p.toString();
 }
-ADDR_SEP="*" //will not urlencoded 
+const ADDR_SEP="*" //will not urlencoded 
 
 //const {conjugate,conjugateWord,analyzeword,G_outwords,G_shortdefpost,outputAnalysis}=require("./fromdpr")
 const {vpl2paranum,id_regex}=require("./fetch");
@@ -151,11 +153,11 @@ new Vue({
 		  },200);
 		});
 		*/
-		Dengine.open(dbname[0],function(db){
+		open(dbname[0],function(db){
 			this.log(dbname[0]+" opened, built on "+db.builddate);
-			Dengine.open(dbname[1],db2=>{
+			open(dbname[1],db2=>{
 				this.log(dbname[1]+" opened, built on "+db2.builddate);
-				Dengine.open(dbname[2],db3=>{
+				open(dbname[2],db3=>{
 					this.log(dbname[2]+" opened, built on "+db3.builddate);
 					this.ready=true;
 				});

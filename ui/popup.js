@@ -1,3 +1,4 @@
+'use strict';
 Vue.component("fullscreenpopup",{
 	props:['content','close'],
 	methods:{

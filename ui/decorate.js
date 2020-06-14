@@ -1,6 +1,7 @@
+'use strict';
 const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
-const {parse}=require("dengine");
 const {getdef}=require("./lexicon");
+const {syllabify,isSyllable,isPaliword}=require("pengine");
 const {suggestedBreak}=require("paliword");
 const {filename2set,hyperlink_regex,hyperlink_regex_g}=require("./linkparser");
 const {matlabel}=require("./fetch");
@@ -92,7 +93,7 @@ const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 	}
 	return btns;
 }
-const {syllabify,isSyllable,isPaliword}=require("dengine")
+
 const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 	const decorations=[];
 	let bold=0,paranum;
@@ -102,7 +103,7 @@ const decorateText=({cap,i,x,t,nti,props,notes,h,onclick})=>{
 
 	let mheader=t.match(/([a-z\d]+)\|/);
 	if (mheader) {
-		headerstyle=mheader[1];
+		const headerstyle=mheader[1];
 		paranum=parseInt(headerstyle);
 		
 		t=t.substr(mheader[0].length);

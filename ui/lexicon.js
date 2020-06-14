@@ -1,6 +1,6 @@
+'use strict';
 const lexjs=palilexicon;
-
-const {bsearch}=require("dengine");
+const {bsearch}=require("pengine");
 
 const getdef=(w)=>{
 	if (typeof w=="number"){

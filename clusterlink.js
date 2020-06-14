@@ -1,5 +1,5 @@
 const fs=require("fs");
-const {openSync}=require("dengine");
+const {openSync}=require("pengine");
 const links=fs.readFileSync('./link-parsed.txt',"utf8").split(/\r?\n/);
 const muldb=openSync("mul");
 const {parseId}=require("./fetch");

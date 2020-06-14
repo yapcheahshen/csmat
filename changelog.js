@@ -1,5 +1,6 @@
 ﻿/* remind me to backup*/
 `
+2020.6.14 move data and builder to cs0
 2020.6.4  Newcard and movetop
 2020.6.3  improve paranum navigation
 2020.6.1  new CAP addressing model

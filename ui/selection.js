@@ -1,4 +1,4 @@
-const {syllabify,isSyllable}=require("dengine");
+const {syllabify,isSyllable}=require("pengine");
 
 const getattr=(node,attr)=>{
 	while (node) {

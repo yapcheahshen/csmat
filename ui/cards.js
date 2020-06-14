@@ -1,7 +1,8 @@
+'use strict';
 require("./card");
 require("./tocpopup");
 require("./dictionary");
-const {stringify,isPaliword}=require("dengine")
+const {isPaliword}=require("pengine")
 
 Vue.component("cards",{
 	props:{	'addrs':{type:Array,required:true},//initial from hash

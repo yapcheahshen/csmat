@@ -1,3 +1,4 @@
+'use strict';
 const MAXDOC=1<<16; //<p> is a doc
 const MAXSYL =1<<12;
 /*

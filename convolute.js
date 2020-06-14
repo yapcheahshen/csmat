@@ -1,4 +1,4 @@
-const {syllabify,isSyllable}=require("dengine");
+const {syllabify,isSyllable}=require("pengine");
 const text1=` “Sādhu, bhikkhave!Sannipatitānaṃ vo, bhikkhave, dkayaṃ karaṇīyaṃ dhammī  vā kathā ariyo vā tuṇhībhāvo , Etaṃ kho, bhikkhave, tumhākaṃ patirūpaṃ kulaputtānaṃ saddhā agārasmā anagāriyaṃ pabbajitānaṃ yaṃ tumhe dhammiyā kathāya sannisīdeyyātha. Sannipatitānaṃ vo, bhikkhave, dkayaṃ karaṇīyaṃ dhammī  vā kathā ariyo vā tuṇhībhāvo”.Bhagavantameva kho no kho no kho no kho no kho no kho no`
 
 const text2=`Sannipatitānaṃ vo, bhikkhave, dkayaṃ karaṇīyaṃ dhammī  vā kathā ariyo vā tuṇhībhāvo`

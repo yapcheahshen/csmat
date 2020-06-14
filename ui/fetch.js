@@ -1,10 +1,11 @@
-const {SEGSEP,open,readlines,stringify}=require("dengine");
+'use strict';
+const {SEGSEP,open,readlines,stringify}=require("pengine");
 const {filename2set}=require("./linkparser");
 
 const getparallel=(cap,set)=>{
 	let str=cap.stringify();
 	str=str.replace(/y.+/g,'');
-	parallel={"att":"a","tik":"t","mul":"m"};
+	const parallel={"cs0att":"a","cs0tik":"t","cs0mul":"m"};
 
 	return str.replace(/[mat](\d?)_/,parallel[set]+"$1_");
 }

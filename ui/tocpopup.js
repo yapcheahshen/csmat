@@ -1,4 +1,5 @@
-const {parseCAP}=require("dengine");
+'use strict';
+const {parseCAP}=require("pengine");
 const getancestor=(cap)=>{
 	let ancestor=[];
 	ancestor=cap.db.gettocancestor(cap.bkx).filter(item=>item.t!="-");

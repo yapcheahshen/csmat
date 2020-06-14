@@ -1,4 +1,5 @@
 //mul bookname
+'use strict';
 const parseBookPara=link=>{
 	const m=link.match(/(\d+)\.(\d+)/);
 	if (!m)return null;

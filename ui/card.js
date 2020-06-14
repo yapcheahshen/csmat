@@ -1,8 +1,9 @@
+'use strict';
 /*
 	nestable text
 
 */
-const {getdbbookname,parseCAP,stringify,open,readlines,isPaliword}=require("dengine");
+const {getdbbookname,parseCAP,open,readlines,isPaliword}=require("pengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
@@ -427,7 +428,7 @@ Vue.component('card', {
 
 		const depth=this.depth||0;
 		const notes={};
-
+		let notestext='';
 		this.rawtext.map((item,idx)=>{
 			const at2=item[1].indexOf("|||");
 			if (at2>0) {

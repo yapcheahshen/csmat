@@ -1,3 +1,4 @@
+'use strict';
 Vue.component('bookmarklist',{
 	props:{
 		'openbookmark':{type:Function,required:true}

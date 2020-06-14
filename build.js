@@ -1,6 +1,6 @@
 'use stricts';
 const fs=require("fs");
-const {createbuilder,writeExtra}=require("dengine");
+const {createbuilder,writeExtra}=require("pengine");
 const set=process.argv[2] || "mul"
 const maxfile=parseInt(process.argv[3],0);
 
