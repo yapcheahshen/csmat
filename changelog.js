@@ -1,5 +1,12 @@
 ﻿/* remind me to backup*/
 `
+try to locate quote source
+DOUBLE CLICK單字自動拆分，HOVER 顯示解釋
+輸入PTS頁碼，顯示PTS整頁。並標出頁碼
+用VUEX改寫
+試著找引文的目標，模糊比對
+縮短backlink label
+
 2020.6.14 move data and builder to cs0
 2020.6.4  Newcard and movetop
 2020.6.3  improve paranum navigation
@@ -18,10 +25,7 @@
 2020.5.13 start project
 
 	
-DOUBLE CLICK單字自動拆分，HOVER 顯示解釋
-輸入PTS頁碼，顯示PTS整頁。並標出頁碼
-用VUEX改寫
-試著找引文的目標，模糊比對
+
 
 
 TODO

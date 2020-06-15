@@ -278,7 +278,7 @@ Vue.component('backlinkmenu',{
 			const depth=this.depth+1;
 			const addr=cap.stringify();
 			const label=addr.replace(/y.+/,'');
-			const displayline=cap.y?-1:null;
+			const displayline=(cap.y)?-1:null;
 			return h("cardbutton",
 				{props:{command:this.command,cardcommand:this.cardcommand,
 					addr,cap:this.cap,label,depth,displayline}})
@@ -330,11 +330,10 @@ Vue.component('card', {
 		fetch(cap,updating){
 			let obj={},dbname;
 			let start=cap.x0-cap.x;
+			let count=cap._w;
 			this.rawtext=null;
-			let count=cap.nextp(cap.x?2:1).x0 - start;;
-			if (updating)start=cap.x0;
-	
-			if (this.disline) {
+				
+			if (this.disline&&this.depth>1) {
 				count=Math.abs(this.disline);
 				start=cap.x0;
 				if (this.disline<0) this.disline=0;
