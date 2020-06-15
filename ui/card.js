@@ -3,7 +3,7 @@
 	nestable text
 
 */
-const {getdbbookname,parseCAP,open,readlines,isPaliword}=require("pengine");
+const {getdbbookname,parseCAP,open,readlines,isPaliword,NOTESEP}=require("pengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText,nissayaText}=require("./decorate");
@@ -56,7 +56,7 @@ Vue.component('notebutton',{
 })
 
 Vue.component('cardbutton',{
-	props:['cap','addr','depth','label','command','cardcommand'],
+	props:['cap','addr','depth','label','command','cardcommand','displayline'],
 	methods:{
 		execcommand(cmd,arg){
 			if (cmd=="close") {
@@ -77,7 +77,7 @@ Vue.component('cardbutton',{
 			return h("button",{class:"btnnav",on:{click:this.showme}},this.label);
 		} else {
 			return h("card",{props:{depth:this.depth+1,
-				command:this.execcommand,from:this.cap,
+				command:this.execcommand,from:this.cap,displayline:this.displayline,
 				cardcommand:this.cardcommand,addr :this.addr}});
 		}
 	}
@@ -278,9 +278,10 @@ Vue.component('backlinkmenu',{
 			const depth=this.depth+1;
 			const addr=cap.stringify();
 			const label=addr.replace(/y.+/,'');
+			const displayline=cap.y?-1:null;
 			return h("cardbutton",
 				{props:{command:this.command,cardcommand:this.cardcommand,
-					addr,cap:this.cap,label,depth}})
+					addr,cap:this.cap,label,depth,displayline}})
 		}):[];
 		return h('div',{},children)
 	}
@@ -298,9 +299,9 @@ const findselx=()=>{
 	return -1;
 };
 Vue.component('card', { 
-	props:['cardid','addr','depth','from','command','cardcommand'],
+	props:['cardid','addr','depth','from','displayline','command','cardcommand'],
 	data(){
-		return {rawtext:null,prevaddr:'',nti:'',
+		return {rawtext:null,prevaddr:'',nti:'',disline:this.displayline,
 		cap:null,backlinks:[],autotranslate:false}
 	},
 	methods:{
@@ -328,12 +329,16 @@ Vue.component('card', {
 		},
 		fetch(cap,updating){
 			let obj={},dbname;
-			let start=cap.x0-cap.x,count=1;
+			let start=cap.x0-cap.x;
 			this.rawtext=null;
-			if (updating){
+			let count=cap.nextp(cap.x?2:1).x0 - start;;
+			if (updating)start=cap.x0;
+	
+			if (this.disline) {
+				count=Math.abs(this.disline);
 				start=cap.x0;
+				if (this.disline<0) this.disline=0;
 			}
-			count=cap.nextp(cap.x?2:1).x0 - start;
 			readlines(this.cap.db,start,count,res=>{
 				this.rawtext=res;
 				if(typeof this.cardid!=="undefined") {
@@ -426,7 +431,7 @@ Vue.component('card', {
 		const notes={};
 		let notestext='';
 		this.rawtext.map((item,idx)=>{
-			const at2=item[1].indexOf("|||");
+			const at2=item[1].indexOf(NOTESEP);
 			if (at2>0) {
 				notestext=item[1].substr(at2+3);
 			} else return;

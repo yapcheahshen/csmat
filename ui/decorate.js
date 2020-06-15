@@ -3,7 +3,6 @@ const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
 const {getdef}=require("./lexicon");
 const {syllabify,isSyllable,isPaliword}=require("pengine");
 const {suggestedBreak}=require("paliword");
-const {filename2set,}=require("./linkparser");
 const {matlabel}=require("./fetch");
 const trimdef=d=>{
 	let o='';
