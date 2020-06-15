@@ -1,6 +1,5 @@
 'use strict';
 const {SEGSEP,open,readlines,stringify}=require("pengine");
-const {filename2set}=require("./linkparser");
 
 const getparallel=(cap,set)=>{
 	let str=cap.stringify();

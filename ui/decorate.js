@@ -3,7 +3,7 @@ const PALI=/([a-zāīūñṅṇŋṁṃḍṭḷ]+)/ig
 const {getdef}=require("./lexicon");
 const {syllabify,isSyllable,isPaliword}=require("pengine");
 const {suggestedBreak}=require("paliword");
-const {filename2set,hyperlink_regex,hyperlink_regex_g}=require("./linkparser");
+const {filename2set,}=require("./linkparser");
 const {matlabel}=require("./fetch");
 const trimdef=d=>{
 	let o='';
@@ -82,8 +82,7 @@ const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
 	if (note) {
 		note.trim().replace(/#(.+?);/,(m,addr)=>{
 			const label=matlabel(addr);
-			const setname=filename2set(addr);
-			const props=Object.assign({addr,setname,label},tprops);
+			const props=Object.assign({addr,label},tprops);
 			btns.push(h('cardbutton',{props}));
 		})
 		if (!btns.length){

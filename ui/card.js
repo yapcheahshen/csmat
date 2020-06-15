@@ -5,7 +5,6 @@
 */
 const {getdbbookname,parseCAP,open,readlines,isPaliword}=require("pengine");
 const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
-const {filename2set,hyperlink_regex_g,hyperlink_regex}=require("./linkparser");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText,nissayaText}=require("./decorate");
 const {parsedef}=require("./lexicon");
@@ -31,17 +30,16 @@ Vue.component('notebutton',{
 			const children=[];
 			let prev=0;
 			const notetext=this.note;
+			const hyperlink_regex_g=/#(\w+)_(\w+);/g;
 			notetext.replace(hyperlink_regex_g,(m,m1,m2,idx)=>{
 				const t=notetext.substring(prev,idx)
 				if (t) children.push( h('span',{},t));
 				const addr=m1+"_"+m2;
-				console.log(addr)
 				const label=matlabel(addr);
-				const setname=filename2set(addr);
 				children.push( h('cardbutton',
 					{props:{cap:this.cap,addr,depth:this.depth,
 						cardcommand:this.cardcommand,
-						command:this.command,setname,label}}));
+						command:this.command,label}}));
 				prev=idx+m.length;
 			});
 			let t=notetext.substr(prev)
@@ -76,8 +74,7 @@ Vue.component('cardbutton',{
 	},
 	render(h){
 		if (!this.show){
-			return h("button",{class:"btnnav",on:{click:this.showme}},
-				this.label?this.label:this.setname);
+			return h("button",{class:"btnnav",on:{click:this.showme}},this.label);
 		} else {
 			return h("card",{props:{depth:this.depth+1,
 				command:this.execcommand,from:this.cap,
@@ -103,7 +100,7 @@ Vue.component('paralleltextbutton',{
 	render(h){
 		if (!this.show){
 			return h("button",{class:"btnnav",on:{click:this.showme}},
-				this.label?this.label:this.setname);
+				this.label?this.label:this.setname.substr(3));
 		} else {
 			const addr=getparallel(this.cap,this.setname);
 			return h("card",{props:{depth:this.depth+1,
@@ -205,9 +202,9 @@ Vue.component('toptextmenu',{
 	},
 	render(h){
 
-		const sets=["mul","att","tik"].filter(s=>s!==this.cap.db.name);
+		const sets=["cs0mul","cs0att","cs0tik"].filter(s=>s!==this.cap.db.name);
 		const children=sets.map(setname=>h("paralleltextbutton",
-			{props:{setname,cap:this.cap,
+			{props:{cap:this.cap,setname,
 				command:this.command,cardcommand:this.cardcommand,
 				depth:this.depth+1}}))
 		children.push(h("autotran",{props:{command:this.command}}));
@@ -264,15 +261,14 @@ Vue.component('textmenu',{
 });
 Vue.component('backlinkmenu',{
 	props:['cap','links','depth','command','cardcommand'],
-	//props:['setname','closeme','depth','rawid','label'],
 	methods:{
-		decodelink(link,setname){
+		decodelink(link){
 			const tdb=link[0];
 			const vpl=unpackmataddr(link[1]);
 			const fn=getdbbookname(tdb,vpl[0]);
 			let addr=fn+"_x"+(vpl[1]-1)
 			if (vpl[2]) addr+="y"+vpl[2];
-			return parseCAP(addr,setname).stringify();
+			return parseCAP(addr).stringify();
 		}
 	},
 	render(h){
@@ -284,7 +280,7 @@ Vue.component('backlinkmenu',{
 			const label=addr.replace(/y.+/,'');
 			return h("cardbutton",
 				{props:{command:this.command,cardcommand:this.cardcommand,
-					addr,cap:this.cap,label,setname,depth}})
+					addr,cap:this.cap,label,depth}})
 		}):[];
 		return h('div',{},children)
 	}
