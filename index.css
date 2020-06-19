@@ -11,6 +11,8 @@
 .quote {border-bottom:dashed 1px green;}
 .marker{}
 .marker:before{content:"●";color: red}
+.backlink {font-family:Tahoma;font-size:80%;
+	border:dotted 2px blue;cursor:pointer;}
 
 .fullscreenpopup .ancestor{background:silver;cursor:pointer;}
 .fullscreenpopup .ancestor_active {background: yellow;cursor:pointer;}
@@ -60,8 +62,8 @@ rt {font-size:90%;font-family:"Microsoft YaHei"}
 .address {font-size:85%;font-family: consolas}
 .breadcrumbtoc {font-size:100%;border:none;background: #DFDFDF}
 .pagenum {width:5em;}
-.btnnav {font-size:85%;}
-.btnbacklink {font-size:70%;}
+.btnnav {font-size:75%;}
+.backlinkbtn {font-size:75%;background:gray;color:yellow;}
 
 .btnclose{width:1em;height: 1em;}
 .btnclose:hover {cursor:pointer;

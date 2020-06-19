@@ -1,308 +1,19 @@
 'use strict';
-/*
-	nestable text
-
-*/
+require("./textmenu")
+require("./intextbutton")
 const {getdbbookname,parseCAP,open,readlines,isPaliword,NOTESEP}=require("pengine");
-const {parseId,vpl2paranum,getparallel,matlabel}=require("./fetch");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText,nissayaText}=require("./decorate");
 const {parsedef}=require("./lexicon");
-const {getancestor}=require("./tocpopup");
 const {getCAPSelection}=require("./selection");
-const dbname=["mul","att","tik"];
+const {getintextbacklinks,parseBacklink}=require("./backlinks");
+const BACKLINKSEP="|";
 
-Vue.component('notebutton',{
-	props:['note','id','depth','command','cardcommand'],
-	methods:{
-		toggle(){
-			this.show=!this.show;
-		},
-		openlink(){
-			
-		}
-	},
-	data(){
-		return {show:false,showtimer:0} 
-	},
-	render(h) {
-		if (this.show) {
-			const children=[];
-			let prev=0;
-			const notetext=this.note;
-			const hyperlink_regex_g=/#(\w+)_(\w+);/g;
-			notetext.replace(hyperlink_regex_g,(m,m1,m2,idx)=>{
-				const t=notetext.substring(prev,idx)
-				if (t) children.push( h('span',{},t));
-				const addr=m1+"_"+m2;
-				const label=matlabel(addr);
-				children.push( h('cardbutton',
-					{props:{cap:this.cap,addr,depth:this.depth,
-						cardcommand:this.cardcommand,
-						command:this.command,label}}));
-				prev=idx+m.length;
-			});
-			let t=notetext.substr(prev)
-			if (t) children.push( h('span',{},t));
-			children.unshift(h('button',{on:{click:this.toggle}},'x'));
-
-			return h('span',{class:'inlinenote'},children);
-
-		} else{
-			return h('span',{class:'notebutton',
-				on:{click:this.toggle}},"※");
-		}
-	}
-})
-
-Vue.component('cardbutton',{
-	props:['cap','addr','depth','label','command','cardcommand','displayline'],
-	methods:{
-		execcommand(cmd,arg){
-			if (cmd=="close") {
-				this.show=false;
-				return;
-			}
-			this.command&&this.command(cmd,arg);
-		},
-		showme(){
-			this.show=true;
-		}
-	},
-	data(){
-		return {show:false} 
-	},
-	render(h){
-		if (!this.show){
-			return h("button",{class:"btnnav",on:{click:this.showme}},this.label);
-		} else {
-			return h("card",{props:{depth:this.depth+1,
-				command:this.execcommand,from:this.cap,displayline:this.displayline,
-				cardcommand:this.cardcommand,addr :this.addr}});
-		}
-	}
-})
-
-Vue.component('paralleltextbutton',{
-	props:['cap','setname','depth','label','command','cardcommand'],
-	methods:{
-		execcommand(cmd,arg){
-			if (cmd=="close") {
-				this.show=false;
-				return;
-			}
-			this.command&&this.command(cmd,arg);
-		},
-		showme(){
-			this.show=true;
-		}
-	},
-	render(h){
-		if (!this.show){
-			return h("button",{class:"btnnav",on:{click:this.showme}},
-				this.label?this.label:this.setname.substr(3));
-		} else {
-			const addr=getparallel(this.cap,this.setname);
-			return h("card",{props:{depth:this.depth+1,
-				command:this.execcommand,from:this.cap,
-				cardcommand:this.cardcommand,addr }});
-		}
-	},
-	data(){
-		return {show:false} 
-	},
-})
-
-const CardNav=Vue.extend({
-	props:['cap','command'],
-	methods:{
-		inputparanum(event){
-			//TODO mn1 short cut
-			if (event.key=="Enter"){
-				//allow x100 for line number
-				const v=event.srcElement.value.trim(); 
-				if (v.indexOf("_")>-1 || v.indexOf(":")>-1) {
-					const cap=parseCAP(v,this.cap.db);
-					this.command('setcap',cap);
-					return;
-				}
-				const para=parseInt(v);
-				let n=this.cap.bk+"_";
-				n+=(para.toString()==v)?(para):v;
-				const cap=parseCAP(n,this.cap.db);
-				this.command('setcap',cap);
-			}
-		},
-		prevpara(){
-			this.command('setcap',this.cap.prevp());
-		},
-		nextpara(){
-			this.command('setcap',this.cap.nextp());
-		},
-		selectsid(sid){
-			const cap=parseCAP(sid,this.cap.db);
-			this.command('setcap',cap);
-		},
-
-		onselecttocitem(linkto){
-			if (linkto) this.selectsid(linkto)
-			this.selectingtocitem=false;
-		},
-		selecttocitem(event){
-			this.depth=parseInt(event.srcElement.attributes.depth.value);
-			this.selectingtocitem=true;
-		}
-	},
-	data(){
-		return {depth:0,selectingtocitem:false,thispara:this.cap._}
-	},
-	updated(){
-		this.$refs.paranum.value=this.cap._;
-	},
-	render(h){
-		const ancestor=getancestor(this.cap);
-		let selecting=0,cap;
-		const arr=ancestor.filter(item=>item.d>=this.depth);
-		if (this.depth&&arr.length){
-			selecting=arr[0].l;
-			cap=parseCAP(selecting,this.cap.db );
-		}
-		const ancestorspan=ancestor.map((item,idx)=>{
-			let t=item.t;
-			const at=t.indexOf("|");
-			if (at>-1) t=t.substr(at+1);
-			return h("span",{class:"tocitem",
-				on:{click:this.selecttocitem},
-				attrs:{depth:item.d}},"/"+t);
-		})
-		return h("span",{class:"cardnav"},[
-			h("button",{class:"btnnav",on:{click:this.prevpara}},"‹"),
-			h("input",{class:"address",ref:"paranum",
-				on:{keyup:this.inputparanum},
-				attrs:{size:3,value:this.thispara,title:this.cap.bkx}}),
-			h("button",{class:"btnnav",on:{click:this.nextpara}},"›"),
-			h("span",{},ancestorspan),
-			this.selectingtocitem?h("tocitempopup",
-				{props:{cap,depth:this.depth,
-					onselecttocitem:this.onselecttocitem}}):null
-		]
-		);
-	}
-})
-
-Vue.component('toptextmenu',{
-	props:['depth','cap','command','cardcommand'],
-	methods:{
-		close(){
-			this.command("closecard");
-		},
-		movetop(){
-			this.command("movetop");
-		}
-	},
-	render(h){
-
-		const sets=["cs0mul","cs0att","cs0tik"].filter(s=>s!==this.cap.db.name);
-		const children=sets.map(setname=>h("paralleltextbutton",
-			{props:{cap:this.cap,setname,
-				command:this.command,cardcommand:this.cardcommand,
-				depth:this.depth+1}}))
-		children.push(h("autotran",{props:{command:this.command}}));
-		children.push(h("span",{on:{click:this.movetop},class:"btnbringtop",
-			props:{command:this.command}}));
-
-		children.unshift(h("cardnav",{props:{command:this.command,cap:this.cap}}));
-		
-		children.unshift(h("span",{on:{click:this.close},class:"btnclose"}));
-		return h("div",{class:"toptextmenu"},children);
-	},
-	components:{
-		'cardnav':CardNav
-	}
-})
-Vue.component('autotran',{
-	props:['command'],
-	methods:{
-		toggletranslate(){
-			this.command("toggletranslate")
-		}
-	},
-	render(h){
-		return h("span",{class:"btntrans",on:{click:this.toggletranslate}})
-	}
-})
-Vue.component('textmenu',{
-	props:['depth','command','cap','cardcommand'],
-	methods:{
-		close(){
-			this.command("close");
-		},
-		bringtop(){
-			this.command("bringtop",this.cap);
-			this.command("close");
-		}
-	},
-	render(h){
-		const props={cap:this.cap,depth:this.depth,
-			cardcommand:this.cardcommand,command:this.command};
-		if (this.depth==0) {
-			return h("toptextmenu",{props});
-		}
-		return h("div",{},
-			 [h("span",{on:{click:this.close},class:"btnclose"}),
-			 h("cardnav",{props}),
-			 h("autotran",{props}),
-			 h("span",{on:{click:this.bringtop},class:"btnbringtop",props})]
-		);
-	},
-	components:{
-		'cardnav':CardNav
-	}
-});
-Vue.component('backlinkmenu',{
-	props:['cap','links','depth','command','cardcommand'],
-	methods:{
-		decodelink(link){
-			const tdb=link[0];
-			const vpl=unpackmataddr(link[1]);
-			const fn=getdbbookname(tdb,vpl[0]);
-			let addr=fn+"_x"+(vpl[1]-1)
-			if (vpl[2]) addr+="y"+vpl[2];
-			return parseCAP(addr).stringify();
-		}
-	},
-	render(h){
-		const children=this.links?this.links.map( link=>{
-			const setname=link[0];
-			const cap=parseCAP(link[1], setname);
-			const depth=this.depth+1;
-			const addr=cap.stringify();
-			const label=addr.replace(/y.+/,'');
-			const displayline=(cap.y)?-1:null;
-			return h("cardbutton",
-				{props:{command:this.command,cardcommand:this.cardcommand,
-					addr,cap:this.cap,label,depth,displayline}})
-		}):[];
-		return h('div',{},children)
-	}
-
-})
-const findselx=()=>{
-	let node=document.getSelection().baseNode;
-	while (node){
-		if (node.attributes && node.attributes['x0']){
-			return parseInt(node.attributes['x0'].value);
-		}
-		node=node.parentNode;
-		if (node==document) break;
-	}
-	return -1;
-};
 Vue.component('card', { 
 	props:['cardid','addr','depth','from','displayline','command','cardcommand'],
 	data(){
 		return {rawtext:null,prevaddr:'',nti:'',disline:this.displayline,
-		cap:null,backlinks:[],autotranslate:false}
+		cap:null,backlinks:[],autotranslate:false,backlink:''}
 	},
 	methods:{
 		onnote(note){
@@ -322,13 +33,14 @@ Vue.component('card', {
 					const cap=parseCAP(sel.x0 ,this.cap.db);
 					cap.y=sel.y;
 					cap.z=sel.z;
-					this.cap=cap;
-					if (typeof this.cardid!=="undefined") this.cardcommand('fetched',this.cardid,cap);
+					if (typeof this.cardid!=="undefined") {
+						this.cardcommand('fetched',this.cardid,cap);
+					}
 				}
 			}
 		},
 		fetch(cap,updating){
-			let obj={},dbname;
+			let obj={};
 			let start=cap.x0-cap.x;
 			let count=cap._w;
 			this.rawtext=null;
@@ -344,7 +56,7 @@ Vue.component('card', {
 					this.prevaddr=this.cap.stringify();//so that it will not get refresh
 					this.cardcommand("fetched",this.cardid,this.cap,res);
 				}
-				this.backlinks=cap.db.getbacklinks(cap.stringify());
+				this.backlinks=cap.db.getbacklinks(cap.stringify())||[];
 			});	
 			this.prevaddr=this.addr;
 		},
@@ -411,6 +123,15 @@ Vue.component('card', {
 				return;
 			} else if (cmd=='setnti'){
 				this.nti=arg;
+				return;
+			} else if (cmd=='setbacklink') {
+				this.backlink=arg;
+				const bl=parseBacklink(arg,this.cap);
+				setTimeout(function(){
+						this.cardcommand("fetched",this.cardid,bl.target);
+				}.bind(this),10);
+				
+				return;
 			}
 			if (this.command) r=this.command(cmd,arg);//pass to parent
 		}
@@ -426,6 +147,8 @@ Vue.component('card', {
 			return h("span",{},"Loading "+this.cap.stringify());
 		}
 
+
+		
 		const depth=this.depth||0;
 		const notes={};
 		let notestext='';
@@ -445,30 +168,32 @@ Vue.component('card', {
 		if (this.autotranslate){
 			this.nissaya(h,children);
 		} else {
+			const backlinks=getintextbacklinks(this.backlinks,this.cap);
+
 			for (var i=0;i<this.rawtext.length;i++){
 				const x0=this.rawtext[i][0];
 				let t=this.rawtext[i][1];
 				const at2=t.indexOf("|||");
 				if (at2>0) t=t.substr(0,at2);
-				const props={depth:depth+1,cardcommand:this.cardcommand,command:this.command};
+				const props={depth:depth+1,cardcommand:this.cardcommand,
+					command:this.execcommand};
 				const selectionclick=this.selectionclick;
 				const decorated=decorateText({cap:this.cap,nti:this.nti,
+					backlinks:backlinks[x0],backlink:this.backlink,
 					i,x:x0,t,props,notes,h,onclick:this.onSnippetClick
 				});
-				//const text=this.rawtext[j][1];
-				//const textwithotebtn=renderInlineNote(h,text,notes,i,depth+1,props);
-
 				children.push(h('span',{attrs:{x0},on:{mouseup:this.checkselection}},decorated));
 				children.push(h('br'));
 			}
 		}
+		const links=this.backlinks.filter(itm=>itm[1].indexOf(BACKLINKSEP)==-1);
 		children.unshift(h('textmenu',
 			{props:{depth,cap:this.cap,command:this.execcommand,
 			cardcommand:this.cardcommand}}));
 		children.push(h('backlinkmenu',
 			{class:"backlinkmenu",props:{
-				command:this.execcommand,cardcommand:this.cardcommand,
-				cap:this.cap,links:this.backlinks,depth}}));
+				command:this.execcommand,
+				cardcommand:this.cardcommand,links,depth}}));
 		let cls='card0';
 		if (this.depth) cls="card";
 		if (this.autotranslate) cls+=' unknown';
