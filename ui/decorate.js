@@ -5,7 +5,7 @@ const {syllabify,isSyllable,isPaliword,parseCAP}=require("pengine");
 const {suggestedBreak}=require("paliword");
 const {matlabel}=require("./fetch");
 const BACKLINKSEP="|";
-const {createBacklinkCard}=require("./backlinks")
+const {createBacklinkCard,parseBacklink}=require("./backlinks")
 const {makecanonref}=require("./canonref");
 const trimdef=d=>{
 	let o='';
@@ -79,27 +79,38 @@ const snip=(str,decoration)=>{
 	}
 	return out;
 }
-
-const inlinenotebtn=(h,m1,notes,nline,tprops)=>{
+const getsourcequote=(addr,tcap,scap)=>{
+	const sourcelinks=tcap.db.backlinks[tcap.bk][tcap._][scap.db.name];
+	
+	for (var i=0;i<sourcelinks.length;i++) {
+		const {source,target}=parseBacklink(sourcelinks[i],tcap)
+		return source.stringify();
+	}
+	return scap.stringify();
+}
+const inlinenotebtn=({h,cap,nid,note,activelink,props})=>{
 	let p=0;
-	const note=notes[nline+"_"+m1];
 	const btns=[];
 	if (note) {
 		note.trim().replace(/#(.+?);/g,(m,addr)=>{
-
-			const label=makecanonref(parseCAP(matlabel(addr)));
-			const props=Object.assign({addr,label},tprops);
-			btns.push(h('cardbutton',{props}));
+			const tcap=parseCAP(matlabel(addr));
+			const label=makecanonref(tcap);
+			//highlight the source range when button is click
+			const quotecap=getsourcequote(addr,tcap,cap);
+			const _props=Object.assign({addr,label,
+				command:this.command,
+				displayline:-1,quotecap,activelink},props);			
+			btns.push(h('forwardlink',{props:_props}));
 		})
 		if (!btns.length){
-			const props=Object.assign({id:m1,note},tprops);
-			btns.push(h('notebutton',{props}));
+			const _props=Object.assign({id:nid,note},props);
+			btns.push(h('notebutton',{props:_props}));
 		}
 	}
 	return btns;
 }
 
-const decorateText=({cap,i,x,t,nti,props,notes,backlinks,backlink,h,onclick})=>{
+const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,onclick})=>{
 	const decorations=[];
 	let bold=0,paranum;
 	let marker=-1;
@@ -154,7 +165,7 @@ const decorateText=({cap,i,x,t,nti,props,notes,backlinks,backlink,h,onclick})=>{
 			bls[y]=[];
 		}
 
-		if ( (z!==-1&&y==cap.y+z&&cap.x0==x)){
+		if ( (z!==-1&&y==cap.y+z&&cap.x0==x0)){
 			//if (!(decorations.length&&decorations[decorations.length-1][0]==off)){
 				if (off==start){ //null marker
 					decorations.push([start, 0,""]);//no style for zero span, 
@@ -182,18 +193,17 @@ const decorateText=({cap,i,x,t,nti,props,notes,backlinks,backlink,h,onclick})=>{
 			const links=prevclass.split(" ").filter(item=>item);
 			links.forEach(link=>{
 				if (!link || link[0]!=='~') return;
-				const _props=Object.assign(props,{cap,link:link.substr(1)});
-				if (backlink==link.substr(1)) {
+				const show=backlink==link.substr(1);
+				const _props=Object.assign(props,{h,cap,
+					show,link:link.substr(1)});
 					children.push( createBacklinkCard(h,_props));
-				} else {
-					children.push(h('backlinkbtn',{props:_props}))				
-				}
 			})
 			prevclass='';
 		} 
 		if (str) children.push(h('span',{on,attrs:{y},class:prevclass},str));
 	}
-	while(j<=t.length){ 
+	while(j<=t.length){
+
 		if (!sycnt) {
 			if (isSyllable(syl[syl_i]))yinc++
 			if( syl_i+1<syl.length) sycnt=syl[++syl_i].length;
@@ -217,7 +227,8 @@ const decorateText=({cap,i,x,t,nti,props,notes,backlinks,backlink,h,onclick})=>{
 			const m=t.substr(j+1).match(/(\d+)/);
 			j+=m[1].length;
 			addspan();
-			let btns=inlinenotebtn(h,m[1],notes,i,props);
+
+			let btns=inlinenotebtn({h,cap,activelink,nid:m[1],note:notes[x+"_"+m[1]],props});
 			for (let k=0;k<btns.length;k++){
 				children.push(btns[k]);
 			}

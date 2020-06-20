@@ -1,7 +1,8 @@
 'use strict';
 require("./textmenu")
 require("./intextbutton")
-const {getdbbookname,parseCAP,open,readlines,isPaliword,NOTESEP}=require("pengine");
+const {getdbbookname,parseCAP,newCAP,
+	open,readlines,isPaliword,NOTESEP}=require("pengine");
 const {unpackmataddr}=require("./mataddr");
 const {decorateText,nissayaText}=require("./decorate");
 const {parsedef}=require("./lexicon");
@@ -104,6 +105,10 @@ Vue.component('card', {
 				children.push(h('br'));
 			}
 		},
+		clearSelection(){
+			const cap=newCAP(this.cap,{y:0,z:0});
+			this.cardcommand("fetched",this.cardid,cap);
+		},
 		execcommand(cmd,arg){
 			let r=null;
 			if (cmd=='toggletranslate') {
@@ -126,11 +131,25 @@ Vue.component('card', {
 				return;
 			} else if (cmd=='setbacklink') {
 				this.backlink=arg;
-				const bl=parseBacklink(arg,this.cap);
-				setTimeout(function(){
+				if (arg){
+					const bl=parseBacklink(arg,this.cap);
+					setTimeout(function(){
+							this.cardcommand("fetched",this.cardid,bl.target);
+					}.bind(this),10);					
+				} else {
+					this.clearSelection();
+				}
+				return;
+			} else if (cmd=='setactivelink') {
+				this.activelink=arg;
+				if (arg){
+					const bl=parseBacklink(arg,this.cap);
+					setTimeout(function(){
 						this.cardcommand("fetched",this.cardid,bl.target);
-				}.bind(this),10);
-				
+					}.bind(this),10);
+				} else {
+					this.clearSelection();
+				}
 				return;
 			}
 			if (this.command) r=this.command(cmd,arg);//pass to parent
@@ -179,8 +198,8 @@ Vue.component('card', {
 					command:this.execcommand};
 				const selectionclick=this.selectionclick;
 				const decorated=decorateText({cap:this.cap,nti:this.nti,
-					backlinks:backlinks[x0],backlink:this.backlink,
-					i,x:x0,t,props,notes,h,onclick:this.onSnippetClick
+					backlinks:backlinks[x0],backlink:this.backlink,activelink:this.activelink,
+					x:i,x0:x0,t,props,notes,h,onclick:this.onSnippetClick
 				});
 				children.push(h('span',{attrs:{x0},on:{mouseup:this.checkselection}},decorated));
 				children.push(h('br'));

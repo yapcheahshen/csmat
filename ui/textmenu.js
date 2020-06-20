@@ -11,7 +11,7 @@ const CardNav=Vue.extend({
 			if (event.key=="Enter"){
 				//allow x100 for line number
 				const v=event.srcElement.value.trim(); 
-				if (v.indexOf("_")>-1 || v.indexOf(":")>-1) {
+				if (v.indexOf("_")>-1) {
 					const cap=parseCAP(v);
 					this.command('setcap',cap);
 					return;

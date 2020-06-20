@@ -2,6 +2,9 @@ const BACKLINKSEP="|";
 const {parseCAP}=require("pengine");
 const {makecanonref}=require("./canonref");
 const createBacklinkCard=(h,props)=>{
+	if (!props.show) {
+		return h('backlinkbtn',{props})
+	}
 	let addr=props.link;
 	const cardcommand=props.cardcommand;
 	const command=arg=>{
@@ -18,7 +21,7 @@ const createBacklinkCard=(h,props)=>{
 	const cap=parseCAP(addr);
 	const label=makecanonref(cap);
 
-	return h("card",{props:{depth,command,from,displayline:1,cardcommand,addr}});
+	return h("card",{props:{depth,command,from,displayline:-1,cardcommand,addr}});
 }
 const getintextbacklinks=(allbacklinks,cap)=>{
 	if (!allbacklinks)return {};

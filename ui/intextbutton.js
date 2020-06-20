@@ -1,7 +1,7 @@
 'use strict'
 const BACKLINKSEP="|";
 const {makecanonref}=require("./canonref");
-const {parseCAP}=require("pengine");
+const {parseCAP,readlines}=require("pengine");
 const {getparallel,matlabel}=require("./fetch");
 Vue.component('notebutton',{
 	props:['note','id','depth','command','cardcommand'],
@@ -23,13 +23,11 @@ Vue.component('notebutton',{
 				const t=notetext.substring(prev,idx)
 				if (t) children.push( h('span',{},t));
 				const addr=m1+"_"+m2;
-				//const label=matlabel(addr);
 				const cap=parseCAP(addr);
 				const label=makecanonref(cap);
 
-				children.push( h("cardbutton",
+				children.push( h("forwardlink",
 					{props:{cap:this.cap,addr,depth:this.depth,
-						cardcommand:this.cardcommand,
 						command:this.command,label}}));
 				prev=idx+m.length;
 			});
@@ -104,7 +102,45 @@ Vue.component('paralleltextbutton',{
 		return {show:false} 
 	},
 })
-
+Vue.component("forwardlink",{
+	props:{
+		addr:{type:String},
+		label:{type:String},
+		command:{type:Function},
+		show:{type:Boolean},
+		depth:{type:Number},
+		activelink:{type:String},
+		quotecap:{type:String}
+	},
+	methods:{
+		execcommand(arg){
+			if (arg=="close") {
+				this.command("setactivelink",'');
+				return;
+			}
+			this.command(arg);
+		},
+		openforwardlink(event){
+			//const s='cs0att@7_x427y105z29|x1y294z29'
+			if (this.quotecap) {
+				const cap=parseCAP(this.addr);
+				readlines(cap.db,cap.x0,1,function(res){ //prepare for diff
+					this.command("setactivelink",this.addr+"|"+this.quotecap)
+				}.bind(this));
+			}
+		}
+	},
+	render(h){
+		if (this.addr+"|"+this.quotecap==this.activelink) {
+			const props={displayline:-1,addr:this.addr
+				,command:this.execcommand,label:this.label,quote:this.quote,depth:(this.depth||0)+1};
+			return h("card",{props});
+		} else {
+			return h("button",{attrs:{addr:this.addr,quote:this.quote}
+				,on:{click:this.openforwardlink}},this.label);
+		}
+	}
+})
 Vue.component("backlinkbtn",{
 	//	functional:true,
 	props:{
