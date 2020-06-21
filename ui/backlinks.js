@@ -46,7 +46,7 @@ const parseBacklink=(addr,cap)=>{
 	const at=addr.indexOf(BACKLINKSEP);
 	const sourceaddr=addr.substr(0,at);
 	const targetaddr=cap.bk+"_"+cap._+addr.substr(at+1);
-	const source=parseCAP(sourceaddr);
+	const source=sourceaddr?parseCAP(sourceaddr):cap;
 	const target=parseCAP(targetaddr);
 	return {source,target}
 }

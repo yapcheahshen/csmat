@@ -7,6 +7,7 @@ const {matlabel}=require("./fetch");
 const BACKLINKSEP="|";
 const {createBacklinkCard,parseBacklink}=require("./backlinks")
 const {makecanonref}=require("./canonref");
+const {renderCitation}=require("./citation");
 const trimdef=d=>{
 	let o='';
 	if (!d)return '';
@@ -64,7 +65,7 @@ const snip=(str,decoration)=>{
 		}
 		if (!arr[p+len]) arr[p+len]='';
 		if (len==0 && deco) {
-			arr[p]+=deco+' ';
+			arr[p]+=' '+deco+' ';
 		}
 	}
 	const out=[];
@@ -150,6 +151,14 @@ const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,
 		if (!bls[pos]) bls[pos]=[];
 		bls[pos].push(item);
 	})
+
+	renderCitation(cap,x0,decorations,activelink,backlink);
+
+	if (cap.z>0&&x0==cap.x0) {
+		const c=cap.gettext();
+		decorations.push([c.start,c.len,"yzrange"]);
+	}
+
 	for (let j=0;j<syl.length;j++){
 		if (y==cap.y) start=off;
 		if (syl[j][syl[j].length-1]=="{") {
@@ -165,32 +174,20 @@ const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,
 			bls[y]=[];
 		}
 
-		if ( (z!==-1&&y==cap.y+z&&cap.x0==x0)){
-			//if (!(decorations.length&&decorations[decorations.length-1][0]==off)){
-				if (off==start){ //null marker
-					decorations.push([start, 0,""]);//no style for zero span, 
-				} else {
-					decorations.push([start, off-start, "yzrange"]);
-				}
-			//}
-		}
-
-		if (isSyllable(syl[j])) {
-			y++;
-		} 
-		
+		if (isSyllable(syl[j])) y++;
 		off+=syl[j].length;
 	}
 
 	const children=[];
+	decorations.sort((a,b)=>a[0]-b[0]);
 	const snippet=snip(t,decorations);
 	y=0 ;
 	let j=0,n=0,str='',prevclass='',yinc=0, syl_i=0 ,ch='';
 	let sycnt=syl[0].length;
 	const addspan=()=>{
 		const on={click:onclick};
-		if (prevclass[0]=="~") {
-			const links=prevclass.split(" ").filter(item=>item);
+		if (prevclass&&prevclass.indexOf("~")>-1) {
+			const links=prevclass.split(/ +/).filter(item=>item);
 			links.forEach(link=>{
 				if (!link || link[0]!=='~') return;
 				const show=backlink==link.substr(1);

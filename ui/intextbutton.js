@@ -148,23 +148,28 @@ Vue.component("backlinkbtn",{
 		depth:{type:Number},
 		command:{type:Function},
 	},
-	methods:{
-		openbacklink(event){
-			const v=event.target.attributes.link.value;
-			//const s='cs0att@7_x427y105z29|x1y294z29'
-			this.command("setbacklink",v)
-		}
-	},
-	render(h) {
+	mounted(){
 		let addr=this.link;
 		const command=this.command;
 		const depth=(this.depth||0)+1
 		const at=addr.indexOf(BACKLINKSEP);
 		if (at>-1) addr=addr.substr(0,at);
-		const cap=parseCAP(addr);
-		const label=makecanonref(cap);
+		this.cap=parseCAP(addr);
+		this.label=makecanonref(this.cap);
+	},
+	data(){
+		return {label:'',cap:null}
+	},
+	methods:{
+		openbacklink(event){
+			readlines(this.cap.db,this.cap.x0,1,function(res){ //prepare for diff
+				this.command("setbacklink",this.link)
+			}.bind(this));
+		}
+	},
+	render(h) {
 		return h("button",{class:"backlinkbtn",
-			attrs:{link:this.link},on:{click:this.openbacklink}},label);
+			on:{click:this.openbacklink}},this.label);
 
 	}
 })

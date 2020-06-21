@@ -14,6 +14,10 @@
 .backlink {font-family:Tahoma;font-size:80%;
 	border:dotted 2px blue;cursor:pointer;}
 
+
+.linkquote {background:lightgreen;}
+.linkquote_diff {background:#FFAFAF;}
+
 .fullscreenpopup .ancestor{background:silver;cursor:pointer;}
 .fullscreenpopup .ancestor_active {background: yellow;cursor:pointer;}
 .tocitem{cursor:pointer;}

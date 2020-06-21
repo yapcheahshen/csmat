@@ -14,7 +14,7 @@ Vue.component('card', {
 	props:['cardid','addr','depth','from','displayline','command','cardcommand'],
 	data(){
 		return {rawtext:null,prevaddr:'',nti:'',disline:this.displayline,
-		cap:null,backlinks:[],autotranslate:false,backlink:''}
+		cap:null,backlinks:[],autotranslate:false,backlink:'',activelink:''}
 	},
 	methods:{
 		onnote(note){
@@ -133,22 +133,12 @@ Vue.component('card', {
 				this.backlink=arg;
 				if (arg){
 					const bl=parseBacklink(arg,this.cap);
-					setTimeout(function(){
-							this.cardcommand("fetched",this.cardid,bl.target);
-					}.bind(this),10);					
-				} else {
-					this.clearSelection();
 				}
 				return;
 			} else if (cmd=='setactivelink') {
 				this.activelink=arg;
 				if (arg){
 					const bl=parseBacklink(arg,this.cap);
-					setTimeout(function(){
-						this.cardcommand("fetched",this.cardid,bl.target);
-					}.bind(this),10);
-				} else {
-					this.clearSelection();
 				}
 				return;
 			}
@@ -166,8 +156,10 @@ Vue.component('card', {
 			return h("span",{},"Loading "+this.cap.stringify());
 		}
 
+		if (this.activelink){
+			console.log("render active link")
+		}
 
-		
 		const depth=this.depth||0;
 		const notes={};
 		let notestext='';
