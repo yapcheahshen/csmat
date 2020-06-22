@@ -17,26 +17,29 @@ const createBacklinkCard=(h,props)=>{
 	const depth=(props.depth||0)+1;
 	const from=props.cap;
 	const at=addr.indexOf(BACKLINKSEP);
-	if (at>-1) addr=addr.substr(0,at);
-	const cap=parseCAP(addr);
+	let quoting='';
+	if (at>-1) {
+		quoting=addr.substr(0,at)+BACKLINKSEP+addr.substr(0,at);
+		addr=addr.substr(0,at);
+	}
+	const cap=parseCAP(addr.replace(/[yz].*/,''));
 	const label=makecanonref(cap);
 
-	return h("card",{props:{depth,command,from,displayline:-1,cardcommand,addr}});
+	return h("card",{props:{depth,command,from,quoting,
+				displayline:-1,cardcommand,addr}});
 }
 const getintextbacklinks=(allbacklinks,cap)=>{
 	if (!allbacklinks)return {};
-	const backlinks=allbacklinks.filter(itm=>itm[1].indexOf(BACKLINKSEP)>0);
+	const backlinks=allbacklinks.filter(itm=>itm[1].indexOf("z")>0);
 	const out={};
 	if (backlinks&&backlinks.length){
 		for (let i=0;i<backlinks.length;i++) {
-			const sourcedb=backlinks[i][0];
-			const at=backlinks[i][1].indexOf(BACKLINKSEP);
-			const sourceaddr=backlinks[i][1].substr(0,at);
-			const targetaddr=backlinks[i][1].substr(at+1);
+			const sourceaddr=backlinks[i][0];
+			const targetaddr=backlinks[i][1];
 			
-			const tcap=parseCAP(  cap.bk+"_"+cap._+targetaddr , cap.db); 
+			const tcap=parseCAP(targetaddr); 
 			if (!out[tcap.x0])out[tcap.x0]=[];
-			out[tcap.x0].push(sourcedb+"@"+backlinks[i][1]);
+			out[tcap.x0].push(backlinks[i]);
 		}
 	}
 	return out;

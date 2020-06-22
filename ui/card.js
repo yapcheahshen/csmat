@@ -11,10 +11,11 @@ const {getintextbacklinks,parseBacklink}=require("./backlinks");
 const BACKLINKSEP="|";
 
 Vue.component('card', { 
-	props:['cardid','addr','depth','from','displayline','command','cardcommand'],
+	props:['cardid','addr','depth','from','quoting',
+		'displayline','command','cardcommand'],
 	data(){
 		return {rawtext:null,prevaddr:'',nti:'',disline:this.displayline,
-		cap:null,backlinks:[],autotranslate:false,backlink:'',activelink:''}
+		cap:null,backlinks:[],autotranslate:false,backlink:'',forwardlink:''}
 	},
 	methods:{
 		onnote(note){
@@ -135,8 +136,8 @@ Vue.component('card', {
 					const bl=parseBacklink(arg,this.cap);
 				}
 				return;
-			} else if (cmd=='setactivelink') {
-				this.activelink=arg;
+			} else if (cmd=='setforwardlink') {
+				this.forwardlink=arg;
 				if (arg){
 					const bl=parseBacklink(arg,this.cap);
 				}
@@ -154,10 +155,6 @@ Vue.component('card', {
 		}
 		if (!this.rawtext) {
 			return h("span",{},"Loading "+this.cap.stringify());
-		}
-
-		if (this.activelink){
-			console.log("render active link")
 		}
 
 		const depth=this.depth||0;
@@ -190,20 +187,22 @@ Vue.component('card', {
 					command:this.execcommand};
 				const selectionclick=this.selectionclick;
 				const decorated=decorateText({cap:this.cap,nti:this.nti,
-					backlinks:backlinks[x0],backlink:this.backlink,activelink:this.activelink,
+					backlinks:backlinks[x0],backlink:this.backlink,
+					forwardlink:this.forwardlink,quoting:this.quoting,
 					x:i,x0:x0,t,props,notes,h,onclick:this.onSnippetClick
 				});
 				children.push(h('span',{attrs:{x0},on:{mouseup:this.checkselection}},decorated));
 				children.push(h('br'));
 			}
 		}
-		const links=this.backlinks.filter(itm=>itm[1].indexOf(BACKLINKSEP)==-1);
+
+		const links=this.backlinks.filter(item=>item[1].indexOf("z")==-1);
 		children.unshift(h('textmenu',
 			{props:{depth,cap:this.cap,command:this.execcommand,
 			cardcommand:this.cardcommand}}));
 		children.push(h('backlinkmenu',
 			{class:"backlinkmenu",props:{
-				command:this.execcommand,
+				command:this.execcommand,cap:this.cap,
 				cardcommand:this.cardcommand,links,depth}}));
 		let cls='card0';
 		if (this.depth) cls="card";

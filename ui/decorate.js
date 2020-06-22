@@ -89,7 +89,7 @@ const getsourcequote=(addr,tcap,scap)=>{
 	}
 	return scap.stringify();
 }
-const inlinenotebtn=({h,cap,nid,note,activelink,props})=>{
+const inlinenotebtn=({h,cap,nid,note,forwardlink,props})=>{
 	let p=0;
 	const btns=[];
 	if (note) {
@@ -100,7 +100,7 @@ const inlinenotebtn=({h,cap,nid,note,activelink,props})=>{
 			const quotecap=getsourcequote(addr,tcap,cap);
 			const _props=Object.assign({addr,label,
 				command:this.command,
-				displayline:-1,quotecap,activelink},props);			
+				displayline:-1,quotecap,forwardlink},props);			
 			btns.push(h('forwardlink',{props:_props}));
 		})
 		if (!btns.length){
@@ -111,7 +111,7 @@ const inlinenotebtn=({h,cap,nid,note,activelink,props})=>{
 	return btns;
 }
 
-const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,onclick})=>{
+const decorateText=({h,cap,x,x0,t,nti,props,notes,forwardlink,backlinks,backlink,quoting,onclick})=>{
 	const decorations=[];
 	let bold=0,paranum;
 	let marker=-1;
@@ -143,16 +143,15 @@ const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,
 	backlinks=backlinks||[];
 	const bls={};
 	backlinks.forEach(item=>{
-		const at=item.indexOf(BACKLINKSEP);
-		const sourceaddr=item.substr(0,at);
-		const targetaddr=item.substr(at+1);
-		const c=parseCAP(cap.bk+"_"+cap._+targetaddr);
+		const sourceaddr=item[0];
+		const targetaddr=item[1];
+		const c=parseCAP(targetaddr);
 		const pos=c.y+c.z;
 		if (!bls[pos]) bls[pos]=[];
-		bls[pos].push(item);
+		bls[pos].push(item.join(BACKLINKSEP));
 	})
 
-	renderCitation(cap,x0,decorations,activelink,backlink);
+	renderCitation(cap,x0,decorations,forwardlink,backlink,quoting);
 
 	if (cap.z>0&&x0==cap.x0) {
 		const c=cap.gettext();
@@ -225,7 +224,7 @@ const decorateText=({cap,x,x0,t,nti,props,notes,activelink,backlinks,backlink,h,
 			j+=m[1].length;
 			addspan();
 
-			let btns=inlinenotebtn({h,cap,activelink,nid:m[1],note:notes[x+"_"+m[1]],props});
+			let btns=inlinenotebtn({h,cap,forwardlink,nid:m[1],note:notes[x+"_"+m[1]],props});
 			for (let k=0;k<btns.length;k++){
 				children.push(btns[k]);
 			}

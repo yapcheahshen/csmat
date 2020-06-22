@@ -45,7 +45,8 @@ Vue.component('notebutton',{
 })
 
 Vue.component('cardbutton',{
-	props:['cap','addr','depth','label','command','cardcommand','displayline'],
+	props:['cap','addr','depth','label','command','cardcommand','displayline'
+	,'quoting'],
 	methods:{
 		execcommand(cmd,arg){
 			if (cmd=="close") {
@@ -68,7 +69,7 @@ Vue.component('cardbutton',{
 		} else {
 			return h("card",{props:{depth:this.depth+1,
 				command:this.execcommand,from:this.cap,displayline:this.displayline,
-				cardcommand:this.cardcommand,addr :this.addr}});
+				cardcommand:this.cardcommand,addr :this.addr,quoting:this.quoting}});
 		}
 	}
 })
@@ -107,15 +108,16 @@ Vue.component("forwardlink",{
 		addr:{type:String},
 		label:{type:String},
 		command:{type:Function},
+		cardcommand:{type:Function},
 		show:{type:Boolean},
 		depth:{type:Number},
-		activelink:{type:String},
+		forwardlink:{type:String},
 		quotecap:{type:String}
 	},
 	methods:{
 		execcommand(arg){
 			if (arg=="close") {
-				this.command("setactivelink",'');
+				this.command("setforwardlink",'');
 				return;
 			}
 			this.command(arg);
@@ -125,18 +127,20 @@ Vue.component("forwardlink",{
 			if (this.quotecap) {
 				const cap=parseCAP(this.addr);
 				readlines(cap.db,cap.x0,1,function(res){ //prepare for diff
-					this.command("setactivelink",this.addr+"|"+this.quotecap)
+					this.command("setforwardlink",this.addr+"|"+this.quotecap)
 				}.bind(this));
 			}
 		}
 	},
 	render(h){
-		if (this.addr+"|"+this.quotecap==this.activelink) {
-			const props={displayline:-1,addr:this.addr
-				,command:this.execcommand,label:this.label,quote:this.quote,depth:(this.depth||0)+1};
+		if (this.addr+"|"+this.quotecap==this.forwardlink) {
+			const addr=this.addr.replace(/[yz].*/,'');
+			const props={displayline:-1,addr,quoting:this.quotecap+"|"+this.addr
+				,command:this.execcommand,cardcommand:this.cardcommand,
+				label:this.label,depth:(this.depth||0)+1};
 			return h("card",{props});
 		} else {
-			return h("button",{attrs:{addr:this.addr,quote:this.quote}
+			return h("button",{attrs:{addr:this.addr}
 				,on:{click:this.openforwardlink}},this.label);
 		}
 	}

@@ -151,32 +151,18 @@ Vue.component('textmenu',{
 });
 
 Vue.component('backlinkmenu',{
-	props:['links','depth','command','cardcommand'],
-	methods:{
-		decodelink(link){
-			const tdb=link[0];
-			const vpl=unpackmataddr(link[1]);
-			const fn=getdbbookname(tdb,vpl[0]);
-			let addr=fn+"_x"+(vpl[1]-1)
-			if (vpl[2]) addr+="y"+vpl[2];
-			return parseCAP(addr).stringify();
-		}
-	},
+	props:['cap','links','depth','command','cardcommand'],
 	render(h){
 		const children=this.links?this.links.map( link=>{
-			const setname=link[0];
-			let s=link[1];
-			if (s.indexOf(BACKLINKSEP)>0) { //has pinpoint
-				s=s.replace(/\|.+/,'');
-			}
-			const cap=parseCAP(s, setname);
+			const cap=parseCAP(link[0]);
 			const depth=this.depth+1;
-			const addr=cap.stringify();
+			const addr=cap.stringify().replace(/[yz].*/,'');
 			const label=makecanonref(cap);
-			const displayline=(cap.y)?-1:null;
+			const displayline=(cap.z)?-1:null;
+			const quoting=this.cap.stringify()+BACKLINKSEP+cap.stringify();
 			return h("cardbutton",
 				{props:{command:this.command,cardcommand:this.cardcommand,
-					addr,label,depth,displayline}})
+					quoting,addr,label,depth,displayline}})
 		}):[];
 		return h('div',{},children)
 	}
