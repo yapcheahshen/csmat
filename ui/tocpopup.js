@@ -2,7 +2,7 @@
 const {parseCAP}=require("pengine");
 const getancestor=(cap)=>{
 	let ancestor=[];
-	ancestor=cap.db.gettocancestor(cap.bkx).filter(item=>item.t!="-");
+	ancestor=cap.db.gettocancestor(cap.stringify()).filter(item=>item.t!="-");
 	return ancestor;
 }
 

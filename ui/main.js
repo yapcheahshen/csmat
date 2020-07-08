@@ -11,7 +11,7 @@ const helpmessage=[];//[["","巴利聖典逐詞定址系統"]]
                //   ,["","版本：2020.5.11"]
                 //  ,["","https://github.com/ksanaforge/csmat/"]]
 
-const dbname=["cs0mul","cs0att","cs0tik"];
+const dbname=["cs0m","cs0a"];//,"cs0tik"];
 const URLParams=()=>{
 	let hash=document.location.hash.substr(1);
 	return hash;
@@ -157,10 +157,10 @@ new Vue({
 			this.log(dbname[0]+" opened, built on "+db.builddate);
 			open(dbname[1],db2=>{
 				this.log(dbname[1]+" opened, built on "+db2.builddate);
-				open(dbname[2],db3=>{
-					this.log(dbname[2]+" opened, built on "+db3.builddate);
+				//open(dbname[2],db3=>{
+				//	this.log(dbname[2]+" opened, built on "+db3.builddate);
 					this.ready=true;
-				});
+				//});
 			})
 			let a=URLParams();
 			const cardsaddr=[];
@@ -172,7 +172,7 @@ new Vue({
 				}
 			}
 			if (cardsaddr.length==0){
-				cardsaddr.push("vin01m_1");
+				cardsaddr.push("mn1_273");
 			}
 			this.addrs=cardsaddr;
 
